@@ -12,7 +12,7 @@ import {
   getScoreRangeLabel,
   detailedTraitInterpretations,
 } from '../lib/interpretations';
-import { getAllTraitInsights, generateProfileSummary } from '../lib/insights';
+import { getAllTraitInsights } from '../lib/insights';
 import TraitChart from '../components/TraitChart';
 import FacetBreakdown from '../components/FacetBreakdown';
 import PDFReport from '../components/PDFReport';
@@ -27,9 +27,6 @@ import {
   Heart,
   TrendingUp,
   Star,
-  Users,
-  Zap,
-  Target,
   Leaf,
   Sparkles,
 } from 'lucide-react';
@@ -81,12 +78,6 @@ export default function ResultsPage() {
 
   // Generate personality insights
   const traitInsights = getAllTraitInsights(
-    results.traits.map((t) => ({
-      trait: t.trait,
-      percentScore: t.percentScore,
-    })),
-  );
-  const profileSummary = generateProfileSummary(
     results.traits.map((t) => ({
       trait: t.trait,
       percentScore: t.percentScore,
@@ -461,95 +452,6 @@ export default function ResultsPage() {
         </div>
       </section>
 
-      {/* Profile Summary */}
-      <section className="py-12 bg-sage-50/50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 bg-sage-200 rounded-xl flex items-center justify-center">
-              <Zap className="w-5 h-5 text-sage-700" />
-            </div>
-            <h2 className="text-xl font-serif font-semibold text-warm-800">
-              Your Personality Profile
-            </h2>
-          </div>
-
-          <div className="card-zen mb-6">
-            <div className="text-center mb-6">
-              <h3 className="text-2xl font-serif font-semibold text-sage-700 mb-2">
-                {profileSummary.personalityPattern}
-              </h3>
-              <p className="text-warm-500">
-                Based on your unique combination of traits
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-              {/* Communication Style */}
-              <div className="bg-sage-50 rounded-xl p-4">
-                <div className="flex items-center gap-2 mb-3">
-                  <Users className="w-5 h-5 text-sage-600" />
-                  <h4 className="font-semibold text-warm-700">
-                    Communication Style
-                  </h4>
-                </div>
-                <p className="text-sm text-warm-600">
-                  {profileSummary.communicationStyle}
-                </p>
-              </div>
-
-              {/* Stress Response */}
-              <div className="bg-sage-50 rounded-xl p-4">
-                <div className="flex items-center gap-2 mb-3">
-                  <Target className="w-5 h-5 text-sage-600" />
-                  <h4 className="font-semibold text-warm-700">
-                    Under Pressure
-                  </h4>
-                </div>
-                <p className="text-sm text-warm-600">
-                  {profileSummary.stressResponse}
-                </p>
-              </div>
-
-              {/* Key Strengths */}
-              <div className="bg-sage-50 rounded-xl p-4">
-                <div className="flex items-center gap-2 mb-3">
-                  <Star className="w-5 h-5 text-sage-600" />
-                  <h4 className="font-semibold text-warm-700">Key Strengths</h4>
-                </div>
-                <ul className="text-sm text-warm-600 space-y-1">
-                  {profileSummary.overallStrengths
-                    .slice(0, 4)
-                    .map((strength, i) => (
-                      <li key={i} className="flex items-start gap-2">
-                        <span className="text-sage-500 mt-1">•</span>
-                        {strength}
-                      </li>
-                    ))}
-                </ul>
-              </div>
-
-              {/* Motivation Drivers */}
-              <div className="bg-sage-50 rounded-xl p-4">
-                <div className="flex items-center gap-2 mb-3">
-                  <TrendingUp className="w-5 h-5 text-sage-600" />
-                  <h4 className="font-semibold text-warm-700">
-                    What Motivates You
-                  </h4>
-                </div>
-                <ul className="text-sm text-warm-600 space-y-1">
-                  {profileSummary.motivationDrivers.map((driver, i) => (
-                    <li key={i} className="flex items-start gap-2">
-                      <span className="text-sage-500 mt-1">•</span>
-                      {driver}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Detailed Insights by Trait */}
       <section className="py-12 bg-white/50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -819,7 +721,6 @@ export default function ResultsPage() {
         <PDFReport
           results={results}
           interpretationReport={interpretationReport}
-          profileSummary={profileSummary}
           fullName={fullName}
           onClose={() => {
             setShowPDFPreview(false);

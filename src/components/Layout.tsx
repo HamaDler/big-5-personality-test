@@ -100,6 +100,17 @@ export default function Layout({ children }: LayoutProps) {
             This assessment is for educational and self-reflection purposes
             only. It is not a clinical diagnosis tool.
           </p>
+          <p className="text-xs text-warm-400 text-center mt-3">
+            Developed by{' '}
+            <a
+              href="https://hamadler.xyz"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sage-500 hover:text-sage-600 transition-colors"
+            >
+              Hama Dler
+            </a>
+          </p>
         </div>
       </footer>
     </div>
