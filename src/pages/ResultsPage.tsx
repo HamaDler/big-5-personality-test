@@ -237,17 +237,19 @@ export default function ResultsPage() {
             <div className="text-center mb-8">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-sage-100 rounded-full mb-4">
                 <Sparkles className="w-4 h-4 text-sage-600" />
-                <span className="text-sm font-medium text-sage-700">Trait Interactions</span>
+                <span className="text-sm font-medium text-sage-700">
+                  Trait Interactions
+                </span>
               </div>
               <h2 className="text-xl font-serif font-semibold text-warm-800 mb-2">
                 Your Personality Blends
               </h2>
               <p className="text-warm-500 max-w-2xl mx-auto text-sm">
-                The magic of personality often happens at the intersections of traits. 
-                Here's what your unique combination reveals.
+                The magic of personality often happens at the intersections of
+                traits. Here's what your unique combination reveals.
               </p>
             </div>
-            
+
             <div className="grid gap-4 md:grid-cols-1">
               {profileSummary.personalityBlends.map((blend, index) => (
                 <div
@@ -257,17 +259,16 @@ export default function ResultsPage() {
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-sage-400 to-sage-600 flex items-center justify-center flex-shrink-0">
                       <span className="text-white font-bold text-lg">
-                        {blend.name.split(' ')[1]?.charAt(0) || blend.name.charAt(0)}
+                        {blend.name.split(' ')[1]?.charAt(0) ||
+                          blend.name.charAt(0)}
                       </span>
                     </div>
                     <div className="flex-1">
                       <h3 className="text-lg font-semibold text-warm-800 mb-1">
                         {blend.name}
                       </h3>
-                      <p className="text-warm-600 mb-4">
-                        {blend.description}
-                      </p>
-                      
+                      <p className="text-warm-600 mb-4">{blend.description}</p>
+
                       <div className="grid sm:grid-cols-2 gap-4">
                         <div className="bg-sage-50 rounded-xl p-4">
                           <h4 className="text-sm font-medium text-warm-700 mb-2 flex items-center gap-2">
@@ -276,14 +277,17 @@ export default function ResultsPage() {
                           </h4>
                           <ul className="space-y-1">
                             {blend.strengths.map((strength, i) => (
-                              <li key={i} className="text-sm text-warm-600 flex items-start gap-2">
+                              <li
+                                key={i}
+                                className="text-sm text-warm-600 flex items-start gap-2"
+                              >
                                 <span className="text-sage-500 mt-0.5">+</span>
                                 <span>{strength}</span>
                               </li>
                             ))}
                           </ul>
                         </div>
-                        
+
                         <div className="bg-warm-50 rounded-xl p-4">
                           <h4 className="text-sm font-medium text-warm-700 mb-2 flex items-center gap-2">
                             <Info className="w-4 h-4 text-openness" />
@@ -291,7 +295,10 @@ export default function ResultsPage() {
                           </h4>
                           <ul className="space-y-1">
                             {blend.watchOuts.map((watchOut, i) => (
-                              <li key={i} className="text-sm text-warm-600 flex items-start gap-2">
+                              <li
+                                key={i}
+                                className="text-sm text-warm-600 flex items-start gap-2"
+                              >
                                 <span className="text-openness mt-0.5">!</span>
                                 <span>{watchOut}</span>
                               </li>
@@ -629,11 +636,15 @@ export default function ResultsPage() {
                       </div>
                       <div className="space-y-2">
                         <p className="text-sm text-warm-600">
-                          <span className="font-medium text-warm-700">Style: </span>
+                          <span className="font-medium text-warm-700">
+                            Style:{' '}
+                          </span>
                           {insight.relationshipInsight.style}
                         </p>
                         <p className="text-sm text-warm-500">
-                          <span className="font-medium text-warm-600">Watch out: </span>
+                          <span className="font-medium text-warm-600">
+                            Watch out:{' '}
+                          </span>
                           {insight.relationshipInsight.watchOut}
                         </p>
                       </div>
@@ -711,7 +722,9 @@ export default function ResultsPage() {
                           <p key={i} className="text-sm text-warm-600">
                             <span className="font-medium">{figure.name}</span>
                             <span className="text-warm-400"> — </span>
-                            <span className="text-warm-500 italic">{figure.reason}</span>
+                            <span className="text-warm-500 italic">
+                              {figure.reason}
+                            </span>
                           </p>
                         ))}
                       </div>

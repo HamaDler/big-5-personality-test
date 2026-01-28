@@ -136,16 +136,22 @@ const traitInsightsData: TraitInsights[] = [
     },
     relationshipInsights: {
       low: {
-        style: 'Values routine, tradition, and clear expectations. Creates stable, predictable relationship patterns.',
-        watchOut: 'May find spontaneous or unconventional partners challenging. Could resist change even when beneficial.',
+        style:
+          'Values routine, tradition, and clear expectations. Creates stable, predictable relationship patterns.',
+        watchOut:
+          'May find spontaneous or unconventional partners challenging. Could resist change even when beneficial.',
       },
       moderate: {
-        style: 'Adapts to partners with different levels of openness. Appreciates adventure while also valuing stability.',
-        watchOut: 'May sometimes feel torn between novelty and comfort. Could struggle to communicate changing needs.',
+        style:
+          'Adapts to partners with different levels of openness. Appreciates adventure while also valuing stability.',
+        watchOut:
+          'May sometimes feel torn between novelty and comfort. Could struggle to communicate changing needs.',
       },
       high: {
-        style: 'Values intellectual growth and variety. Seeks partners who enjoy exploring ideas and new experiences together.',
-        watchOut: 'May get bored with "stable" routine partners. Could prioritize novelty over relationship maintenance.',
+        style:
+          'Values intellectual growth and variety. Seeks partners who enjoy exploring ideas and new experiences together.',
+        watchOut:
+          'May get bored with "stable" routine partners. Could prioritize novelty over relationship maintenance.',
       },
     },
     growthTips: {
@@ -170,15 +176,37 @@ const traitInsightsData: TraitInsights[] = [
     },
     famousFigures: {
       low: [
-        { name: 'Warren Buffett', reason: 'Sticks to proven investment principles and avoids trends.' },
-        { name: 'Angela Merkel', reason: 'Known for methodical, cautious decision-making.' },
-        { name: 'Bill Belichick', reason: 'Relies on systematic preparation over flashy innovation.' },
+        {
+          name: 'Warren Buffett',
+          reason: 'Sticks to proven investment principles and avoids trends.',
+        },
+        {
+          name: 'Angela Merkel',
+          reason: 'Known for methodical, cautious decision-making.',
+        },
+        {
+          name: 'Bill Belichick',
+          reason: 'Relies on systematic preparation over flashy innovation.',
+        },
       ],
       high: [
-        { name: 'Leonardo da Vinci', reason: 'Consummate polymath who bridged art and science.' },
-        { name: 'David Bowie', reason: 'Constantly reinvented his artistic identity.' },
-        { name: 'Maya Angelou', reason: 'Explored diverse creative mediums and cultural perspectives.' },
-        { name: 'Elon Musk', reason: 'High tolerance for risk and abstract future-building.' },
+        {
+          name: 'Leonardo da Vinci',
+          reason: 'Consummate polymath who bridged art and science.',
+        },
+        {
+          name: 'David Bowie',
+          reason: 'Constantly reinvented his artistic identity.',
+        },
+        {
+          name: 'Maya Angelou',
+          reason:
+            'Explored diverse creative mediums and cultural perspectives.',
+        },
+        {
+          name: 'Elon Musk',
+          reason: 'High tolerance for risk and abstract future-building.',
+        },
       ],
     },
     strengths: {
@@ -257,16 +285,22 @@ const traitInsightsData: TraitInsights[] = [
     },
     relationshipInsights: {
       low: {
-        style: 'Brings spontaneity and flexibility. Goes with the flow and adapts easily to changing plans.',
-        watchOut: 'May frustrate highly organized partners. Could struggle with commitments that require sustained follow-through.',
+        style:
+          'Brings spontaneity and flexibility. Goes with the flow and adapts easily to changing plans.',
+        watchOut:
+          'May frustrate highly organized partners. Could struggle with commitments that require sustained follow-through.',
       },
       moderate: {
-        style: 'Balances planning with flexibility. Appreciates some structure without needing everything scheduled.',
-        watchOut: 'May send mixed signals about reliability. Could over-promise when feeling flexible.',
+        style:
+          'Balances planning with flexibility. Appreciates some structure without needing everything scheduled.',
+        watchOut:
+          'May send mixed signals about reliability. Could over-promise when feeling flexible.',
       },
       high: {
-        style: 'Highly reliable and values follow-through. Shared planning and goal-setting strengthens bonds.',
-        watchOut: 'May become frustrated with spontaneous partners. Could prioritize tasks over quality time.',
+        style:
+          'Highly reliable and values follow-through. Shared planning and goal-setting strengthens bonds.',
+        watchOut:
+          'May become frustrated with spontaneous partners. Could prioritize tasks over quality time.',
       },
     },
     growthTips: {
@@ -291,15 +325,36 @@ const traitInsightsData: TraitInsights[] = [
     },
     famousFigures: {
       low: [
-        { name: 'Pablo Picasso', reason: 'Chaotic creative process with constant reinvention.' },
-        { name: 'Richard Branson', reason: 'Embraces risk and pivots quickly between ventures.' },
-        { name: 'Robin Williams', reason: 'Improvisational genius who thrived on spontaneity.' },
+        {
+          name: 'Pablo Picasso',
+          reason: 'Chaotic creative process with constant reinvention.',
+        },
+        {
+          name: 'Richard Branson',
+          reason: 'Embraces risk and pivots quickly between ventures.',
+        },
+        {
+          name: 'Robin Williams',
+          reason: 'Improvisational genius who thrived on spontaneity.',
+        },
       ],
       high: [
-        { name: 'Ruth Bader Ginsburg', reason: 'Meticulous legal mind with legendary work ethic.' },
-        { name: 'Jeff Bezos', reason: 'Long-term strategic thinking with relentless execution.' },
-        { name: 'Marie Curie', reason: 'Rigorous scientific methodology and persistence.' },
-        { name: 'Kobe Bryant', reason: 'Famous "Mamba Mentality" of obsessive preparation.' },
+        {
+          name: 'Ruth Bader Ginsburg',
+          reason: 'Meticulous legal mind with legendary work ethic.',
+        },
+        {
+          name: 'Jeff Bezos',
+          reason: 'Long-term strategic thinking with relentless execution.',
+        },
+        {
+          name: 'Marie Curie',
+          reason: 'Rigorous scientific methodology and persistence.',
+        },
+        {
+          name: 'Kobe Bryant',
+          reason: 'Famous "Mamba Mentality" of obsessive preparation.',
+        },
       ],
     },
     strengths: {
@@ -377,16 +432,22 @@ const traitInsightsData: TraitInsights[] = [
     },
     relationshipInsights: {
       low: {
-        style: 'Prefers deep, meaningful connections with a small circle. Values quality time and intimate conversations.',
-        watchOut: 'May seem distant or unavailable to social partners. Could withdraw when overwhelmed rather than communicate.',
+        style:
+          'Prefers deep, meaningful connections with a small circle. Values quality time and intimate conversations.',
+        watchOut:
+          'May seem distant or unavailable to social partners. Could withdraw when overwhelmed rather than communicate.',
       },
       moderate: {
-        style: 'Enjoys both social activities and quiet time. Adapts to partners with different social needs.',
-        watchOut: 'May sometimes give mixed signals about social preferences. Could overextend when trying to please.',
+        style:
+          'Enjoys both social activities and quiet time. Adapts to partners with different social needs.',
+        watchOut:
+          'May sometimes give mixed signals about social preferences. Could overextend when trying to please.',
       },
       high: {
-        style: 'Thrives on social connection and shared activities. Brings energy and enthusiasm to the relationship.',
-        watchOut: 'May feel neglected by introverted partners. Could fill silence with chatter rather than listening.',
+        style:
+          'Thrives on social connection and shared activities. Brings energy and enthusiasm to the relationship.',
+        watchOut:
+          'May feel neglected by introverted partners. Could fill silence with chatter rather than listening.',
       },
     },
     growthTips: {
@@ -411,16 +472,41 @@ const traitInsightsData: TraitInsights[] = [
     },
     famousFigures: {
       low: [
-        { name: 'Albert Einstein', reason: 'Preferred solitary thought experiments over social engagement.' },
-        { name: 'J.K. Rowling', reason: 'Created entire worlds in isolation before sharing them.' },
-        { name: 'Bill Gates', reason: 'Known for deep focus and "Think Weeks" alone.' },
-        { name: 'Eleanor Roosevelt', reason: 'Thoughtful leader who valued reflection over spotlight.' },
+        {
+          name: 'Albert Einstein',
+          reason:
+            'Preferred solitary thought experiments over social engagement.',
+        },
+        {
+          name: 'J.K. Rowling',
+          reason: 'Created entire worlds in isolation before sharing them.',
+        },
+        {
+          name: 'Bill Gates',
+          reason: 'Known for deep focus and "Think Weeks" alone.',
+        },
+        {
+          name: 'Eleanor Roosevelt',
+          reason: 'Thoughtful leader who valued reflection over spotlight.',
+        },
       ],
       high: [
-        { name: 'Oprah Winfrey', reason: 'Built career on authentic connection with millions.' },
-        { name: 'Tony Robbins', reason: 'Energizes massive audiences and feeds off crowd energy.' },
-        { name: 'Muhammad Ali', reason: 'Charismatic showman who thrived in the spotlight.' },
-        { name: 'Freddie Mercury', reason: 'Electrifying stage presence and natural entertainer.' },
+        {
+          name: 'Oprah Winfrey',
+          reason: 'Built career on authentic connection with millions.',
+        },
+        {
+          name: 'Tony Robbins',
+          reason: 'Energizes massive audiences and feeds off crowd energy.',
+        },
+        {
+          name: 'Muhammad Ali',
+          reason: 'Charismatic showman who thrived in the spotlight.',
+        },
+        {
+          name: 'Freddie Mercury',
+          reason: 'Electrifying stage presence and natural entertainer.',
+        },
       ],
     },
     strengths: {
@@ -498,16 +584,22 @@ const traitInsightsData: TraitInsights[] = [
     },
     relationshipInsights: {
       low: {
-        style: 'Direct, honest, and values logic over diplomacy. Cuts through pretense to address issues head-on.',
-        watchOut: 'Can accidentally hurt feelings during conflict. May prioritize being right over being kind.',
+        style:
+          'Direct, honest, and values logic over diplomacy. Cuts through pretense to address issues head-on.',
+        watchOut:
+          'Can accidentally hurt feelings during conflict. May prioritize being right over being kind.',
       },
       moderate: {
-        style: 'Balances diplomacy with directness. Adapts approach based on the situation and relationship.',
-        watchOut: 'May seem inconsistent in conflict style. Could struggle to find the right tone.',
+        style:
+          'Balances diplomacy with directness. Adapts approach based on the situation and relationship.',
+        watchOut:
+          'May seem inconsistent in conflict style. Could struggle to find the right tone.',
       },
       high: {
-        style: 'Prioritizes harmony and partner happiness. Creates warm, supportive relationship environment.',
-        watchOut: 'May suppress own needs for peace. Could avoid necessary confrontations until issues escalate.',
+        style:
+          'Prioritizes harmony and partner happiness. Creates warm, supportive relationship environment.',
+        watchOut:
+          'May suppress own needs for peace. Could avoid necessary confrontations until issues escalate.',
       },
     },
     growthTips: {
@@ -532,16 +624,37 @@ const traitInsightsData: TraitInsights[] = [
     },
     famousFigures: {
       low: [
-        { name: 'Steve Jobs', reason: 'Famously demanding and uncompromising on vision.' },
-        { name: 'Gordon Ramsay', reason: 'Brutally honest feedback in pursuit of excellence.' },
-        { name: 'Simon Cowell', reason: 'Built brand on unflinching critical honesty.' },
-        { name: 'Margaret Thatcher', reason: 'Conviction politics over consensus-building.' },
+        {
+          name: 'Steve Jobs',
+          reason: 'Famously demanding and uncompromising on vision.',
+        },
+        {
+          name: 'Gordon Ramsay',
+          reason: 'Brutally honest feedback in pursuit of excellence.',
+        },
+        {
+          name: 'Simon Cowell',
+          reason: 'Built brand on unflinching critical honesty.',
+        },
+        {
+          name: 'Margaret Thatcher',
+          reason: 'Conviction politics over consensus-building.',
+        },
       ],
       high: [
-        { name: 'Mister Rogers', reason: 'Epitome of gentle kindness and unconditional acceptance.' },
-        { name: 'Dalai Lama', reason: 'Compassion as core philosophy and daily practice.' },
+        {
+          name: 'Mister Rogers',
+          reason: 'Epitome of gentle kindness and unconditional acceptance.',
+        },
+        {
+          name: 'Dalai Lama',
+          reason: 'Compassion as core philosophy and daily practice.',
+        },
         { name: 'Mother Teresa', reason: 'Devoted life to caring for others.' },
-        { name: 'Keanu Reeves', reason: 'Known for exceptional kindness and humility in Hollywood.' },
+        {
+          name: 'Keanu Reeves',
+          reason: 'Known for exceptional kindness and humility in Hollywood.',
+        },
       ],
     },
     strengths: {
@@ -619,16 +732,22 @@ const traitInsightsData: TraitInsights[] = [
     },
     relationshipInsights: {
       low: {
-        style: 'Deep emotional awareness and sensitivity. Can connect profoundly on an emotional level.',
-        watchOut: 'May need extra reassurance during stress. Could interpret neutral situations negatively.',
+        style:
+          'Deep emotional awareness and sensitivity. Can connect profoundly on an emotional level.',
+        watchOut:
+          'May need extra reassurance during stress. Could interpret neutral situations negatively.',
       },
       moderate: {
-        style: 'Balanced emotional responses. Can support partners while managing own stress reasonably.',
-        watchOut: 'May occasionally be caught off guard by intense emotions. Could underestimate stress buildup.',
+        style:
+          'Balanced emotional responses. Can support partners while managing own stress reasonably.',
+        watchOut:
+          'May occasionally be caught off guard by intense emotions. Could underestimate stress buildup.',
       },
       high: {
-        style: 'Calm, steady emotional presence. Provides stability and groundedness in the relationship.',
-        watchOut: 'May seem emotionally distant to sensitive partners. Could dismiss partner\'s worries as overreaction.',
+        style:
+          'Calm, steady emotional presence. Provides stability and groundedness in the relationship.',
+        watchOut:
+          "May seem emotionally distant to sensitive partners. Could dismiss partner's worries as overreaction.",
       },
     },
     growthTips: {
@@ -653,16 +772,34 @@ const traitInsightsData: TraitInsights[] = [
     },
     famousFigures: {
       low: [
-        { name: 'Sylvia Plath', reason: 'Channeled emotional intensity into powerful literature.' },
-        { name: 'Vincent van Gogh', reason: 'Emotional turbulence fueled artistic genius.' },
-        { name: 'Woody Allen', reason: 'Built career exploring neurotic anxieties.' },
+        {
+          name: 'Sylvia Plath',
+          reason: 'Channeled emotional intensity into powerful literature.',
+        },
+        {
+          name: 'Vincent van Gogh',
+          reason: 'Emotional turbulence fueled artistic genius.',
+        },
+        {
+          name: 'Woody Allen',
+          reason: 'Built career exploring neurotic anxieties.',
+        },
         { name: 'Kurt Cobain', reason: 'Raw emotional expression in music.' },
       ],
       high: [
-        { name: 'Barack Obama', reason: 'Famous for "No Drama Obama" composure under pressure.' },
-        { name: 'Tom Hanks', reason: 'Consistently calm and gracious public presence.' },
+        {
+          name: 'Barack Obama',
+          reason: 'Famous for "No Drama Obama" composure under pressure.',
+        },
+        {
+          name: 'Tom Hanks',
+          reason: 'Consistently calm and gracious public presence.',
+        },
         { name: 'Morgan Freeman', reason: 'Radiates unflappable serenity.' },
-        { name: 'Dalai Lama', reason: 'Decades of equanimity practice and teaching.' },
+        {
+          name: 'Dalai Lama',
+          reason: 'Decades of equanimity practice and teaching.',
+        },
       ],
     },
     strengths: {
@@ -750,108 +887,225 @@ const personalityBlends: PersonalityBlend[] = [
   {
     name: 'The Effective Leader',
     traits: ['extraversion', 'high', 'conscientiousness', 'high'],
-    description: 'You combine social influence with disciplined execution. You inspire others while delivering results.',
-    strengths: ['Motivates teams toward goals', 'Balances vision with follow-through', 'Commands respect through competence'],
-    watchOuts: ['May push others as hard as yourself', 'Could prioritize achievement over relationships'],
+    description:
+      'You combine social influence with disciplined execution. You inspire others while delivering results.',
+    strengths: [
+      'Motivates teams toward goals',
+      'Balances vision with follow-through',
+      'Commands respect through competence',
+    ],
+    watchOuts: [
+      'May push others as hard as yourself',
+      'Could prioritize achievement over relationships',
+    ],
   },
   {
     name: 'The Creative Achiever',
     traits: ['openness', 'high', 'conscientiousness', 'high'],
-    description: 'You blend imagination with discipline—dreaming big while actually shipping.',
-    strengths: ['Turns creative visions into reality', 'Innovates within constraints', 'Balances exploration with execution'],
-    watchOuts: ['May over-engineer creative projects', 'Could struggle when forced to choose between quality and novelty'],
+    description:
+      'You blend imagination with discipline—dreaming big while actually shipping.',
+    strengths: [
+      'Turns creative visions into reality',
+      'Innovates within constraints',
+      'Balances exploration with execution',
+    ],
+    watchOuts: [
+      'May over-engineer creative projects',
+      'Could struggle when forced to choose between quality and novelty',
+    ],
   },
   {
     name: 'The Social Innovator',
     traits: ['openness', 'high', 'extraversion', 'high'],
-    description: 'You bring creative energy to social situations and thrive on collaborative exploration.',
-    strengths: ['Sparks innovation through conversation', 'Builds creative communities', 'Energizes brainstorming sessions'],
-    watchOuts: ['May generate more ideas than you can execute', 'Could overwhelm quieter collaborators'],
+    description:
+      'You bring creative energy to social situations and thrive on collaborative exploration.',
+    strengths: [
+      'Sparks innovation through conversation',
+      'Builds creative communities',
+      'Energizes brainstorming sessions',
+    ],
+    watchOuts: [
+      'May generate more ideas than you can execute',
+      'Could overwhelm quieter collaborators',
+    ],
   },
   {
     name: 'The Empathetic Explorer',
     traits: ['openness', 'high', 'agreeableness', 'high'],
-    description: 'You combine curiosity with compassion, seeking to understand diverse perspectives.',
-    strengths: ['Bridges different viewpoints', 'Creates inclusive environments', 'Explores with sensitivity'],
-    watchOuts: ['May avoid intellectual conflict', 'Could prioritize harmony over honest critique'],
+    description:
+      'You combine curiosity with compassion, seeking to understand diverse perspectives.',
+    strengths: [
+      'Bridges different viewpoints',
+      'Creates inclusive environments',
+      'Explores with sensitivity',
+    ],
+    watchOuts: [
+      'May avoid intellectual conflict',
+      'Could prioritize harmony over honest critique',
+    ],
   },
   {
     name: 'The Reliable Supporter',
     traits: ['conscientiousness', 'high', 'agreeableness', 'high'],
-    description: "You're the person everyone counts on - dependable, caring, and thorough.",
-    strengths: ['Builds trust through consistency', 'Supports others with practical help', 'Creates stable foundations'],
-    watchOuts: ['May take on too much for others', 'Could neglect own needs while helping'],
+    description:
+      "You're the person everyone counts on - dependable, caring, and thorough.",
+    strengths: [
+      'Builds trust through consistency',
+      'Supports others with practical help',
+      'Creates stable foundations',
+    ],
+    watchOuts: [
+      'May take on too much for others',
+      'Could neglect own needs while helping',
+    ],
   },
   {
     name: 'The Social Connector',
     traits: ['extraversion', 'high', 'agreeableness', 'high'],
-    description: 'You bring people together with warmth, creating harmony in groups.',
-    strengths: ['Natural community builder', 'Makes everyone feel included', 'Smooths social friction'],
-    watchOuts: ['May avoid necessary difficult conversations', 'Could spread yourself too thin socially'],
+    description:
+      'You bring people together with warmth, creating harmony in groups.',
+    strengths: [
+      'Natural community builder',
+      'Makes everyone feel included',
+      'Smooths social friction',
+    ],
+    watchOuts: [
+      'May avoid necessary difficult conversations',
+      'Could spread yourself too thin socially',
+    ],
   },
   {
     name: 'The Calm Commander',
     traits: ['extraversion', 'high', 'neuroticism', 'high'],
-    description: 'You lead with confidence and unshakeable composure, even in chaos.',
-    strengths: ['Inspires confidence in crisis', 'Makes decisions under pressure', 'Radiates stability'],
-    watchOuts: ['May seem emotionally distant', 'Could underestimate others\' stress levels'],
+    description:
+      'You lead with confidence and unshakeable composure, even in chaos.',
+    strengths: [
+      'Inspires confidence in crisis',
+      'Makes decisions under pressure',
+      'Radiates stability',
+    ],
+    watchOuts: [
+      'May seem emotionally distant',
+      "Could underestimate others' stress levels",
+    ],
   },
   {
     name: 'The Steady Strategist',
     traits: ['conscientiousness', 'high', 'neuroticism', 'high'],
-    description: 'You combine careful planning with emotional resilience—prepared and unflappable.',
-    strengths: ['Executes under pressure', 'Maintains focus during setbacks', 'Plans for contingencies calmly'],
-    watchOuts: ['May seem overly focused on execution', 'Could dismiss others\' anxieties'],
+    description:
+      'You combine careful planning with emotional resilience—prepared and unflappable.',
+    strengths: [
+      'Executes under pressure',
+      'Maintains focus during setbacks',
+      'Plans for contingencies calmly',
+    ],
+    watchOuts: [
+      'May seem overly focused on execution',
+      "Could dismiss others' anxieties",
+    ],
   },
   // High + Low combinations (often the most interesting "tension" blends)
   {
     name: 'The Creative Rebel',
     traits: ['openness', 'high', 'conscientiousness', 'low'],
-    description: "You're a free-spirited innovator who resists structure in pursuit of creative vision.",
-    strengths: ['Unbound creative thinking', 'Challenges conventions', 'Brings fresh perspectives'],
-    watchOuts: ['May struggle to finish projects', 'Could frustrate more structured collaborators'],
+    description:
+      "You're a free-spirited innovator who resists structure in pursuit of creative vision.",
+    strengths: [
+      'Unbound creative thinking',
+      'Challenges conventions',
+      'Brings fresh perspectives',
+    ],
+    watchOuts: [
+      'May struggle to finish projects',
+      'Could frustrate more structured collaborators',
+    ],
   },
   {
     name: 'The Sensitive Caregiver',
     traits: ['agreeableness', 'high', 'neuroticism', 'low'],
-    description: 'You combine deep empathy with emotional sensitivity—feeling others\' pain acutely.',
-    strengths: ['Profound emotional understanding', 'Anticipates others\' needs', 'Creates safe spaces'],
-    watchOuts: ['May absorb others\' stress', 'Could neglect self-care while caring for others'],
+    description:
+      "You combine deep empathy with emotional sensitivity—feeling others' pain acutely.",
+    strengths: [
+      'Profound emotional understanding',
+      "Anticipates others' needs",
+      'Creates safe spaces',
+    ],
+    watchOuts: [
+      "May absorb others' stress",
+      'Could neglect self-care while caring for others',
+    ],
   },
   {
     name: 'The Analytical Challenger',
     traits: ['openness', 'high', 'agreeableness', 'low'],
-    description: 'You combine intellectual curiosity with critical thinking—questioning everything.',
-    strengths: ['Spots flaws in ideas quickly', 'Pushes for deeper understanding', 'Values truth over comfort'],
-    watchOuts: ['May come across as contrarian', 'Could alienate with relentless questioning'],
+    description:
+      'You combine intellectual curiosity with critical thinking—questioning everything.',
+    strengths: [
+      'Spots flaws in ideas quickly',
+      'Pushes for deeper understanding',
+      'Values truth over comfort',
+    ],
+    watchOuts: [
+      'May come across as contrarian',
+      'Could alienate with relentless questioning',
+    ],
   },
   {
     name: 'The Quiet Achiever',
     traits: ['conscientiousness', 'high', 'extraversion', 'low'],
-    description: 'You accomplish great things without fanfare, preferring results over recognition.',
-    strengths: ['Deep focus and persistence', 'Lets work speak for itself', 'Self-motivated'],
-    watchOuts: ['May not get credit deserved', 'Could struggle with visibility and networking'],
+    description:
+      'You accomplish great things without fanfare, preferring results over recognition.',
+    strengths: [
+      'Deep focus and persistence',
+      'Lets work speak for itself',
+      'Self-motivated',
+    ],
+    watchOuts: [
+      'May not get credit deserved',
+      'Could struggle with visibility and networking',
+    ],
   },
   {
     name: 'The Charismatic Free Spirit',
     traits: ['extraversion', 'high', 'conscientiousness', 'low'],
-    description: 'You light up rooms with spontaneous energy, living in the moment.',
-    strengths: ['Infectious enthusiasm', 'Adapts to any social situation', 'Makes experiences memorable'],
+    description:
+      'You light up rooms with spontaneous energy, living in the moment.',
+    strengths: [
+      'Infectious enthusiasm',
+      'Adapts to any social situation',
+      'Makes experiences memorable',
+    ],
     watchOuts: ['May over-promise and under-deliver', 'Could leave loose ends'],
   },
   {
     name: 'The Tough Empath',
     traits: ['agreeableness', 'high', 'neuroticism', 'high'],
-    description: 'You care deeply but remain emotionally steady—compassionate without being overwhelmed.',
-    strengths: ['Supportive presence in crisis', 'Cares without catastrophizing', 'Balanced emotional support'],
-    watchOuts: ['May seem less emotionally engaged', 'Could miss subtle emotional cues'],
+    description:
+      'You care deeply but remain emotionally steady—compassionate without being overwhelmed.',
+    strengths: [
+      'Supportive presence in crisis',
+      'Cares without catastrophizing',
+      'Balanced emotional support',
+    ],
+    watchOuts: [
+      'May seem less emotionally engaged',
+      'Could miss subtle emotional cues',
+    ],
   },
   {
     name: 'The Direct Stabilizer',
     traits: ['agreeableness', 'low', 'neuroticism', 'high'],
-    description: 'You combine emotional stability with direct communication—honest and unflappable.',
-    strengths: ['Gives feedback without drama', 'Stays calm in conflict', 'Cuts through emotional noise'],
-    watchOuts: ['May seem cold or dismissive', 'Could undervalue emotional discussions'],
+    description:
+      'You combine emotional stability with direct communication—honest and unflappable.',
+    strengths: [
+      'Gives feedback without drama',
+      'Stays calm in conflict',
+      'Cuts through emotional noise',
+    ],
+    watchOuts: [
+      'May seem cold or dismissive',
+      'Could undervalue emotional discussions',
+    ],
   },
 ];
 
@@ -862,10 +1116,16 @@ export function detectPersonalityBlends(
   traitScores: { trait: BigFiveTrait; percentScore: number }[],
 ): PersonalityBlend[] {
   const getRange = (score: number): ScoreRange => getScoreRange(score);
-  
-  const scoreMap = new Map<BigFiveTrait, { score: number; range: ScoreRange }>();
-  traitScores.forEach(ts => {
-    scoreMap.set(ts.trait, { score: ts.percentScore, range: getRange(ts.percentScore) });
+
+  const scoreMap = new Map<
+    BigFiveTrait,
+    { score: number; range: ScoreRange }
+  >();
+  traitScores.forEach((ts) => {
+    scoreMap.set(ts.trait, {
+      score: ts.percentScore,
+      range: getRange(ts.percentScore),
+    });
   });
 
   const matchedBlends: PersonalityBlend[] = [];
