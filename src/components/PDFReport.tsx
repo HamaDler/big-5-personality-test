@@ -116,28 +116,39 @@ export default function PDFReport({
             // Create a slice of the canvas
             const sliceCanvas = document.createElement('canvas');
             sliceCanvas.width = canvas.width;
-            
+
             // For the last slice, take whatever is remaining
             const isLastSlice = pageNum === totalPagesNeeded - 1;
-            const currentSliceHeight = isLastSlice 
-              ? canvas.height - (pageNum * sliceHeight)
+            const currentSliceHeight = isLastSlice
+              ? canvas.height - pageNum * sliceHeight
               : sliceHeight;
-            
+
             sliceCanvas.height = currentSliceHeight;
 
             const ctx = sliceCanvas.getContext('2d');
             if (ctx) {
               ctx.drawImage(
                 canvas,
-                0, pageNum * sliceHeight, // source x, y
-                canvas.width, currentSliceHeight, // source width, height
-                0, 0, // dest x, y
-                canvas.width, currentSliceHeight // dest width, height
+                0,
+                pageNum * sliceHeight, // source x, y
+                canvas.width,
+                currentSliceHeight, // source width, height
+                0,
+                0, // dest x, y
+                canvas.width,
+                currentSliceHeight, // dest width, height
               );
 
               const sliceImgData = sliceCanvas.toDataURL('image/jpeg', 0.92);
               const sliceScaledHeight = currentSliceHeight * scaleFactor;
-              pdf.addImage(sliceImgData, 'JPEG', 4, 4, imgWidth, sliceScaledHeight);
+              pdf.addImage(
+                sliceImgData,
+                'JPEG',
+                4,
+                4,
+                imgWidth,
+                sliceScaledHeight,
+              );
             }
 
             isFirstPage = false;
@@ -373,7 +384,10 @@ export default function PDFReport({
                       Understanding {TRAIT_LABELS[report.trait]}
                     </h3>
                     <p className="text-sm text-warm-700 leading-relaxed">
-                      {detailedTraitInterpretations[report.trait].fullDescription}
+                      {
+                        detailedTraitInterpretations[report.trait]
+                          .fullDescription
+                      }
                     </p>
                   </div>
                 )}
