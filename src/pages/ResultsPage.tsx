@@ -13,6 +13,12 @@ import {
   getScoreRange,
   getScoreRangeLabel,
 } from '../lib/interpretations';
+import {
+  getAllTraitInsights,
+  generateProfileSummary,
+  PersonalizedInsight,
+  ProfileSummary,
+} from '../lib/insights';
 import TraitChart from '../components/TraitChart';
 import FacetBreakdown from '../components/FacetBreakdown';
 import PDFReport from '../components/PDFReport';
@@ -23,6 +29,14 @@ import {
   ChevronUp,
   Info,
   AlertTriangle,
+  Lightbulb,
+  Briefcase,
+  Heart,
+  TrendingUp,
+  Star,
+  Users,
+  Zap,
+  Target,
 } from 'lucide-react';
 
 export default function ResultsPage() {
@@ -68,6 +82,20 @@ export default function ResultsPage() {
   }
 
   const interpretationReport = generateInterpretationReport(results.traits);
+
+  // Generate personality insights
+  const traitInsights = getAllTraitInsights(
+    results.traits.map((t) => ({
+      trait: t.trait,
+      percentScore: t.percentScore,
+    })),
+  );
+  const profileSummary = generateProfileSummary(
+    results.traits.map((t) => ({
+      trait: t.trait,
+      percentScore: t.percentScore,
+    })),
+  );
 
   const toggleTrait = (trait: BigFiveTrait) => {
     setExpandedTraits((prev) => {
@@ -308,6 +336,268 @@ export default function ResultsPage() {
         </div>
       </section>
 
+      {/* Profile Summary */}
+      <section className="py-12 bg-gradient-to-br from-indigo-50 to-purple-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
+              <Zap className="w-5 h-5 text-white" />
+            </div>
+            <h2 className="text-xl font-semibold text-gray-900">
+              Your Personality Profile
+            </h2>
+          </div>
+
+          <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
+            <div className="text-center mb-6">
+              <h3 className="text-2xl font-bold text-indigo-600 mb-2">
+                {profileSummary.personalityPattern}
+              </h3>
+              <p className="text-gray-600">
+                Based on your unique combination of traits
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Communication Style */}
+              <div className="bg-gray-50 rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <Users className="w-5 h-5 text-indigo-600" />
+                  <h4 className="font-semibold text-gray-900">
+                    Communication Style
+                  </h4>
+                </div>
+                <p className="text-sm text-gray-600">
+                  {profileSummary.communicationStyle}
+                </p>
+              </div>
+
+              {/* Stress Response */}
+              <div className="bg-gray-50 rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <Target className="w-5 h-5 text-indigo-600" />
+                  <h4 className="font-semibold text-gray-900">
+                    Under Pressure
+                  </h4>
+                </div>
+                <p className="text-sm text-gray-600">
+                  {profileSummary.stressResponse}
+                </p>
+              </div>
+
+              {/* Key Strengths */}
+              <div className="bg-gray-50 rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <Star className="w-5 h-5 text-green-600" />
+                  <h4 className="font-semibold text-gray-900">Key Strengths</h4>
+                </div>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  {profileSummary.overallStrengths
+                    .slice(0, 4)
+                    .map((strength, i) => (
+                      <li key={i} className="flex items-start gap-2">
+                        <span className="text-green-500 mt-1">•</span>
+                        {strength}
+                      </li>
+                    ))}
+                </ul>
+              </div>
+
+              {/* Motivation Drivers */}
+              <div className="bg-gray-50 rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <TrendingUp className="w-5 h-5 text-amber-600" />
+                  <h4 className="font-semibold text-gray-900">
+                    What Motivates You
+                  </h4>
+                </div>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  {profileSummary.motivationDrivers.map((driver, i) => (
+                    <li key={i} className="flex items-start gap-2">
+                      <span className="text-amber-500 mt-1">•</span>
+                      {driver}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Detailed Insights by Trait */}
+      <section className="py-12 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center">
+              <Lightbulb className="w-5 h-5 text-white" />
+            </div>
+            <h2 className="text-xl font-semibold text-gray-900">
+              Detailed Insights & Interesting Facts
+            </h2>
+          </div>
+
+          <div className="space-y-6">
+            {traitInsights.map((insight) => {
+              const colors = getTraitColorClasses(insight.trait);
+              return (
+                <div
+                  key={insight.trait}
+                  className="bg-gray-50 rounded-2xl p-6 border border-gray-200"
+                >
+                  <div className="flex items-center gap-3 mb-4">
+                    <div
+                      className={`w-8 h-8 rounded-full ${colors.bg} flex items-center justify-center`}
+                    >
+                      <span className="text-white font-bold text-sm">
+                        {TRAIT_LABELS[insight.trait].charAt(0)}
+                      </span>
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      {TRAIT_LABELS[insight.trait]}
+                    </h3>
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs font-medium ${colors.light} ${colors.text}`}
+                    >
+                      {insight.score}%
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Interesting Facts */}
+                    <div className="bg-white rounded-xl p-4">
+                      <div className="flex items-center gap-2 mb-3">
+                        <Lightbulb className="w-4 h-4 text-amber-500" />
+                        <h4 className="font-medium text-gray-900 text-sm">
+                          Did You Know?
+                        </h4>
+                      </div>
+                      <ul className="text-sm text-gray-600 space-y-2">
+                        {insight.interestingFacts.slice(0, 2).map((fact, i) => (
+                          <li key={i} className="flex items-start gap-2">
+                            <span className="text-amber-400 mt-1 flex-shrink-0">
+                              ✦
+                            </span>
+                            <span>{fact}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Career Environments */}
+                    <div className="bg-white rounded-xl p-4">
+                      <div className="flex items-center gap-2 mb-3">
+                        <Briefcase className="w-4 h-4 text-blue-500" />
+                        <h4 className="font-medium text-gray-900 text-sm">
+                          Suitable Environments
+                        </h4>
+                      </div>
+                      <ul className="text-sm text-gray-600 space-y-1">
+                        {insight.careerEnvironments
+                          .slice(0, 3)
+                          .map((env, i) => (
+                            <li key={i} className="flex items-start gap-2">
+                              <span className="text-blue-400 mt-1 flex-shrink-0">
+                                →
+                              </span>
+                              <span>{env}</span>
+                            </li>
+                          ))}
+                      </ul>
+                    </div>
+
+                    {/* Relationship Insights */}
+                    <div className="bg-white rounded-xl p-4">
+                      <div className="flex items-center gap-2 mb-3">
+                        <Heart className="w-4 h-4 text-rose-500" />
+                        <h4 className="font-medium text-gray-900 text-sm">
+                          Relationships
+                        </h4>
+                      </div>
+                      <p className="text-sm text-gray-600">
+                        {insight.relationshipInsight}
+                      </p>
+                    </div>
+
+                    {/* Growth Tips */}
+                    <div className="bg-white rounded-xl p-4">
+                      <div className="flex items-center gap-2 mb-3">
+                        <TrendingUp className="w-4 h-4 text-green-500" />
+                        <h4 className="font-medium text-gray-900 text-sm">
+                          Growth Tips
+                        </h4>
+                      </div>
+                      <ul className="text-sm text-gray-600 space-y-1">
+                        {insight.growthTips.slice(0, 2).map((tip, i) => (
+                          <li key={i} className="flex items-start gap-2">
+                            <span className="text-green-400 mt-1 flex-shrink-0">
+                              ✓
+                            </span>
+                            <span>{tip}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Strengths */}
+                    <div className="bg-white rounded-xl p-4">
+                      <div className="flex items-center gap-2 mb-3">
+                        <Star className="w-4 h-4 text-emerald-500" />
+                        <h4 className="font-medium text-gray-900 text-sm">
+                          Your Strengths
+                        </h4>
+                      </div>
+                      <ul className="text-sm text-gray-600 space-y-1">
+                        {insight.strengths.slice(0, 3).map((strength, i) => (
+                          <li key={i} className="flex items-start gap-2">
+                            <span className="text-emerald-400 mt-1 flex-shrink-0">
+                              +
+                            </span>
+                            <span>{strength}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Challenges */}
+                    <div className="bg-white rounded-xl p-4">
+                      <div className="flex items-center gap-2 mb-3">
+                        <Info className="w-4 h-4 text-orange-500" />
+                        <h4 className="font-medium text-gray-900 text-sm">
+                          Watch Out For
+                        </h4>
+                      </div>
+                      <ul className="text-sm text-gray-600 space-y-1">
+                        {insight.challenges.slice(0, 2).map((challenge, i) => (
+                          <li key={i} className="flex items-start gap-2">
+                            <span className="text-orange-400 mt-1 flex-shrink-0">
+                              !
+                            </span>
+                            <span>{challenge}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* Famous Figures */}
+                  {insight.famousFigures.length > 0 && (
+                    <div className="mt-4 pt-4 border-t border-gray-200">
+                      <p className="text-sm text-gray-500">
+                        <span className="font-medium">
+                          Notable figures with similar traits:{' '}
+                        </span>
+                        {insight.famousFigures.join(', ')}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       {/* Understanding Your Results */}
       <section className="py-12 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -354,6 +644,8 @@ export default function ResultsPage() {
         <PDFReport
           results={results}
           interpretationReport={interpretationReport}
+          traitInsights={traitInsights}
+          profileSummary={profileSummary}
           onClose={() => setShowPDFPreview(false)}
         />
       )}

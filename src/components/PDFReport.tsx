@@ -6,11 +6,14 @@ import {
   InterpretationReport,
   getScoreRangeLabel,
 } from '../lib/interpretations';
+import { PersonalizedInsight, ProfileSummary } from '../lib/insights';
 import { X, Download, Loader2 } from 'lucide-react';
 
 interface PDFReportProps {
   results: TestResults;
   interpretationReport: InterpretationReport[];
+  traitInsights: PersonalizedInsight[];
+  profileSummary: ProfileSummary;
   onClose: () => void;
 }
 
@@ -25,6 +28,8 @@ const TRAIT_COLORS: Record<BigFiveTrait, string> = {
 export default function PDFReport({
   results,
   interpretationReport,
+  traitInsights,
+  profileSummary,
   onClose,
 }: PDFReportProps) {
   const reportRef = useRef<HTMLDivElement>(null);
@@ -209,7 +214,7 @@ export default function PDFReport({
               </div>
 
               {/* Detailed Results */}
-              {interpretationReport.map((report, index) => (
+              {interpretationReport.map((report) => (
                 <div
                   key={report.trait}
                   className="mb-8"
@@ -277,6 +282,173 @@ export default function PDFReport({
                   </div>
                 </div>
               ))}
+
+              {/* Profile Summary Section */}
+              <div className="mb-8" style={{ pageBreakBefore: 'always' }}>
+                <h2 className="text-xl font-semibold text-gray-900 mb-4 pb-2 border-b border-indigo-200">
+                  Your Personality Profile
+                </h2>
+
+                <div className="bg-indigo-50 rounded-lg p-4 mb-4 text-center">
+                  <h3 className="text-lg font-bold text-indigo-600 mb-1">
+                    {profileSummary.personalityPattern}
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    Based on your unique combination of traits
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div className="bg-gray-50 rounded-lg p-3">
+                    <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                      Communication Style
+                    </h4>
+                    <p className="text-xs text-gray-600">
+                      {profileSummary.communicationStyle}
+                    </p>
+                  </div>
+                  <div className="bg-gray-50 rounded-lg p-3">
+                    <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                      Under Pressure
+                    </h4>
+                    <p className="text-xs text-gray-600">
+                      {profileSummary.stressResponse}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-gray-50 rounded-lg p-3">
+                    <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                      Key Strengths
+                    </h4>
+                    <ul className="text-xs text-gray-600 space-y-1">
+                      {profileSummary.overallStrengths
+                        .slice(0, 4)
+                        .map((strength, i) => (
+                          <li key={i}>• {strength}</li>
+                        ))}
+                    </ul>
+                  </div>
+                  <div className="bg-gray-50 rounded-lg p-3">
+                    <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                      What Motivates You
+                    </h4>
+                    <ul className="text-xs text-gray-600 space-y-1">
+                      {profileSummary.motivationDrivers.map((driver, i) => (
+                        <li key={i}>• {driver}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              {/* Detailed Insights Section */}
+              <div className="mb-8">
+                <h2 className="text-xl font-semibold text-gray-900 mb-4 pb-2 border-b border-purple-200">
+                  Detailed Insights & Interesting Facts
+                </h2>
+
+                {traitInsights.map((insight) => (
+                  <div
+                    key={insight.trait}
+                    className="mb-6"
+                    style={{ pageBreakInside: 'avoid' }}
+                  >
+                    <div
+                      className="flex items-center gap-2 mb-3 pb-2 border-b"
+                      style={{ borderColor: TRAIT_COLORS[insight.trait] }}
+                    >
+                      <div
+                        className="w-6 h-6 rounded-full flex items-center justify-center"
+                        style={{ backgroundColor: TRAIT_COLORS[insight.trait] }}
+                      >
+                        <span className="text-white font-bold text-xs">
+                          {TRAIT_LABELS[insight.trait].charAt(0)}
+                        </span>
+                      </div>
+                      <h3 className="text-base font-semibold text-gray-900">
+                        {TRAIT_LABELS[insight.trait]}
+                      </h3>
+                      <span className="text-sm text-gray-500">
+                        ({insight.score}%)
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3 mb-3">
+                      {/* Interesting Facts */}
+                      <div className="bg-amber-50 rounded-lg p-3">
+                        <h4 className="text-xs font-semibold text-amber-800 mb-2">
+                          ✦ Did You Know?
+                        </h4>
+                        <ul className="text-xs text-gray-700 space-y-1">
+                          {insight.interestingFacts
+                            .slice(0, 2)
+                            .map((fact, i) => (
+                              <li key={i}>• {fact}</li>
+                            ))}
+                        </ul>
+                      </div>
+
+                      {/* Career Environments */}
+                      <div className="bg-blue-50 rounded-lg p-3">
+                        <h4 className="text-xs font-semibold text-blue-800 mb-2">
+                          💼 Suitable Environments
+                        </h4>
+                        <ul className="text-xs text-gray-700 space-y-1">
+                          {insight.careerEnvironments
+                            .slice(0, 3)
+                            .map((env, i) => (
+                              <li key={i}>→ {env}</li>
+                            ))}
+                        </ul>
+                      </div>
+
+                      {/* Growth Tips */}
+                      <div className="bg-green-50 rounded-lg p-3">
+                        <h4 className="text-xs font-semibold text-green-800 mb-2">
+                          📈 Growth Tips
+                        </h4>
+                        <ul className="text-xs text-gray-700 space-y-1">
+                          {insight.growthTips.slice(0, 2).map((tip, i) => (
+                            <li key={i}>✓ {tip}</li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* Strengths */}
+                      <div className="bg-emerald-50 rounded-lg p-3">
+                        <h4 className="text-xs font-semibold text-emerald-800 mb-2">
+                          ⭐ Your Strengths
+                        </h4>
+                        <ul className="text-xs text-gray-700 space-y-1">
+                          {insight.strengths.slice(0, 3).map((strength, i) => (
+                            <li key={i}>+ {strength}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+
+                    {/* Relationship Insight */}
+                    <div className="bg-rose-50 rounded-lg p-3 mb-2">
+                      <h4 className="text-xs font-semibold text-rose-800 mb-1">
+                        💕 Relationships
+                      </h4>
+                      <p className="text-xs text-gray-700">
+                        {insight.relationshipInsight}
+                      </p>
+                    </div>
+
+                    {/* Famous Figures */}
+                    {insight.famousFigures.length > 0 && (
+                      <p className="text-xs text-gray-500 italic">
+                        Notable figures with similar traits:{' '}
+                        {insight.famousFigures.join(', ')}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
 
               {/* Footer */}
               <div className="mt-8 pt-4 border-t border-gray-200 text-center">
