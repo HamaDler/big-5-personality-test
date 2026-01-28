@@ -174,25 +174,31 @@ export default function PDFReport({
                     </p>
                   )}
                   <div className="flex items-center justify-center gap-4 text-warm-600">
-                    <span className="text-sm">Assessment Date: {formattedDate}</span>
+                    <span className="text-sm">
+                      Assessment Date: {formattedDate}
+                    </span>
                     <span className="text-sage-300">•</span>
                     <span className="text-sm">Time: {formattedTime}</span>
                   </div>
                 </div>
                 <p className="text-warm-500 text-sm leading-relaxed max-w-2xl mx-auto">
-                  This comprehensive personality assessment provides insights into your natural tendencies,
-                  behavioral patterns, and unique personality profile based on the Big Five personality model.
+                  This comprehensive personality assessment provides insights
+                  into your natural tendencies, behavioral patterns, and unique
+                  personality profile based on the Big Five personality model.
                 </p>
               </div>
 
               {/* Disclaimer */}
               <div className="bg-gradient-to-r from-sage-50 to-sage-50/50 border-l-4 border-sage-400 rounded-lg p-6 mb-12">
                 <p className="text-sm text-sage-800 leading-relaxed">
-                  <strong className="text-sage-900">About This Report:</strong> This assessment is based on the 
-                  IPIP-NEO-120 personality inventory and is intended for personal growth, 
-                  self-reflection, and educational purposes only. Results reflect self-reported tendencies at this 
-                  particular moment and should not be used for clinical diagnosis, professional evaluations, 
-                  employment decisions, or medical purposes. Personality is dynamic and can shift across time and 
+                  <strong className="text-sage-900">About This Report:</strong>{' '}
+                  This assessment is based on the IPIP-NEO-120 personality
+                  inventory and is intended for personal growth,
+                  self-reflection, and educational purposes only. Results
+                  reflect self-reported tendencies at this particular moment and
+                  should not be used for clinical diagnosis, professional
+                  evaluations, employment decisions, or medical purposes.
+                  Personality is dynamic and can shift across time and
                   situations.
                 </p>
               </div>
@@ -207,7 +213,10 @@ export default function PDFReport({
                 </div>
                 <div className="space-y-4">
                   {interpretationReport.map((report) => (
-                    <div key={report.trait} className="flex items-center gap-4 p-4 rounded-xl bg-white border border-sage-100 hover:border-sage-200 transition-colors">
+                    <div
+                      key={report.trait}
+                      className="flex items-center gap-4 p-4 rounded-xl bg-white border border-sage-100 hover:border-sage-200 transition-colors"
+                    >
                       <div
                         className="w-6 h-6 rounded-full flex-shrink-0 shadow-sm"
                         style={{ backgroundColor: TRAIT_COLORS[report.trait] }}
@@ -245,12 +254,15 @@ export default function PDFReport({
                     Detailed Trait Analysis
                   </h2>
                 </div>
-                
+
                 {interpretationReport.map((report) => (
                   <div
                     key={report.trait}
                     className="mb-10 p-6 rounded-xl border-2 bg-white"
-                    style={{ borderColor: TRAIT_COLORS[report.trait], pageBreakInside: 'avoid' }}
+                    style={{
+                      borderColor: TRAIT_COLORS[report.trait],
+                      pageBreakInside: 'avoid',
+                    }}
                   >
                     <div className="flex items-center gap-3 mb-4">
                       <div
@@ -278,7 +290,9 @@ export default function PDFReport({
                     {/* Facets */}
                     <div className="bg-gradient-to-br from-sage-50 to-sage-50/50 rounded-lg p-4 mt-4">
                       <h4 className="text-sm font-bold text-warm-800 uppercase tracking-wide mb-3 flex items-center gap-2">
-                        <span style={{ color: TRAIT_COLORS[report.trait] }}>▸</span>
+                        <span style={{ color: TRAIT_COLORS[report.trait] }}>
+                          ▸
+                        </span>
                         Key Aspects
                       </h4>
                       <div className="space-y-3">
@@ -334,7 +348,10 @@ export default function PDFReport({
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 mb-6">
-                  <div className="bg-white border-l-4 rounded-lg p-4" style={{ borderColor: TRAIT_COLORS.openness }}>
+                  <div
+                    className="bg-white border-l-4 rounded-lg p-4"
+                    style={{ borderColor: TRAIT_COLORS.openness }}
+                  >
                     <h4 className="text-sm font-bold text-warm-800 mb-2 flex items-center gap-2">
                       <span style={{ color: TRAIT_COLORS.openness }}>→</span>
                       Communication Style
@@ -343,7 +360,10 @@ export default function PDFReport({
                       {profileSummary.communicationStyle}
                     </p>
                   </div>
-                  <div className="bg-white border-l-4 rounded-lg p-4" style={{ borderColor: TRAIT_COLORS.neuroticism }}>
+                  <div
+                    className="bg-white border-l-4 rounded-lg p-4"
+                    style={{ borderColor: TRAIT_COLORS.neuroticism }}
+                  >
                     <h4 className="text-sm font-bold text-warm-800 mb-2 flex items-center gap-2">
                       <span style={{ color: TRAIT_COLORS.neuroticism }}>→</span>
                       Under Pressure
@@ -355,9 +375,14 @@ export default function PDFReport({
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-white border-l-4 rounded-lg p-4" style={{ borderColor: TRAIT_COLORS.conscientiousness }}>
+                  <div
+                    className="bg-white border-l-4 rounded-lg p-4"
+                    style={{ borderColor: TRAIT_COLORS.conscientiousness }}
+                  >
                     <h4 className="text-sm font-bold text-warm-800 mb-2 flex items-center gap-2">
-                      <span style={{ color: TRAIT_COLORS.conscientiousness }}>▸</span>
+                      <span style={{ color: TRAIT_COLORS.conscientiousness }}>
+                        ▸
+                      </span>
                       Key Strengths
                     </h4>
                     <ul className="text-xs text-warm-700 space-y-1">
@@ -368,9 +393,14 @@ export default function PDFReport({
                         ))}
                     </ul>
                   </div>
-                  <div className="bg-white border-l-4 rounded-lg p-4" style={{ borderColor: TRAIT_COLORS.extraversion }}>
+                  <div
+                    className="bg-white border-l-4 rounded-lg p-4"
+                    style={{ borderColor: TRAIT_COLORS.extraversion }}
+                  >
                     <h4 className="text-sm font-bold text-warm-800 mb-2 flex items-center gap-2">
-                      <span style={{ color: TRAIT_COLORS.extraversion }}>✦</span>
+                      <span style={{ color: TRAIT_COLORS.extraversion }}>
+                        ✦
+                      </span>
                       What Motivates You
                     </h4>
                     <ul className="text-xs text-warm-700 space-y-1">
@@ -395,7 +425,10 @@ export default function PDFReport({
                   <div
                     key={insight.trait}
                     className="mb-8 p-6 rounded-xl border-2 bg-white"
-                    style={{ borderColor: TRAIT_COLORS[insight.trait], pageBreakInside: 'avoid' }}
+                    style={{
+                      borderColor: TRAIT_COLORS[insight.trait],
+                      pageBreakInside: 'avoid',
+                    }}
                   >
                     <div className="flex items-center gap-3 mb-4">
                       <div
@@ -426,7 +459,9 @@ export default function PDFReport({
                           {insight.interestingFacts
                             .slice(0, 2)
                             .map((fact, i) => (
-                              <li key={i} className="leading-relaxed">• {fact}</li>
+                              <li key={i} className="leading-relaxed">
+                                • {fact}
+                              </li>
                             ))}
                         </ul>
                       </div>
@@ -440,7 +475,9 @@ export default function PDFReport({
                           {insight.careerEnvironments
                             .slice(0, 3)
                             .map((env, i) => (
-                              <li key={i} className="leading-relaxed">→ {env}</li>
+                              <li key={i} className="leading-relaxed">
+                                → {env}
+                              </li>
                             ))}
                         </ul>
                       </div>
@@ -452,7 +489,9 @@ export default function PDFReport({
                         </h4>
                         <ul className="text-xs text-warm-700 space-y-1.5">
                           {insight.growthTips.slice(0, 2).map((tip, i) => (
-                            <li key={i} className="leading-relaxed">✓ {tip}</li>
+                            <li key={i} className="leading-relaxed">
+                              ✓ {tip}
+                            </li>
                           ))}
                         </ul>
                       </div>
@@ -464,7 +503,9 @@ export default function PDFReport({
                         </h4>
                         <ul className="text-xs text-warm-700 space-y-1.5">
                           {insight.strengths.slice(0, 3).map((strength, i) => (
-                            <li key={i} className="leading-relaxed">+ {strength}</li>
+                            <li key={i} className="leading-relaxed">
+                              + {strength}
+                            </li>
                           ))}
                         </ul>
                       </div>
@@ -483,7 +524,10 @@ export default function PDFReport({
                     {/* Famous Figures */}
                     {insight.famousFigures.length > 0 && (
                       <p className="text-xs text-warm-600 italic mt-3 pt-3 border-t border-sage-100">
-                        <span className="font-semibold">Individuals with similar traits:</span> {insight.famousFigures.join(', ')}
+                        <span className="font-semibold">
+                          Individuals with similar traits:
+                        </span>{' '}
+                        {insight.famousFigures.join(', ')}
                       </p>
                     )}
                   </div>
@@ -499,7 +543,8 @@ export default function PDFReport({
                   Big Five Personality Assessment Report
                 </p>
                 <p className="text-xs text-warm-500 mt-2">
-                  Based on the IPIP-NEO-120 • International Personality Item Pool • Public Domain
+                  Based on the IPIP-NEO-120 • International Personality Item
+                  Pool • Public Domain
                 </p>
                 <p className="text-xs text-warm-400 mt-3">
                   Session ID: {results.sessionId}
