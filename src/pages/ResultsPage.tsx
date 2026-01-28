@@ -42,6 +42,8 @@ export default function ResultsPage() {
     new Set(),
   );
   const [showPDFPreview, setShowPDFPreview] = useState(false);
+  const [showNameModal, setShowNameModal] = useState(false);
+  const [fullName, setFullName] = useState('');
 
   // Load results from state or storage
   useEffect(() => {
@@ -191,7 +193,7 @@ export default function ResultsPage() {
                 Retake
               </button>
               <button
-                onClick={() => setShowPDFPreview(true)}
+                onClick={() => setShowNameModal(true)}
                 className="flex-1 sm:flex-none btn-zen flex items-center justify-center gap-2"
               >
                 <Download className="w-4 h-4" />
@@ -763,13 +765,67 @@ export default function ResultsPage() {
       </section>
 
       {/* PDF Preview Modal */}
+      {showNameModal && (
+        <div className="fixed inset-0 bg-warm-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-soft-xl max-w-md w-full p-8">
+            <h2 className="text-2xl font-serif font-semibold text-warm-800 mb-2">
+              Export Your Results
+            </h2>
+            <p className="text-warm-500 mb-6">
+              Please enter your full name to include in the PDF report.
+            </p>
+            <input
+              type="text"
+              placeholder="Your full name"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && fullName.trim()) {
+                  setShowNameModal(false);
+                  setShowPDFPreview(true);
+                }
+              }}
+              className="w-full px-4 py-3 border border-sage-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sage-500 focus:border-transparent mb-6"
+              autoFocus
+            />
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => {
+                  setShowNameModal(false);
+                  setFullName('');
+                }}
+                className="flex-1 btn-zen-outline"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  if (fullName.trim()) {
+                    setShowNameModal(false);
+                    setShowPDFPreview(true);
+                  }
+                }}
+                disabled={!fullName.trim()}
+                className="flex-1 btn-zen disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Continue
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showPDFPreview && (
         <PDFReport
           results={results}
           interpretationReport={interpretationReport}
           traitInsights={traitInsights}
           profileSummary={profileSummary}
-          onClose={() => setShowPDFPreview(false)}
+          fullName={fullName}
+          onClose={() => {
+            setShowPDFPreview(false);
+            setFullName('');
+          }}
         />
       )}
     </div>
