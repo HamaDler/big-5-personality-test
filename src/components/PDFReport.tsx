@@ -52,14 +52,7 @@ export default function PDFReport({
     setError(null);
 
     try {
-      // Wait for fonts and images to load
       await document.fonts.ready;
-
-      // Split the report into multiple pages
-      const pages = reportRef.current.querySelectorAll('[data-pdf-page]');
-      if (pages.length === 0) {
-        throw new Error('No pages found to generate');
-      }
 
       const pdf = new jsPDF({
         orientation: 'portrait',
@@ -67,62 +60,89 @@ export default function PDFReport({
         format: 'a4',
       });
 
-      for (let i = 0; i < pages.length; i++) {
-        const page = pages[i] as HTMLElement;
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
 
-        // Use JPEG format which is more reliable than PNG
-        const canvas = await html2canvas(page, {
+      // Get all content sections
+      const sections = reportRef.current.querySelectorAll('[data-pdf-section]');
+      if (sections.length === 0) {
+        throw new Error('No sections found to generate');
+      }
+
+      let isFirstPage = true;
+
+      for (let i = 0; i < sections.length; i++) {
+        const section = sections[i] as HTMLElement;
+
+        // Render the section to canvas
+        const canvas = await html2canvas(section, {
           scale: 2,
           useCORS: true,
           allowTaint: true,
           logging: false,
           backgroundColor: '#ffffff',
-          width: page.offsetWidth,
-          height: page.offsetHeight,
-          onclone: (clonedDoc) => {
-            // Ensure cloned elements are visible
-            const clonedElement = clonedDoc.querySelector('[data-pdf-page]');
-            if (clonedElement) {
-              (clonedElement as HTMLElement).style.visibility = 'visible';
-              (clonedElement as HTMLElement).style.position = 'relative';
-            }
-          },
+          width: section.offsetWidth,
+          height: section.offsetHeight,
         });
 
-        // Validate canvas has content
         if (canvas.width === 0 || canvas.height === 0) {
-          throw new Error(`Page ${i + 1} generated empty canvas`);
+          continue;
         }
 
-        // Use JPEG format for better compatibility
-        const imgData = canvas.toDataURL('image/jpeg', 0.95);
+        // Calculate how many pages this section needs
+        const imgWidth = pdfWidth - 8; // 4mm margin on each side
+        const scaleFactor = imgWidth / canvas.width;
+        const scaledHeight = canvas.height * scaleFactor;
+        const pageContentHeight = pdfHeight - 8; // 4mm margin top and bottom
 
-        // Validate image data
-        if (!imgData || imgData === 'data:,') {
-          throw new Error(`Failed to generate image for page ${i + 1}`);
+        // If section fits on one page
+        if (scaledHeight <= pageContentHeight) {
+          if (!isFirstPage) {
+            pdf.addPage();
+          }
+          const imgData = canvas.toDataURL('image/jpeg', 0.92);
+          pdf.addImage(imgData, 'JPEG', 4, 4, imgWidth, scaledHeight);
+          isFirstPage = false;
+        } else {
+          // Section needs multiple pages - slice the canvas
+          const totalPagesNeeded = Math.ceil(scaledHeight / pageContentHeight);
+          const sliceHeight = Math.floor(canvas.height / totalPagesNeeded);
+
+          for (let pageNum = 0; pageNum < totalPagesNeeded; pageNum++) {
+            if (!isFirstPage) {
+              pdf.addPage();
+            }
+
+            // Create a slice of the canvas
+            const sliceCanvas = document.createElement('canvas');
+            sliceCanvas.width = canvas.width;
+            
+            // For the last slice, take whatever is remaining
+            const isLastSlice = pageNum === totalPagesNeeded - 1;
+            const currentSliceHeight = isLastSlice 
+              ? canvas.height - (pageNum * sliceHeight)
+              : sliceHeight;
+            
+            sliceCanvas.height = currentSliceHeight;
+
+            const ctx = sliceCanvas.getContext('2d');
+            if (ctx) {
+              ctx.drawImage(
+                canvas,
+                0, pageNum * sliceHeight, // source x, y
+                canvas.width, currentSliceHeight, // source width, height
+                0, 0, // dest x, y
+                canvas.width, currentSliceHeight // dest width, height
+              );
+
+              const sliceImgData = sliceCanvas.toDataURL('image/jpeg', 0.92);
+              const sliceScaledHeight = currentSliceHeight * scaleFactor;
+              pdf.addImage(sliceImgData, 'JPEG', 4, 4, imgWidth, sliceScaledHeight);
+            }
+
+            isFirstPage = false;
+          }
         }
-
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-
-        // Calculate image dimensions to fit on page
-        const imgAspect = canvas.width / canvas.height;
-        let finalWidth = pdfWidth - 4; // 2mm margin on each side
-        let finalHeight = finalWidth / imgAspect;
-
-        // If image is too tall, scale down
-        if (finalHeight > pdfHeight - 4) {
-          finalHeight = pdfHeight - 4;
-          finalWidth = finalHeight * imgAspect;
-        }
-
-        if (i > 0) {
-          pdf.addPage();
-        }
-
-        // Center horizontally
-        const xOffset = (pdfWidth - finalWidth) / 2;
-        pdf.addImage(imgData, 'JPEG', xOffset, 2, finalWidth, finalHeight);
       }
 
       pdf.save(
@@ -199,12 +219,11 @@ export default function PDFReport({
       {/* Hidden report container - using absolute positioning off-screen instead of display:none */}
       <div className="fixed" style={{ left: '-9999px', top: 0 }}>
         <div ref={reportRef} className="bg-white" style={{ width: '210mm' }}>
-          {/* PAGE 1: Title and Overview */}
+          {/* SECTION 1: Title and Overview */}
           <div
-            data-pdf-page
+            data-pdf-section
             style={{
               width: '210mm',
-              height: '297mm',
               padding: '15mm 20mm',
               boxSizing: 'border-box',
               backgroundColor: '#ffffff',
@@ -272,132 +291,140 @@ export default function PDFReport({
                 ))}
               </div>
             </div>
-
-            {/* Page footer */}
-            <div className="absolute bottom-4 left-0 right-0 text-center">
-              <p className="text-xs text-warm-400">
-                Page 1 of {interpretationReport.length + 2}
-              </p>
-            </div>
           </div>
 
-          {/* PAGES 2-6: Individual Trait Pages (one per trait) */}
-          {interpretationReport.map((report, index) => (
-            <div
-              key={report.trait}
-              data-pdf-page
-              style={{
-                width: '210mm',
-                height: '297mm',
-                padding: '15mm 20mm',
-                boxSizing: 'border-box',
-                backgroundColor: '#ffffff',
-              }}
-            >
-              {/* Page Header */}
-              <div className="flex items-center gap-3 mb-6 pb-4 border-b-2 border-sage-200">
-                <div
-                  className="w-12 h-12 rounded-full flex items-center justify-center shadow-md"
-                  style={{ backgroundColor: TRAIT_COLORS[report.trait] }}
-                >
-                  <span className="text-white font-bold text-xl">
-                    {TRAIT_LABELS[report.trait].charAt(0)}
-                  </span>
-                </div>
-                <div className="flex-1">
-                  <h2 className="text-2xl font-serif font-bold text-warm-800">
-                    {TRAIT_LABELS[report.trait]}
-                  </h2>
-                  <p className="text-warm-500">
-                    Your Score:{' '}
-                    <span className="font-bold text-warm-700">
-                      {report.score}%
-                    </span>{' '}
-                    • {getScoreRangeLabel(report.range)}
-                  </p>
-                </div>
-              </div>
-
-              {/* Score Bar */}
-              <div className="mb-6 p-4 bg-sage-50 rounded-xl">
-                <div className="flex items-center justify-between text-xs text-warm-500 mb-2">
-                  <span>Low</span>
-                  <span>Average</span>
-                  <span>High</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="flex-1 h-5 bg-white rounded-full overflow-hidden border border-sage-200">
-                    <div
-                      className="h-full rounded-full transition-all"
-                      style={{
-                        width: `${report.score}%`,
-                        backgroundColor: TRAIT_COLORS[report.trait],
-                      }}
-                    />
-                  </div>
-                  <span className="text-sm font-bold text-warm-700 w-12 text-right">
-                    {report.score}%
-                  </span>
-                </div>
-              </div>
-
-              {/* Trait Interpretation */}
-              <div className="mb-6">
-                <h3 className="text-lg font-serif font-bold text-warm-800 mb-3">
-                  What This Means
-                </h3>
-                <p className="text-warm-700 leading-relaxed text-sm">
-                  {report.traitInterpretation}
-                </p>
-              </div>
-
-              {/* Full Description */}
-              {detailedTraitInterpretations[report.trait] && (
-                <div
-                  className="mb-6 p-4 bg-white border-l-4 rounded-lg"
-                  style={{ borderColor: TRAIT_COLORS[report.trait] }}
-                >
-                  <h3 className="text-lg font-serif font-bold text-warm-800 mb-3">
-                    Understanding {TRAIT_LABELS[report.trait]}
-                  </h3>
-                  <p
-                    className="text-sm text-warm-700 leading-relaxed"
-                    style={{
-                      display: '-webkit-box',
-                      WebkitLineClamp: 6,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden',
-                    }}
+          {/* SECTIONS: Individual Trait Details */}
+          {interpretationReport.map((report) => (
+            <div key={report.trait}>
+              {/* Trait Overview Section */}
+              <div
+                data-pdf-section
+                style={{
+                  width: '210mm',
+                  padding: '15mm 20mm',
+                  boxSizing: 'border-box',
+                  backgroundColor: '#ffffff',
+                }}
+              >
+                {/* Page Header */}
+                <div className="flex items-center gap-3 mb-6 pb-4 border-b-2 border-sage-200">
+                  <div
+                    className="w-12 h-12 rounded-full flex items-center justify-center shadow-md"
+                    style={{ backgroundColor: TRAIT_COLORS[report.trait] }}
                   >
-                    {detailedTraitInterpretations[report.trait].fullDescription
-                      .length > 450
-                      ? detailedTraitInterpretations[
-                          report.trait
-                        ].fullDescription.substring(0, 450) + '...'
-                      : detailedTraitInterpretations[report.trait]
-                          .fullDescription}
+                    <span className="text-white font-bold text-xl">
+                      {TRAIT_LABELS[report.trait].charAt(0)}
+                    </span>
+                  </div>
+                  <div className="flex-1">
+                    <h2 className="text-2xl font-serif font-bold text-warm-800">
+                      {TRAIT_LABELS[report.trait]}
+                    </h2>
+                    <p className="text-warm-500">
+                      Your Score:{' '}
+                      <span className="font-bold text-warm-700">
+                        {report.score}%
+                      </span>{' '}
+                      • {getScoreRangeLabel(report.range)}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Score Bar */}
+                <div className="mb-6 p-4 bg-sage-50 rounded-xl">
+                  <div className="flex items-center justify-between text-xs text-warm-500 mb-2">
+                    <span>Low</span>
+                    <span>Average</span>
+                    <span>High</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="flex-1 h-5 bg-white rounded-full overflow-hidden border border-sage-200">
+                      <div
+                        className="h-full rounded-full transition-all"
+                        style={{
+                          width: `${report.score}%`,
+                          backgroundColor: TRAIT_COLORS[report.trait],
+                        }}
+                      />
+                    </div>
+                    <span className="text-sm font-bold text-warm-700 w-12 text-right">
+                      {report.score}%
+                    </span>
+                  </div>
+                </div>
+
+                {/* Trait Interpretation */}
+                <div className="mb-6">
+                  <h3 className="text-lg font-serif font-bold text-warm-800 mb-3">
+                    What This Means
+                  </h3>
+                  <p className="text-warm-700 leading-relaxed text-sm">
+                    {report.traitInterpretation}
                   </p>
                 </div>
-              )}
 
-              {/* Facets */}
-              <div className="bg-sage-50 rounded-xl p-5">
-                <h3 className="text-lg font-serif font-bold text-warm-800 mb-4 flex items-center gap-2">
-                  <span style={{ color: TRAIT_COLORS[report.trait] }}>▸</span>
-                  Key Facets
-                </h3>
-                <div className="grid grid-cols-2 gap-3">
+                {/* Full Description */}
+                {detailedTraitInterpretations[report.trait] && (
+                  <div
+                    className="p-4 bg-white border-l-4 rounded-lg"
+                    style={{ borderColor: TRAIT_COLORS[report.trait] }}
+                  >
+                    <h3 className="text-lg font-serif font-bold text-warm-800 mb-3">
+                      Understanding {TRAIT_LABELS[report.trait]}
+                    </h3>
+                    <p className="text-sm text-warm-700 leading-relaxed">
+                      {detailedTraitInterpretations[report.trait].fullDescription}
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Facets Section - Separate so it can flow to next page if needed */}
+              <div
+                data-pdf-section
+                style={{
+                  width: '210mm',
+                  padding: '15mm 20mm',
+                  boxSizing: 'border-box',
+                  backgroundColor: '#ffffff',
+                }}
+              >
+                {/* Facets Header */}
+                <div className="flex items-center gap-3 mb-6 pb-4 border-b-2 border-sage-200">
+                  <div
+                    className="w-10 h-10 rounded-full flex items-center justify-center shadow-md"
+                    style={{ backgroundColor: TRAIT_COLORS[report.trait] }}
+                  >
+                    <span className="text-white font-bold text-lg">
+                      {TRAIT_LABELS[report.trait].charAt(0)}
+                    </span>
+                  </div>
+                  <div className="flex-1">
+                    <h2 className="text-xl font-serif font-bold text-warm-800">
+                      {TRAIT_LABELS[report.trait]} — Facets
+                    </h2>
+                    <p className="text-warm-500 text-sm">
+                      The six sub-dimensions that make up this trait
+                    </p>
+                  </div>
+                </div>
+
+                {/* Facets Grid */}
+                <div className="space-y-4">
                   {report.facets.map((facet) => (
-                    <div key={facet.facet} className="p-3 rounded-lg bg-white">
+                    <div
+                      key={facet.facet}
+                      className="p-4 rounded-xl bg-sage-50 border border-sage-100"
+                    >
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-semibold text-warm-800">
+                        <span className="font-semibold text-warm-800">
                           {facet.facetLabel}
                         </span>
-                        <span className="text-sm font-bold text-warm-700">
+                        <span className="font-bold text-warm-700">
                           {facet.score}%
                         </span>
                       </div>
-                      <div className="w-full h-2 bg-sage-100 rounded-full overflow-hidden">
+                      <div className="w-full h-3 bg-white rounded-full overflow-hidden border border-sage-200 mb-3">
                         <div
                           className="h-full rounded-full"
                           style={{
@@ -406,102 +433,91 @@ export default function PDFReport({
                           }}
                         />
                       </div>
+                      <p className="text-xs text-warm-600 leading-relaxed">
+                        {facet.interpretation}
+                      </p>
                     </div>
                   ))}
                 </div>
               </div>
-
-              {/* Page footer */}
-              <div className="absolute bottom-4 left-0 right-0 text-center">
-                <p className="text-xs text-warm-400">
-                  Page {index + 2} of {interpretationReport.length + 2}
-                </p>
-              </div>
             </div>
           ))}
 
-          {/* FINAL PAGE: Closing & Footer */}
+          {/* FINAL SECTION: Closing */}
           <div
-            data-pdf-page
+            data-pdf-section
             style={{
               width: '210mm',
-              height: '297mm',
               padding: '15mm 20mm',
               boxSizing: 'border-box',
               backgroundColor: '#ffffff',
-              display: 'flex',
-              flexDirection: 'column',
             }}
           >
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-6 pb-4 border-b-2 border-sage-200">
-                <div className="w-1 h-8 bg-sage-400 rounded-full"></div>
-                <h2 className="text-2xl font-serif font-bold text-warm-800">
-                  Moving Forward
-                </h2>
-              </div>
+            <div className="flex items-center gap-3 mb-6 pb-4 border-b-2 border-sage-200">
+              <div className="w-1 h-8 bg-sage-400 rounded-full"></div>
+              <h2 className="text-2xl font-serif font-bold text-warm-800">
+                Moving Forward
+              </h2>
+            </div>
 
-              <div className="bg-sage-50 rounded-xl p-6 mb-6">
-                <h3 className="text-lg font-serif font-bold text-warm-800 mb-4">
-                  Remember
-                </h3>
-                <ul className="space-y-3 text-sm text-warm-700">
-                  <li className="flex items-start gap-3">
-                    <span className="text-sage-500">✓</span>
-                    <span>
-                      Your personality traits are tendencies, not limitations.
-                      They describe how you naturally operate, not what you're
-                      capable of.
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-sage-500">✓</span>
-                    <span>
-                      All trait levels have their strengths. There's no "ideal"
-                      personality profile—diversity in personalities is
-                      valuable.
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-sage-500">✓</span>
-                    <span>
-                      Personality can shift over time and across situations.
-                      This assessment captures a snapshot of your current
-                      tendencies.
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-sage-500">✓</span>
-                    <span>
-                      Use these insights for self-awareness and growth, not for
-                      self-criticism or limiting beliefs about yourself.
-                    </span>
-                  </li>
-                </ul>
-              </div>
+            <div className="bg-sage-50 rounded-xl p-6 mb-6">
+              <h3 className="text-lg font-serif font-bold text-warm-800 mb-4">
+                Remember
+              </h3>
+              <ul className="space-y-3 text-sm text-warm-700">
+                <li className="flex items-start gap-3">
+                  <span className="text-sage-500">✓</span>
+                  <span>
+                    Your personality traits are tendencies, not limitations.
+                    They describe how you naturally operate, not what you're
+                    capable of.
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-sage-500">✓</span>
+                  <span>
+                    All trait levels have their strengths. There's no "ideal"
+                    personality profile—diversity in personalities is valuable.
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-sage-500">✓</span>
+                  <span>
+                    Personality can shift over time and across situations. This
+                    assessment captures a snapshot of your current tendencies.
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-sage-500">✓</span>
+                  <span>
+                    Use these insights for self-awareness and growth, not for
+                    self-criticism or limiting beliefs about yourself.
+                  </span>
+                </li>
+              </ul>
+            </div>
 
-              <div className="bg-white border border-sage-200 rounded-xl p-6">
-                <h3 className="text-lg font-serif font-bold text-warm-800 mb-4">
-                  About the Big Five Model
-                </h3>
-                <p className="text-sm text-warm-700 leading-relaxed mb-4">
-                  The Big Five personality model (also known as the Five-Factor
-                  Model or OCEAN) is one of the most widely researched and
-                  validated frameworks in personality psychology. It measures
-                  five broad dimensions of personality that have been
-                  consistently found across different cultures and languages.
-                </p>
-                <p className="text-sm text-warm-700 leading-relaxed">
-                  This assessment uses the IPIP-NEO-120, a 120-question
-                  inventory from the International Personality Item Pool, which
-                  is a public domain collection of personality measures
-                  developed for scientific research.
-                </p>
-              </div>
+            <div className="bg-white border border-sage-200 rounded-xl p-6 mb-8">
+              <h3 className="text-lg font-serif font-bold text-warm-800 mb-4">
+                About the Big Five Model
+              </h3>
+              <p className="text-sm text-warm-700 leading-relaxed mb-4">
+                The Big Five personality model (also known as the Five-Factor
+                Model or OCEAN) is one of the most widely researched and
+                validated frameworks in personality psychology. It measures five
+                broad dimensions of personality that have been consistently
+                found across different cultures and languages.
+              </p>
+              <p className="text-sm text-warm-700 leading-relaxed">
+                This assessment uses the IPIP-NEO-120, a 120-question inventory
+                from the International Personality Item Pool, which is a public
+                domain collection of personality measures developed for
+                scientific research.
+              </p>
             </div>
 
             {/* Footer */}
-            <div className="mt-auto pt-8 border-t-2 border-sage-200 text-center">
+            <div className="pt-6 border-t-2 border-sage-200 text-center">
               <p className="text-base text-warm-700 font-serif font-semibold mb-2">
                 Big Five Personality Assessment Report
               </p>
