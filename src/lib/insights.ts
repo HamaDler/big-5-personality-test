@@ -18,6 +18,16 @@ import { getScoreRange } from './scoring';
 // TYPE DEFINITIONS
 // ============================================================================
 
+export interface FamousFigure {
+  name: string;
+  reason: string;
+}
+
+export interface RelationshipInsight {
+  style: string;
+  watchOut: string;
+}
+
 export interface TraitInsights {
   trait: BigFiveTrait;
   interestingFacts: string[];
@@ -27,9 +37,9 @@ export interface TraitInsights {
     high: string[];
   };
   relationshipInsights: {
-    low: string;
-    moderate: string;
-    high: string;
+    low: RelationshipInsight;
+    moderate: RelationshipInsight;
+    high: RelationshipInsight;
   };
   growthTips: {
     low: string[];
@@ -37,8 +47,8 @@ export interface TraitInsights {
     high: string[];
   };
   famousFigures: {
-    low: string[];
-    high: string[];
+    low: FamousFigure[];
+    high: FamousFigure[];
   };
   strengths: {
     low: string[];
@@ -58,16 +68,25 @@ export interface PersonalizedInsight {
   range: ScoreRange;
   interestingFacts: string[];
   careerEnvironments: string[];
-  relationshipInsight: string;
+  relationshipInsight: RelationshipInsight;
   growthTips: string[];
-  famousFigures: string[];
+  famousFigures: FamousFigure[];
   strengths: string[];
   challenges: string[];
+}
+
+export interface PersonalityBlend {
+  name: string;
+  traits: [BigFiveTrait, ScoreRange, BigFiveTrait, ScoreRange];
+  description: string;
+  strengths: string[];
+  watchOuts: string[];
 }
 
 export interface ProfileSummary {
   dominantTraits: BigFiveTrait[];
   personalityPattern: string;
+  personalityBlends: PersonalityBlend[];
   overallStrengths: string[];
   areasForGrowth: string[];
   idealEnvironments: string[];
@@ -107,18 +126,27 @@ const traitInsightsData: TraitInsights[] = [
         'Educational coordination',
       ],
       high: [
+        'Interdisciplinary roles (UX Researcher, Futurist, Design Strategist)',
         'Creative industries (art, design, writing)',
         'Research and academia',
         'Entrepreneurship and startups',
-        'Strategic consulting',
-        'Innovation and R&D departments',
+        'Innovation labs and emerging technology',
+        'Strategic consulting with creative freedom',
       ],
     },
     relationshipInsights: {
-      low: 'You may prefer partners who share your appreciation for routine and tradition. Clear expectations and stable patterns in relationships likely feel comfortable. You might find overly spontaneous partners challenging.',
-      moderate:
-        "You can adapt to partners with different levels of openness. You appreciate some adventure while also valuing stability. You're likely flexible about trying new things in relationships.",
-      high: 'You may seek partners who enjoy intellectual discussions, trying new experiences, and exploring ideas together. Routine and predictability in relationships might feel stifling over time.',
+      low: {
+        style: 'Values routine, tradition, and clear expectations. Creates stable, predictable relationship patterns.',
+        watchOut: 'May find spontaneous or unconventional partners challenging. Could resist change even when beneficial.',
+      },
+      moderate: {
+        style: 'Adapts to partners with different levels of openness. Appreciates adventure while also valuing stability.',
+        watchOut: 'May sometimes feel torn between novelty and comfort. Could struggle to communicate changing needs.',
+      },
+      high: {
+        style: 'Values intellectual growth and variety. Seeks partners who enjoy exploring ideas and new experiences together.',
+        watchOut: 'May get bored with "stable" routine partners. Could prioritize novelty over relationship maintenance.',
+      },
     },
     growthTips: {
       low: [
@@ -141,8 +169,17 @@ const traitInsightsData: TraitInsights[] = [
       ],
     },
     famousFigures: {
-      low: ['Warren Buffett', 'Angela Merkel', 'Bill Belichick'],
-      high: ['Leonardo da Vinci', 'David Bowie', 'Maya Angelou', 'Elon Musk'],
+      low: [
+        { name: 'Warren Buffett', reason: 'Sticks to proven investment principles and avoids trends.' },
+        { name: 'Angela Merkel', reason: 'Known for methodical, cautious decision-making.' },
+        { name: 'Bill Belichick', reason: 'Relies on systematic preparation over flashy innovation.' },
+      ],
+      high: [
+        { name: 'Leonardo da Vinci', reason: 'Consummate polymath who bridged art and science.' },
+        { name: 'David Bowie', reason: 'Constantly reinvented his artistic identity.' },
+        { name: 'Maya Angelou', reason: 'Explored diverse creative mediums and cultural perspectives.' },
+        { name: 'Elon Musk', reason: 'High tolerance for risk and abstract future-building.' },
+      ],
     },
     strengths: {
       low: [
@@ -196,11 +233,12 @@ const traitInsightsData: TraitInsights[] = [
     ],
     careerEnvironments: {
       low: [
-        'Creative agencies with flexible deadlines',
-        'Startup environments',
+        'Dynamic environments where pivoting is a feature, not a bug',
+        'Creative Director or Art Director roles',
+        'Startup environments with rapid iteration',
         'Emergency response and crisis work',
-        'Artistic and performance roles',
-        'Freelance and consulting',
+        'Performing arts (improv, jazz, live performance)',
+        'Freelance and consulting with variety',
       ],
       moderate: [
         'Balanced corporate environments',
@@ -218,10 +256,18 @@ const traitInsightsData: TraitInsights[] = [
       ],
     },
     relationshipInsights: {
-      low: "You bring spontaneity and flexibility to relationships. You may prefer partners who don't expect rigid schedules or detailed planning. Highly organized partners might find your approach frustrating at times.",
-      moderate:
-        "You can balance planning with flexibility in relationships. You appreciate some structure but don't need everything scheduled. You adapt well to partners with different organizational styles.",
-      high: "You likely value reliability and follow-through in relationships. You may become frustrated with partners who are consistently late or don't keep commitments. Shared planning and goal-setting may strengthen your bonds.",
+      low: {
+        style: 'Brings spontaneity and flexibility. Goes with the flow and adapts easily to changing plans.',
+        watchOut: 'May frustrate highly organized partners. Could struggle with commitments that require sustained follow-through.',
+      },
+      moderate: {
+        style: 'Balances planning with flexibility. Appreciates some structure without needing everything scheduled.',
+        watchOut: 'May send mixed signals about reliability. Could over-promise when feeling flexible.',
+      },
+      high: {
+        style: 'Highly reliable and values follow-through. Shared planning and goal-setting strengthens bonds.',
+        watchOut: 'May become frustrated with spontaneous partners. Could prioritize tasks over quality time.',
+      },
     },
     growthTips: {
       low: [
@@ -244,8 +290,17 @@ const traitInsightsData: TraitInsights[] = [
       ],
     },
     famousFigures: {
-      low: ['Pablo Picasso', 'Richard Branson', 'Robin Williams'],
-      high: ['Ruth Bader Ginsburg', 'Jeff Bezos', 'Marie Curie', 'Kobe Bryant'],
+      low: [
+        { name: 'Pablo Picasso', reason: 'Chaotic creative process with constant reinvention.' },
+        { name: 'Richard Branson', reason: 'Embraces risk and pivots quickly between ventures.' },
+        { name: 'Robin Williams', reason: 'Improvisational genius who thrived on spontaneity.' },
+      ],
+      high: [
+        { name: 'Ruth Bader Ginsburg', reason: 'Meticulous legal mind with legendary work ethic.' },
+        { name: 'Jeff Bezos', reason: 'Long-term strategic thinking with relentless execution.' },
+        { name: 'Marie Curie', reason: 'Rigorous scientific methodology and persistence.' },
+        { name: 'Kobe Bryant', reason: 'Famous "Mamba Mentality" of obsessive preparation.' },
+      ],
     },
     strengths: {
       low: [
@@ -321,10 +376,18 @@ const traitInsightsData: TraitInsights[] = [
       ],
     },
     relationshipInsights: {
-      low: 'You may prefer deep, meaningful connections with a small circle over a large social network. You might need alone time to recharge, even from people you love. Partners who understand your need for solitude will be most compatible.',
-      moderate:
-        "You can enjoy both social activities and quiet time. You're likely comfortable in various social situations and can adapt to partners with different social needs. Balance comes naturally to you.",
-      high: 'You likely thrive on social connection and may feel lonely without regular interaction. You might prefer partners who enjoy an active social life. Be mindful that quieter partners may need more downtime than you.',
+      low: {
+        style: 'Prefers deep, meaningful connections with a small circle. Values quality time and intimate conversations.',
+        watchOut: 'May seem distant or unavailable to social partners. Could withdraw when overwhelmed rather than communicate.',
+      },
+      moderate: {
+        style: 'Enjoys both social activities and quiet time. Adapts to partners with different social needs.',
+        watchOut: 'May sometimes give mixed signals about social preferences. Could overextend when trying to please.',
+      },
+      high: {
+        style: 'Thrives on social connection and shared activities. Brings energy and enthusiasm to the relationship.',
+        watchOut: 'May feel neglected by introverted partners. Could fill silence with chatter rather than listening.',
+      },
     },
     growthTips: {
       low: [
@@ -348,16 +411,16 @@ const traitInsightsData: TraitInsights[] = [
     },
     famousFigures: {
       low: [
-        'Albert Einstein',
-        'J.K. Rowling',
-        'Bill Gates',
-        'Eleanor Roosevelt',
+        { name: 'Albert Einstein', reason: 'Preferred solitary thought experiments over social engagement.' },
+        { name: 'J.K. Rowling', reason: 'Created entire worlds in isolation before sharing them.' },
+        { name: 'Bill Gates', reason: 'Known for deep focus and "Think Weeks" alone.' },
+        { name: 'Eleanor Roosevelt', reason: 'Thoughtful leader who valued reflection over spotlight.' },
       ],
       high: [
-        'Oprah Winfrey',
-        'Tony Robbins',
-        'Muhammad Ali',
-        'Freddie Mercury',
+        { name: 'Oprah Winfrey', reason: 'Built career on authentic connection with millions.' },
+        { name: 'Tony Robbins', reason: 'Energizes massive audiences and feeds off crowd energy.' },
+        { name: 'Muhammad Ali', reason: 'Charismatic showman who thrived in the spotlight.' },
+        { name: 'Freddie Mercury', reason: 'Electrifying stage presence and natural entertainer.' },
       ],
     },
     strengths: {
@@ -434,10 +497,18 @@ const traitInsightsData: TraitInsights[] = [
       ],
     },
     relationshipInsights: {
-      low: "You may be direct and honest in relationships, even when it's uncomfortable. You likely value authenticity over harmony. Partners who appreciate straightforward communication will work best with you.",
-      moderate:
-        "You can be both diplomatic and direct depending on the situation. You balance your own needs with others' feelings. This flexibility serves you well in various relationship dynamics.",
-      high: "You likely prioritize harmony and your partner's happiness. Be mindful of not suppressing your own needs for the sake of peace. The healthiest relationships allow both people to express themselves fully.",
+      low: {
+        style: 'Direct, honest, and values logic over diplomacy. Cuts through pretense to address issues head-on.',
+        watchOut: 'Can accidentally hurt feelings during conflict. May prioritize being right over being kind.',
+      },
+      moderate: {
+        style: 'Balances diplomacy with directness. Adapts approach based on the situation and relationship.',
+        watchOut: 'May seem inconsistent in conflict style. Could struggle to find the right tone.',
+      },
+      high: {
+        style: 'Prioritizes harmony and partner happiness. Creates warm, supportive relationship environment.',
+        watchOut: 'May suppress own needs for peace. Could avoid necessary confrontations until issues escalate.',
+      },
     },
     growthTips: {
       low: [
@@ -460,8 +531,18 @@ const traitInsightsData: TraitInsights[] = [
       ],
     },
     famousFigures: {
-      low: ['Steve Jobs', 'Gordon Ramsay', 'Simon Cowell', 'Margaret Thatcher'],
-      high: ['Mister Rogers', 'Dalai Lama', 'Mother Teresa', 'Keanu Reeves'],
+      low: [
+        { name: 'Steve Jobs', reason: 'Famously demanding and uncompromising on vision.' },
+        { name: 'Gordon Ramsay', reason: 'Brutally honest feedback in pursuit of excellence.' },
+        { name: 'Simon Cowell', reason: 'Built brand on unflinching critical honesty.' },
+        { name: 'Margaret Thatcher', reason: 'Conviction politics over consensus-building.' },
+      ],
+      high: [
+        { name: 'Mister Rogers', reason: 'Epitome of gentle kindness and unconditional acceptance.' },
+        { name: 'Dalai Lama', reason: 'Compassion as core philosophy and daily practice.' },
+        { name: 'Mother Teresa', reason: 'Devoted life to caring for others.' },
+        { name: 'Keanu Reeves', reason: 'Known for exceptional kindness and humility in Hollywood.' },
+      ],
     },
     strengths: {
       low: [
@@ -537,10 +618,18 @@ const traitInsightsData: TraitInsights[] = [
       ],
     },
     relationshipInsights: {
-      low: 'You may experience emotional ups and downs more intensely. Partners who are patient and supportive during difficult times will be most compatible. Open communication about your emotional needs is important.',
-      moderate:
-        'You likely experience a normal range of emotional fluctuations. You can support partners through difficulties while managing your own stress reasonably well.',
-      high: 'Your emotional stability can be a calming presence for partners. Be mindful that others may experience emotions more intensely than you, and what seems minor to you might feel significant to them.',
+      low: {
+        style: 'Deep emotional awareness and sensitivity. Can connect profoundly on an emotional level.',
+        watchOut: 'May need extra reassurance during stress. Could interpret neutral situations negatively.',
+      },
+      moderate: {
+        style: 'Balanced emotional responses. Can support partners while managing own stress reasonably.',
+        watchOut: 'May occasionally be caught off guard by intense emotions. Could underestimate stress buildup.',
+      },
+      high: {
+        style: 'Calm, steady emotional presence. Provides stability and groundedness in the relationship.',
+        watchOut: 'May seem emotionally distant to sensitive partners. Could dismiss partner\'s worries as overreaction.',
+      },
     },
     growthTips: {
       low: [
@@ -563,8 +652,18 @@ const traitInsightsData: TraitInsights[] = [
       ],
     },
     famousFigures: {
-      low: ['Sylvia Plath', 'Vincent van Gogh', 'Woody Allen', 'Kurt Cobain'],
-      high: ['Barack Obama', 'Tom Hanks', 'Morgan Freeman', 'Dalai Lama'],
+      low: [
+        { name: 'Sylvia Plath', reason: 'Channeled emotional intensity into powerful literature.' },
+        { name: 'Vincent van Gogh', reason: 'Emotional turbulence fueled artistic genius.' },
+        { name: 'Woody Allen', reason: 'Built career exploring neurotic anxieties.' },
+        { name: 'Kurt Cobain', reason: 'Raw emotional expression in music.' },
+      ],
+      high: [
+        { name: 'Barack Obama', reason: 'Famous for "No Drama Obama" composure under pressure.' },
+        { name: 'Tom Hanks', reason: 'Consistently calm and gracious public presence.' },
+        { name: 'Morgan Freeman', reason: 'Radiates unflappable serenity.' },
+        { name: 'Dalai Lama', reason: 'Decades of equanimity practice and teaching.' },
+      ],
     },
     strengths: {
       low: [
@@ -640,6 +739,155 @@ export function getTraitInsights(
     strengths: insights.strengths[range],
     challenges: insights.challenges[range],
   };
+}
+
+// ============================================================================
+// PERSONALITY BLENDS DATA
+// ============================================================================
+
+const personalityBlends: PersonalityBlend[] = [
+  // High + High combinations
+  {
+    name: 'The Effective Leader',
+    traits: ['extraversion', 'high', 'conscientiousness', 'high'],
+    description: 'You combine social influence with disciplined execution. You inspire others while delivering results.',
+    strengths: ['Motivates teams toward goals', 'Balances vision with follow-through', 'Commands respect through competence'],
+    watchOuts: ['May push others as hard as yourself', 'Could prioritize achievement over relationships'],
+  },
+  {
+    name: 'The Creative Achiever',
+    traits: ['openness', 'high', 'conscientiousness', 'high'],
+    description: 'You blend imagination with discipline—dreaming big while actually shipping.',
+    strengths: ['Turns creative visions into reality', 'Innovates within constraints', 'Balances exploration with execution'],
+    watchOuts: ['May over-engineer creative projects', 'Could struggle when forced to choose between quality and novelty'],
+  },
+  {
+    name: 'The Social Innovator',
+    traits: ['openness', 'high', 'extraversion', 'high'],
+    description: 'You bring creative energy to social situations and thrive on collaborative exploration.',
+    strengths: ['Sparks innovation through conversation', 'Builds creative communities', 'Energizes brainstorming sessions'],
+    watchOuts: ['May generate more ideas than you can execute', 'Could overwhelm quieter collaborators'],
+  },
+  {
+    name: 'The Empathetic Explorer',
+    traits: ['openness', 'high', 'agreeableness', 'high'],
+    description: 'You combine curiosity with compassion, seeking to understand diverse perspectives.',
+    strengths: ['Bridges different viewpoints', 'Creates inclusive environments', 'Explores with sensitivity'],
+    watchOuts: ['May avoid intellectual conflict', 'Could prioritize harmony over honest critique'],
+  },
+  {
+    name: 'The Reliable Supporter',
+    traits: ['conscientiousness', 'high', 'agreeableness', 'high'],
+    description: "You're the person everyone counts on - dependable, caring, and thorough.",
+    strengths: ['Builds trust through consistency', 'Supports others with practical help', 'Creates stable foundations'],
+    watchOuts: ['May take on too much for others', 'Could neglect own needs while helping'],
+  },
+  {
+    name: 'The Social Connector',
+    traits: ['extraversion', 'high', 'agreeableness', 'high'],
+    description: 'You bring people together with warmth, creating harmony in groups.',
+    strengths: ['Natural community builder', 'Makes everyone feel included', 'Smooths social friction'],
+    watchOuts: ['May avoid necessary difficult conversations', 'Could spread yourself too thin socially'],
+  },
+  {
+    name: 'The Calm Commander',
+    traits: ['extraversion', 'high', 'neuroticism', 'high'],
+    description: 'You lead with confidence and unshakeable composure, even in chaos.',
+    strengths: ['Inspires confidence in crisis', 'Makes decisions under pressure', 'Radiates stability'],
+    watchOuts: ['May seem emotionally distant', 'Could underestimate others\' stress levels'],
+  },
+  {
+    name: 'The Steady Strategist',
+    traits: ['conscientiousness', 'high', 'neuroticism', 'high'],
+    description: 'You combine careful planning with emotional resilience—prepared and unflappable.',
+    strengths: ['Executes under pressure', 'Maintains focus during setbacks', 'Plans for contingencies calmly'],
+    watchOuts: ['May seem overly focused on execution', 'Could dismiss others\' anxieties'],
+  },
+  // High + Low combinations (often the most interesting "tension" blends)
+  {
+    name: 'The Creative Rebel',
+    traits: ['openness', 'high', 'conscientiousness', 'low'],
+    description: "You're a free-spirited innovator who resists structure in pursuit of creative vision.",
+    strengths: ['Unbound creative thinking', 'Challenges conventions', 'Brings fresh perspectives'],
+    watchOuts: ['May struggle to finish projects', 'Could frustrate more structured collaborators'],
+  },
+  {
+    name: 'The Sensitive Caregiver',
+    traits: ['agreeableness', 'high', 'neuroticism', 'low'],
+    description: 'You combine deep empathy with emotional sensitivity—feeling others\' pain acutely.',
+    strengths: ['Profound emotional understanding', 'Anticipates others\' needs', 'Creates safe spaces'],
+    watchOuts: ['May absorb others\' stress', 'Could neglect self-care while caring for others'],
+  },
+  {
+    name: 'The Analytical Challenger',
+    traits: ['openness', 'high', 'agreeableness', 'low'],
+    description: 'You combine intellectual curiosity with critical thinking—questioning everything.',
+    strengths: ['Spots flaws in ideas quickly', 'Pushes for deeper understanding', 'Values truth over comfort'],
+    watchOuts: ['May come across as contrarian', 'Could alienate with relentless questioning'],
+  },
+  {
+    name: 'The Quiet Achiever',
+    traits: ['conscientiousness', 'high', 'extraversion', 'low'],
+    description: 'You accomplish great things without fanfare, preferring results over recognition.',
+    strengths: ['Deep focus and persistence', 'Lets work speak for itself', 'Self-motivated'],
+    watchOuts: ['May not get credit deserved', 'Could struggle with visibility and networking'],
+  },
+  {
+    name: 'The Charismatic Free Spirit',
+    traits: ['extraversion', 'high', 'conscientiousness', 'low'],
+    description: 'You light up rooms with spontaneous energy, living in the moment.',
+    strengths: ['Infectious enthusiasm', 'Adapts to any social situation', 'Makes experiences memorable'],
+    watchOuts: ['May over-promise and under-deliver', 'Could leave loose ends'],
+  },
+  {
+    name: 'The Tough Empath',
+    traits: ['agreeableness', 'high', 'neuroticism', 'high'],
+    description: 'You care deeply but remain emotionally steady—compassionate without being overwhelmed.',
+    strengths: ['Supportive presence in crisis', 'Cares without catastrophizing', 'Balanced emotional support'],
+    watchOuts: ['May seem less emotionally engaged', 'Could miss subtle emotional cues'],
+  },
+  {
+    name: 'The Direct Stabilizer',
+    traits: ['agreeableness', 'low', 'neuroticism', 'high'],
+    description: 'You combine emotional stability with direct communication—honest and unflappable.',
+    strengths: ['Gives feedback without drama', 'Stays calm in conflict', 'Cuts through emotional noise'],
+    watchOuts: ['May seem cold or dismissive', 'Could undervalue emotional discussions'],
+  },
+];
+
+/**
+ * Detect personality blends based on trait scores
+ */
+export function detectPersonalityBlends(
+  traitScores: { trait: BigFiveTrait; percentScore: number }[],
+): PersonalityBlend[] {
+  const getRange = (score: number): ScoreRange => getScoreRange(score);
+  
+  const scoreMap = new Map<BigFiveTrait, { score: number; range: ScoreRange }>();
+  traitScores.forEach(ts => {
+    scoreMap.set(ts.trait, { score: ts.percentScore, range: getRange(ts.percentScore) });
+  });
+
+  const matchedBlends: PersonalityBlend[] = [];
+
+  for (const blend of personalityBlends) {
+    const [trait1, range1, trait2, range2] = blend.traits;
+    const score1 = scoreMap.get(trait1);
+    const score2 = scoreMap.get(trait2);
+
+    if (score1 && score2) {
+      // Check if both traits match the required ranges
+      const trait1Match = score1.range === range1;
+      const trait2Match = score2.range === range2;
+
+      if (trait1Match && trait2Match) {
+        matchedBlends.push(blend);
+      }
+    }
+  }
+
+  // Return top 3 most relevant blends
+  return matchedBlends.slice(0, 3);
 }
 
 /**
@@ -760,11 +1008,15 @@ export function generateProfileSummary(
     i.careerEnvironments.slice(0, 1),
   );
 
+  // Detect personality blends
+  const personalityBlendsFound = detectPersonalityBlends(traitScores);
+
   return {
     dominantTraits,
     personalityPattern:
       patterns[patternKey] ||
       'Balanced Profile - You show flexibility across different traits',
+    personalityBlends: personalityBlendsFound,
     overallStrengths: [...new Set(overallStrengths)].slice(0, 6),
     areasForGrowth: [...new Set(areasForGrowth)].slice(0, 4),
     idealEnvironments: [...new Set(idealEnvironments)].slice(0, 5),
