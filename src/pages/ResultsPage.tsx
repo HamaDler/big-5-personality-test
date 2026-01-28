@@ -10,6 +10,7 @@ import {
 import {
   generateInterpretationReport,
   getScoreRangeLabel,
+  detailedTraitInterpretations,
 } from '../lib/interpretations';
 import { getAllTraitInsights, generateProfileSummary } from '../lib/insights';
 import TraitChart from '../components/TraitChart';
@@ -330,6 +331,127 @@ export default function ResultsPage() {
                       />
                     </div>
                   )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Comprehensive Trait Descriptions */}
+      <section className="py-12 bg-gradient-to-b from-white to-sage-50/30">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl font-serif font-semibold text-warm-800 mb-3">
+              Deep Dive: Understanding Your Traits
+            </h2>
+            <p className="text-warm-600 max-w-3xl mx-auto">
+              Each personality trait is complex, with both high and low
+              expressions having strengths and challenges. These comprehensive
+              descriptions explore what your scores mean across different life
+              domains.
+            </p>
+          </div>
+
+          <div className="space-y-8">
+            {results.traits.map((traitScore) => {
+              const colors = getTraitColorClasses(traitScore.trait);
+              const detailedInfo =
+                detailedTraitInterpretations[traitScore.trait];
+
+              return (
+                <div
+                  key={traitScore.trait}
+                  className="bg-white rounded-3xl shadow-soft overflow-hidden border border-sage-100"
+                >
+                  {/* Header */}
+                  <div
+                    className={`${colors.light} px-6 sm:px-8 py-6 border-b border-sage-100`}
+                  >
+                    <div className="flex items-center justify-between flex-wrap gap-4">
+                      <div className="flex items-center gap-4">
+                        <div
+                          className={`w-14 h-14 rounded-2xl ${colors.bg} flex items-center justify-center shadow-sm`}
+                        >
+                          <span className="font-bold text-xl text-white">
+                            {TRAIT_SHORT_LABELS[traitScore.trait].charAt(0)}
+                          </span>
+                        </div>
+                        <div>
+                          <h3 className="text-2xl font-serif font-semibold text-warm-800">
+                            {TRAIT_LABELS[traitScore.trait]}
+                          </h3>
+                          <p className="text-sm text-warm-600 mt-1">
+                            Aspects: {detailedInfo.aspects.join(' • ')}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-4xl font-bold text-warm-800">
+                          {traitScore.percentScore}%
+                        </div>
+                        <div className="text-sm text-warm-500 mt-1">
+                          {getScoreRangeLabel(
+                            traitScore.percentScore <= 35
+                              ? 'low'
+                              : traitScore.percentScore >= 66
+                                ? 'high'
+                                : 'moderate',
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Detailed Description */}
+                  <div className="px-6 sm:px-8 py-8">
+                    <div className="prose prose-sm sm:prose max-w-none">
+                      {detailedInfo.fullDescription
+                        .split('\n\n')
+                        .map((paragraph, idx) => {
+                          // Check if this is a heading (starts with **)
+                          if (paragraph.trim().startsWith('**')) {
+                            const headingText = paragraph
+                              .replace(/\*\*/g, '')
+                              .trim();
+                            return (
+                              <h4
+                                key={idx}
+                                className="text-lg font-semibold text-warm-800 mt-8 mb-4 first:mt-0"
+                              >
+                                {headingText}
+                              </h4>
+                            );
+                          }
+                          // Regular paragraph
+                          return (
+                            <p
+                              key={idx}
+                              className="text-warm-700 leading-relaxed mb-4"
+                            >
+                              {paragraph}
+                            </p>
+                          );
+                        })}
+                    </div>
+                  </div>
+
+                  {/* Score Indicator */}
+                  <div
+                    className={`${colors.light} px-6 sm:px-8 py-4 border-t border-sage-100`}
+                  >
+                    <div className="flex items-center justify-between text-xs text-warm-600 mb-2">
+                      <span>Lower Expression</span>
+                      <span>Your Score: {traitScore.percentScore}%</span>
+                      <span>Higher Expression</span>
+                    </div>
+                    <div className="h-3 bg-white rounded-full overflow-hidden shadow-inner">
+                      <div
+                        className={`h-full ${colors.bg} transition-all duration-500 rounded-full`}
+                        style={{ width: `${traitScore.percentScore}%` }}
+                      />
+                    </div>
+                  </div>
                 </div>
               );
             })}

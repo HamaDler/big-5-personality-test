@@ -24,7 +24,215 @@ import {
 import { getScoreRange } from './scoring';
 
 // ============================================================================
-// TRAIT INTERPRETATIONS
+// DETAILED TRAIT INTERPRETATIONS (Comprehensive Descriptions)
+// ============================================================================
+
+/**
+ * Comprehensive interpretations for each trait that discuss both high and low
+ * expressions, including the two main aspects/sub-traits for each dimension.
+ */
+export const detailedTraitInterpretations: Record<
+  BigFiveTrait,
+  { aspects: string[]; fullDescription: string }
+> = {
+  agreeableness: {
+    aspects: ['Compassion', 'Politeness'],
+    fullDescription: `Agreeableness is a very complex trait, with marked positive and negative elements all along its distribution. Because of this, higher scores and lower scores need to be explained at the same time.
+
+**Understanding High Agreeableness (Compassion & Politeness)**
+
+People high in agreeableness are nice: compliant, nurturing, kind, naively trusting and conciliatory. However, because of their tendency to avoid conflict, they often dissemble and hide what they think. They strongly value compassion—the tendency to care for others who are vulnerable—and politeness, which reflects respect for social conventions and authority.
+
+People with high levels of agreeableness are seen by others as warm, empathetic, and cooperative. They are likely to look for the best in others and tend to be particularly tolerant. They are concerned about the emotional state of others, avoid conflict when possible, and will sacrifice making a point to maintain peace and harmony. People find them agreeable, diplomatic, and considerate. They strongly tend towards submission rather than dominance (particularly if also high in neuroticism).
+
+People with high levels of agreeableness are forgiving, accepting, flexible, gentle and patient. They easily feel pity for those who are excluded, punished or defeated. However, it can be easier for them to be taken advantage of by disagreeable, manipulative or otherwise troublesome people. Their trust can sometimes interfere with their ability to stand up for themselves or others when the situation demands it. They can also be more likely to avoid confronting poor behavior or necessary conflicts.
+
+**Understanding Low Agreeableness (Low Compassion & Politeness)**
+
+People low in agreeableness are not so nice: stubborn, dominant, harsh, skeptical, competitive and, in the extreme, even predatory. However, they tend to be straightforward, even blunt, so you know where they stand. They are less moved by others' distress (low compassion) and less concerned with maintaining social harmony and following conventions (low politeness).
+
+People with low levels of agreeableness are seen by others as competitive, colder, tougher and less empathic. They are less likely to look for the best in others, and are not particularly tolerant (an attitude that is much valued by agreeable people). They are less concerned about the emotional state of others, are willing to engage in conflict, and will sacrifice peace and harmony to make a point or (if conscientious) to get things done. People find them straightforward, even blunt. They strongly tend towards dominance rather than submission (particularly if also below average in neuroticism).
+
+People with low levels of agreeableness are not forgiving, accepting, flexible, gentle or patient. They don't easily feel pity for those who are excluded, punished or defeated. It is also difficult for them to be taken advantage of by disagreeable, manipulative or otherwise troublesome people, or those with criminal or predatory intent. Their skepticism plays a protective role, although it can sometimes interfere with their ability to cooperate with or trust others whose intentions are genuinely good. They can also be less likely to reward good behavior or to give credit where it is due.
+
+They can cooperate, when cooperation is in their interest, but very much appreciate competition, with its clear losers and winners. They will not easily lose arguments (or avoid discussions) with less agreeable people, and can enjoy the battle. They are generally good at bargaining for themselves, or at negotiating for more recognition or power and are likely to have higher salaries and to earn more money, in consequence. People low in agreeableness are therefore less likely to suffer from resentment or to harbour invisible anger. In addition, because of their tendency to engage in conflict, when necessary, people low in agreeableness tend not to sacrifice medium- to long-term stability and function for the sake of short-term peace.
+
+**Gender Differences and Social Patterns**
+
+Women are higher in agreeableness than men. The mean percentile for women in a general population (women and men) is 61.5. For men it is 38.5. The fact that men are lower in agreeableness than women helps explain their much higher rates of criminal incarceration (90% male). The primary difference between criminals and non-criminals is disagreeableness. This difference in agreeableness between men and women is largest in countries such as Norway and Sweden, where the most has been done to ensure equality of outcome between the sexes. This provides strong evidence that biological factors rather than environment and learning account for much of the dissimilarity.
+
+**Political and Occupational Correlates**
+
+Agreeableness, per se, is not strongly associated with political liberalism or conservatism, but this is because the aspects of agreeableness predict such political belief in opposite ways, and cancel each other out. Liberals are higher in aspect compassion, and conservatives in aspect politeness. However, alliance with the category of belief that has come to be known as politically correct is strongly predicted by agreeableness (particularly compassion).
+
+There are large differences between men and women in terms of spontaneous interest, and these also appear associated with agreeableness. Agreeable people, caring as they do for others, are more likely to enter professions associated with people, such as teaching, nursing, and social work, which are dominated by women. This is true even in the Scandinavian countries, where attempts to produce gender-equal societies has reached a maximum. Disagreeable people, by contrast, appear to prefer systematizing over empathizing, and are more interested in things—machines and technology. In consequence, professions such as engineering and trades associated with construction and machinery tend to be dominated by relatively disagreeable men.`,
+  },
+  conscientiousness: {
+    aspects: ['Industriousness', 'Orderliness'],
+    fullDescription: `Conscientiousness is the trait most associated with achievement, productivity, and organizational success. It encompasses two major aspects: industriousness (the tendency to work hard and complete tasks) and orderliness (the tendency to organize, schedule, and systematize).
+
+**Understanding High Conscientiousness (High Industriousness & Orderliness)**
+
+People high in conscientiousness are organized, reliable, hard-working, and dutiful. They follow rules and schedules, plan ahead, and take their obligations seriously. High industriousness means they are motivated to work hard and complete tasks, even when difficult. High orderliness means they prefer structure, organization, and predictability in their environment.
+
+People with high conscientiousness excel in structured environments where clear goals, deadlines, and standards exist. They are dependable, punctual, and detail-oriented. They finish what they start, meet deadlines consistently, and take pride in thorough work. Their organized approach helps them manage complexity and juggle multiple responsibilities effectively.
+
+The industrious aspect makes them persistent, driven, and achievement-oriented. They set goals and work steadily toward them, showing discipline even when motivation wanes. The orderliness aspect makes them systematic, neat, and methodical. They like having things in their proper place and following established procedures.
+
+However, very high conscientiousness can have downsides. Highly industrious people may become workaholics, struggling to relax or delegate. They may be perfectionistic, spending excessive time on details. Highly orderly people may be inflexible, struggling with ambiguity or last-minute changes. They may impose their need for structure on others, or become distressed in chaotic environments.
+
+**Understanding Low Conscientiousness (Low Industriousness & Orderliness)**
+
+People low in conscientiousness are more spontaneous, flexible, and informal. They tend to be less driven by achievement (low industriousness) and less concerned with organization and structure (low orderliness). They may leave tasks unfinished, miss deadlines occasionally, and prefer to handle things as they come rather than planning extensively.
+
+Low industriousness means they may lack the drive to work through difficult or tedious tasks. They might procrastinate, have difficulty maintaining focus on long-term goals, or need external motivation to complete work. They may be satisfied with "good enough" rather than striving for excellence.
+
+Low orderliness means they function comfortably in unstructured or messy environments. They may resist routines, dislike schedules, and prefer flexibility over planning. Their physical spaces may be cluttered, and they might forget details or misplace items.
+
+However, low conscientiousness has advantages in certain contexts. These individuals tend to be more spontaneous, creative, and adaptable. They don't get bogged down in perfectionism and can move quickly when needed. They're comfortable with ambiguity and can thrive in dynamic, unpredictable environments where rigid planning would be counterproductive. They may be less stressed by disorder and more able to "go with the flow."
+
+People low in conscientiousness may excel in creative fields, crisis management, or roles requiring rapid adaptation. They bring flexibility and can help balance overly rigid teams. However, they may struggle in traditional work environments with strict deadlines, detailed procedures, and high accountability.
+
+**Life Outcomes and Success**
+
+Conscientiousness is one of the best personality predictors of job performance across most occupations, particularly for jobs requiring sustained effort, attention to detail, and reliability. It predicts academic success, career achievement, and income. Highly conscientious people live longer, have better health outcomes, and are less likely to engage in risky behaviors.
+
+The industriousness aspect is particularly predictive of career success and work performance, while orderliness is more predictive of political conservatism and traditional values. Both aspects contribute to success in structured environments, but industriousness is more universally valuable across contexts.
+
+**Development and Change**
+
+Conscientiousness tends to increase with age, as people take on more responsibilities and societal roles that require reliability and organization. Young people tend to be less conscientious on average, which may serve adaptive functions in allowing exploration and learning. Life experiences like entering the workforce, starting a family, or facing consequences of disorganization can increase conscientiousness over time.`,
+  },
+  extraversion: {
+    aspects: ['Enthusiasm', 'Assertiveness'],
+    fullDescription: `Extraversion reflects the tendency to be energized by external stimulation, particularly social interaction. It encompasses two major aspects: enthusiasm (sociability, positive emotion, and friendliness) and assertiveness (dominance, leadership, and tendency to speak up).
+
+**Understanding High Extraversion (High Enthusiasm & Assertiveness)**
+
+People high in extraversion are outgoing, talkative, energetic, and socially confident. High enthusiasm means they are friendly, warm, and experience positive emotions frequently. They enjoy social gatherings, make friends easily, and are energized by interaction with others. High assertiveness means they take charge, speak up, influence others, and are comfortable in leadership roles.
+
+Highly extraverted people are often described as the "life of the party." They initiate conversations, enjoy being the center of attention, and create energy in social situations. They think out loud, process experiences by discussing them, and may struggle with prolonged solitude. They have wide social networks and maintain many relationships simultaneously.
+
+The enthusiasm aspect makes them warm, cheerful, and approachable. People are drawn to their positive energy and friendliness. They build rapport quickly and put others at ease. The assertiveness aspect makes them natural leaders who organize groups, make decisions, and drive action. They're comfortable with power and influence.
+
+High extraversion predicts success in sales, management, entertainment, politics, and other roles requiring social skill and leadership. Extraverts report higher subjective well-being on average and have extensive social support networks. They tend to be action-oriented and comfortable taking social risks.
+
+However, high extraversion has potential downsides. Highly enthusiastic people may struggle with solitary work, need constant stimulation, or have difficulty sitting with difficult emotions. They may talk too much, dominate conversations, or fail to listen adequately. Highly assertive people may be domineering, interrupt others, or steamroll quieter voices. Very high extraversion can manifest as attention-seeking, impulsivity, or difficulty with introspection.
+
+**Understanding Low Extraversion (Introversion)**
+
+People low in extraversion—introverts—are reserved, quiet, and prefer less stimulating environments. Low enthusiasm means they are more formal in social interactions, less effusive with positive emotion, and may have fewer but deeper friendships. Low assertiveness means they prefer to follow rather than lead, listen more than speak, and avoid the spotlight.
+
+Introverts are energized by solitude and drained by extensive social interaction. They think before speaking, process experiences internally, and need quiet time to recharge. They prefer one-on-one conversations to large groups and meaningful dialogue to small talk. They have smaller social circles but may form very deep relationships.
+
+Low enthusiasm doesn't mean unfriendly—rather, introverts are more reserved, take longer to warm up, and show affection in quieter ways. Low assertiveness doesn't mean passive—rather, they may lead through expertise, support others' leadership, or influence through different channels than direct assertion.
+
+Introverts excel in roles requiring sustained concentration, independent work, careful analysis, and deep expertise. They are often excellent listeners, thoughtful decision-makers, and detail-oriented workers. Many successful writers, scientists, programmers, and artists are introverted. They bring depth, careful consideration, and the ability to work independently without external validation.
+
+However, introverts may be overlooked for leadership, struggle to promote themselves, or have their quietness misinterpreted as disinterest. In highly social or fast-paced environments, they may become overwhelmed or exhausted. They may need to consciously develop assertiveness skills or learn to navigate extraverted workplace cultures.
+
+**Social and Cultural Context**
+
+Western, particularly American, culture tends to value extraversion—the "extrovert ideal." Many workplace practices (open offices, brainstorming meetings, emphasis on networking) favor extraverts. However, roughly one-third to one-half of people are introverted, and many successful leaders, innovators, and professionals are introverts.
+
+Research shows that moderate extraversion may be optimal for leadership—enough assertiveness to lead and enthusiasm to inspire, but not so much that it becomes domineering or superficial. The most effective teams often balance extraverts and introverts, combining action-orientation with thoughtful analysis.
+
+**Flexibility and Context**
+
+Extraversion is relatively stable but can be situational. Most people can act extraverted when needed (public speaking, networking events) but find it draining if it doesn't match their natural tendency. The key is understanding your natural energy patterns and creating life circumstances that honor them while developing flexibility for situations that require different behavior.`,
+  },
+  neuroticism: {
+    aspects: ['Withdrawal', 'Volatility'],
+    fullDescription: `Neuroticism reflects the tendency to experience negative emotions and emotional instability. Note: Many assessments present this trait inversely as "Emotional Stability" to frame it more positively. Neuroticism encompasses two major aspects: withdrawal (sadness, discouragement, anxiety, and social avoidance in response to threat) and volatility (irritability, anger, emotional reactivity, and mood swings).
+
+**Understanding High Neuroticism (High Withdrawal & Volatility)**
+
+People high in neuroticism experience negative emotions more frequently and intensely. High withdrawal means they tend toward sadness, anxiety, shame, and social withdrawal when stressed. High volatility means they experience anger, irritation, emotional ups and downs, and may have emotional outbursts.
+
+Individuals high in neuroticism are emotionally sensitive and reactive. They worry more, ruminate over problems, and may catastrophize about potential negative outcomes. They feel things deeply—both the withdrawal-related emotions (anxiety, sadness, shame) and the volatility-related emotions (anger, frustration, irritation).
+
+The withdrawal aspect manifests as anxiety disorders, social anxiety, depression, and avoidance when this trait is very high. People high in withdrawal are sensitive to threat and punishment, vigilant for potential problems, and may avoid situations where things could go wrong. They may be self-critical and doubt themselves.
+
+The volatility aspect manifests as mood swings, irritability, angry outbursts, and emotional unpredictability when very high. People high in volatility are sensitive to frustration, may have a quick temper, and experience intense emotional reactions to provocations or obstacles. Their emotions can change rapidly.
+
+High neuroticism is associated with increased risk for mental health challenges, including depression, anxiety disorders, and stress-related illnesses. It predicts lower life satisfaction, more difficult relationships, and poorer physical health outcomes. In work settings, high neuroticism can manifest as burnout, conflict sensitivity, and difficulty handling criticism or setbacks.
+
+However, neuroticism has adaptive aspects. Emotional sensitivity provides important information about one's environment and relationships. Anxiety can motivate careful preparation and problem-prevention. People high in neuroticism may be more attuned to social cues, potential problems, and the emotional states of others. In moderate amounts, neuroticism can drive conscientiousness and careful decision-making.
+
+**Understanding Low Neuroticism (High Emotional Stability)**
+
+People low in neuroticism—emotionally stable individuals—remain calm, even-tempered, and resilient in the face of stress. Low withdrawal means they don't easily experience anxiety, sadness, or social withdrawal. Low volatility means they rarely get angry, maintain steady moods, and don't have emotional outbursts.
+
+Emotionally stable people are described as calm, relaxed, and unflappable. They handle stress well, bounce back quickly from setbacks, and don't dwell on problems. They're difficult to upset, maintain composure in crises, and project an aura of confidence and stability.
+
+Low withdrawal makes them fearless, socially confident, and optimistic. They approach rather than avoid challenges, don't worry excessively, and maintain positive expectations. Low volatility makes them patient, even-tempered, and emotionally predictable. They rarely lose their cool, stay calm during provocations, and provide emotional stability to others.
+
+Emotional stability is highly valued in leadership roles, high-stress professions (military, emergency services, surgery), and positions requiring steady decision-making under pressure. Emotionally stable people report higher life satisfaction, have more stable relationships, and experience better mental and physical health.
+
+However, very low neuroticism has potential downsides. People very low in withdrawal may not feel anxiety when they should, leading to poor risk assessment or lack of preparation for real dangers. They may seem insensitive to others' distress or fail to recognize when something is wrong. People very low in volatility may not get appropriately angry at injustice, may be too accepting of poor treatment, or may fail to advocate for themselves when needed.
+
+**Gender Differences**
+
+Women score higher in neuroticism than men on average, particularly on the withdrawal aspect (anxiety, sadness). This difference appears across cultures and may have both biological and social contributors. Women's higher neuroticism may relate to greater emotional awareness and expressiveness, as well as different social pressures and role demands.
+
+The gender difference in volatility (anger, irritability) is smaller than in withdrawal. While men and women may experience similar levels of anger, they may express it differently due to social conditioning.
+
+**Development and Intervention**
+
+Neuroticism tends to decrease with age, particularly after young adulthood. Life experience, maturity, and development of coping skills contribute to increased emotional stability over time. Neuroticism is also one of the most responsive traits to psychological intervention.
+
+Cognitive-behavioral therapy, mindfulness practices, and other evidence-based approaches can significantly reduce neuroticism and increase emotional regulation skills. Learning to identify triggers, challenge anxious thoughts, develop coping strategies, and build emotional resilience can help high-neuroticism individuals function better and experience improved well-being.`,
+  },
+  openness: {
+    aspects: ['Intellect', 'Aesthetics'],
+    fullDescription: `Openness to Experience is the trait associated with creativity, curiosity, and intellectual engagement. It encompasses two major aspects: intellect (interest in abstract ideas, philosophical thinking, and intellectual exploration) and aesthetics (or openness, the appreciation for beauty, art, imagination, and creative expression).
+
+**Understanding High Openness (High Intellect & Aesthetics)**
+
+People high in openness are curious, creative, imaginative, and intellectually engaged. High intellect means they enjoy abstract thinking, philosophical discussions, and complex ideas. High aesthetics means they deeply appreciate beauty, art, music, and creative expression, and often have active imaginations.
+
+Individuals high in openness are drawn to novelty, complexity, and variety. They question assumptions, explore unconventional ideas, and enjoy intellectual challenges. They tend to be creative problem-solvers who make unexpected connections and think outside conventional boundaries. They value learning for its own sake and are often interested in diverse topics.
+
+The intellect aspect makes them philosophical, analytical, and drawn to complex problems. They enjoy theoretical discussions, abstract reasoning, and intellectual debate. They may be voracious readers, lifelong learners, and drawn to academic or intellectual pursuits.
+
+The aesthetic aspect makes them sensitive to beauty, artistically inclined, and imaginative. They notice aesthetic details others might miss, are moved by art and music, and may engage in creative expression themselves. They have rich inner lives and active imaginations.
+
+High openness predicts creativity, artistic achievement, and unconventional career choices. Open individuals are more likely to be artists, writers, scientists, entrepreneurs, and innovators. They drive cultural and scientific progress through questioning the status quo and imagining new possibilities. They adapt well to change and enjoy travel, diverse experiences, and cross-cultural engagement.
+
+However, very high openness has potential challenges. Highly intellectual people may get lost in abstract thinking, struggle with practical matters, or come across as impractical or "in their heads." Highly aesthetic people may be seen as dreamy, unrealistic, or overly focused on subjective experiences. Very open people may question everything to the point of cynicism, struggle with routine, or have difficulty completing practical tasks that bore them.
+
+**Understanding Low Openness (Conventional or Closed)**
+
+People low in openness prefer familiarity, tradition, and concrete thinking. Low intellect means they favor practical over abstract thinking and straightforward solutions over philosophical complexity. Low aesthetics means they're less moved by art or beauty and have more conventional tastes and less active imaginations.
+
+Individuals low in openness are practical, down-to-earth, and conventional. They prefer proven methods over innovation, value tradition, and are skeptical of change for its own sake. They focus on concrete realities rather than abstract possibilities and prefer clear answers over philosophical ambiguity.
+
+Low intellect doesn't mean unintelligent—rather, these individuals prefer hands-on, practical intelligence over abstract theorizing. They may be very skilled in practical domains, excel at concrete problem-solving, and value common sense. They prefer clear, straightforward communication over complex, nuanced discussion.
+
+Low aesthetics means being less moved by art, beauty, or creative expression. These individuals may find arts and humanities less interesting, prefer functional over beautiful, and have more conventional aesthetic preferences. They may have less active fantasy lives and be more focused on present realities.
+
+People low in openness excel in roles requiring attention to established procedures, practical problem-solving, and hands-on skills. They may be excellent technicians, operators, craftspeople, or specialists in concrete domains. They provide stability, maintain traditions, and ensure proven methods are followed. In teams, they balance highly open innovators by asking practical questions and ensuring ideas are workable.
+
+However, very low openness can limit adaptability, creativity, and intellectual growth. These individuals may resist necessary changes, dismiss new ideas prematurely, or struggle when situations require novel solutions. They may have limited cultural awareness, rigid thinking, or difficulty appreciating perspectives very different from their own.
+
+**Political and Value Correlates**
+
+Openness is one of the strongest personality predictors of political orientation. High openness strongly predicts political liberalism and progressive values—supporting social change, environmental protection, multiculturalism, and individual freedom of expression. Low openness predicts political conservatism—supporting tradition, conventional values, established authority, and stability.
+
+These associations appear across cultures and reflect the trait's fundamental dimension of embracing versus resisting change. Both orientations have value: progressives drive necessary social evolution, while conservatives maintain valuable traditions and prevent reckless change.
+
+**Creativity and Achievement**
+
+The intellect aspect particularly predicts academic achievement, especially in humanities and sciences. Aesthetic openness predicts artistic creativity and achievement. However, creativity requires both openness (to generate novel ideas) and conscientiousness (to develop them)—the combination predicts creative achievement better than either alone.
+
+**Stability and Change**
+
+Openness is relatively stable across adulthood, though life experiences like education, travel, and exposure to diverse ideas can increase it. It tends to decrease slightly in old age, though this varies by individual. Unlike some traits, openness doesn't show consistent gender differences across cultures.`,
+  },
+};
+
+// ============================================================================
+// TRAIT INTERPRETATIONS (Brief Summaries)
 // ============================================================================
 
 export const traitInterpretations: TraitInterpretation[] = [
