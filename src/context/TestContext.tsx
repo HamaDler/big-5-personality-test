@@ -8,7 +8,7 @@
  * - Navigation state
  */
 
-import React, {
+import {
   createContext,
   useContext,
   useReducer,
