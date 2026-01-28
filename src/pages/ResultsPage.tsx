@@ -808,7 +808,7 @@ export default function ResultsPage() {
                 disabled={!fullName.trim()}
                 className="flex-1 btn-zen disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Continue
+                Download
               </button>
             </div>
           </div>
@@ -819,7 +819,6 @@ export default function ResultsPage() {
         <PDFReport
           results={results}
           interpretationReport={interpretationReport}
-          traitInsights={traitInsights}
           profileSummary={profileSummary}
           fullName={fullName}
           onClose={() => {

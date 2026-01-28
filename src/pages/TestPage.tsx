@@ -173,6 +173,18 @@ export default function TestPage() {
     }
   };
 
+  const handleAutoFillTest = () => {
+    // Fill all 120 questions with varied responses
+    questions.forEach((question, index) => {
+      // Use a pattern to create varied responses (1-5)
+      const value = ((index % 5) + 1) as LikertValue;
+      answerQuestion(question.id, value);
+    });
+    // Show notification
+    setSaveNotification(true);
+    setTimeout(() => setSaveNotification(false), 2000);
+  };
+
   const getTraitLightColor = (trait: BigFiveTrait): string => {
     const colors: Record<BigFiveTrait, string> = {
       openness: 'bg-openness-light',
@@ -234,10 +246,18 @@ export default function TestPage() {
                 Step {currentStep + 1} of {TOTAL_STEPS}
               </span>
             </div>
-            <span className="text-sm font-medium text-warm-500">
-              {progress.answered} of {progress.total} questions (
-              {progress.percent}%)
-            </span>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleAutoFillTest}
+                className="text-xs px-2.5 py-1.5 bg-sage-100 text-sage-700 rounded-lg hover:bg-sage-200 transition-colors"
+              >
+                Test Data
+              </button>
+              <span className="text-sm font-medium text-warm-500">
+                {progress.answered} of {progress.total} questions (
+                {progress.percent}%)
+              </span>
+            </div>
           </div>
 
           {/* Step navigation dots - mobile optimized */}

@@ -1,18 +1,17 @@
-import { useRef, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { TestResults, TRAIT_LABELS, BigFiveTrait } from '../types';
 import {
   InterpretationReport,
   getScoreRangeLabel,
+  detailedTraitInterpretations,
 } from '../lib/interpretations';
-import { PersonalizedInsight, ProfileSummary } from '../lib/insights';
-import { X, Download, Loader2, Leaf } from 'lucide-react';
+import { ProfileSummary } from '../lib/insights';
 
 interface PDFReportProps {
   results: TestResults;
   interpretationReport: InterpretationReport[];
-  traitInsights: PersonalizedInsight[];
   profileSummary: ProfileSummary;
   fullName: string;
   onClose: () => void;
@@ -30,13 +29,13 @@ const TRAIT_COLORS: Record<BigFiveTrait, string> = {
 export default function PDFReport({
   results,
   interpretationReport,
-  traitInsights,
   profileSummary,
   fullName,
   onClose,
 }: PDFReportProps) {
   const reportRef = useRef<HTMLDivElement>(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const completedDate = new Date(results.completedAt);
   const formattedDate = completedDate.toLocaleDateString('en-US', {
@@ -50,513 +49,566 @@ export default function PDFReport({
   });
 
   const generatePDF = async () => {
-    if (!reportRef.current) return;
+    if (!reportRef.current || isGenerating) return;
 
     setIsGenerating(true);
+    setError(null);
 
     try {
-      const canvas = await html2canvas(reportRef.current, {
-        scale: 2,
-        useCORS: true,
-        logging: false,
-        backgroundColor: '#ffffff',
-      });
+      // Wait for fonts and images to load
+      await document.fonts.ready;
+      
+      // Split the report into multiple pages
+      const pages = reportRef.current.querySelectorAll('[data-pdf-page]');
+      if (pages.length === 0) {
+        throw new Error('No pages found to generate');
+      }
 
-      const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',
         format: 'a4',
       });
 
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-      const imgWidth = canvas.width;
-      const imgHeight = canvas.height;
-      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-      const imgX = (pdfWidth - imgWidth * ratio) / 2;
-      const imgY = 0;
+      for (let i = 0; i < pages.length; i++) {
+        const page = pages[i] as HTMLElement;
 
-      // Calculate how many pages we need
-      const pageHeight = pdfHeight / ratio;
-      let heightLeft = imgHeight;
-      let position = 0;
+        // Use JPEG format which is more reliable than PNG
+        const canvas = await html2canvas(page, {
+          scale: 2,
+          useCORS: true,
+          allowTaint: true,
+          logging: false,
+          backgroundColor: '#ffffff',
+          width: page.offsetWidth,
+          height: page.offsetHeight,
+          onclone: (clonedDoc) => {
+            // Ensure cloned elements are visible
+            const clonedElement = clonedDoc.querySelector('[data-pdf-page]');
+            if (clonedElement) {
+              (clonedElement as HTMLElement).style.visibility = 'visible';
+              (clonedElement as HTMLElement).style.position = 'relative';
+            }
+          },
+        });
 
-      // First page
-      pdf.addImage(
-        imgData,
-        'PNG',
-        imgX,
-        imgY,
-        imgWidth * ratio,
-        imgHeight * ratio,
-      );
-      heightLeft -= pageHeight;
+        // Validate canvas has content
+        if (canvas.width === 0 || canvas.height === 0) {
+          throw new Error(`Page ${i + 1} generated empty canvas`);
+        }
 
-      while (heightLeft > 0) {
-        position -= pdfHeight;
-        pdf.addPage();
-        pdf.addImage(
-          imgData,
-          'PNG',
-          imgX,
-          position * ratio,
-          imgWidth * ratio,
-          imgHeight * ratio,
-        );
-        heightLeft -= pageHeight;
+        // Use JPEG format for better compatibility
+        const imgData = canvas.toDataURL('image/jpeg', 0.95);
+        
+        // Validate image data
+        if (!imgData || imgData === 'data:,') {
+          throw new Error(`Failed to generate image for page ${i + 1}`);
+        }
+
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
+        
+        // Calculate image dimensions to fit on page
+        const imgAspect = canvas.width / canvas.height;
+        let finalWidth = pdfWidth - 4; // 2mm margin on each side
+        let finalHeight = finalWidth / imgAspect;
+        
+        // If image is too tall, scale down
+        if (finalHeight > pdfHeight - 4) {
+          finalHeight = pdfHeight - 4;
+          finalWidth = finalHeight * imgAspect;
+        }
+
+        if (i > 0) {
+          pdf.addPage();
+        }
+
+        // Center horizontally
+        const xOffset = (pdfWidth - finalWidth) / 2;
+        pdf.addImage(imgData, 'JPEG', xOffset, 2, finalWidth, finalHeight);
       }
 
-      pdf.save(`big-five-results-${results.sessionId.slice(0, 8)}.pdf`);
+      pdf.save(
+        `big-five-personality-report-${results.sessionId.slice(0, 8)}.pdf`,
+      );
+      onClose();
     } catch (error) {
       console.error('Error generating PDF:', error);
-      alert('There was an error generating the PDF. Please try again.');
+      setError(error instanceof Error ? error.message : 'Failed to generate PDF');
     } finally {
       setIsGenerating(false);
     }
   };
 
+  // Auto-generate PDF on mount
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      generatePDF();
+    }, 800);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <div className="fixed inset-0 bg-warm-900/50 backdrop-blur-sm z-50 overflow-y-auto">
-      <div className="min-h-screen py-8 px-4 flex items-start justify-center">
-        <div className="bg-white rounded-2xl shadow-soft-xl max-w-4xl w-full">
-          {/* Modal Header */}
-          <div className="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-sage-100 rounded-t-2xl p-4 flex items-center justify-between z-10">
-            <div className="flex items-center gap-2">
-              <Leaf className="w-5 h-5 text-sage-500" />
-              <h2 className="text-lg font-serif font-semibold text-warm-800">
-                PDF Report Preview
+    <>
+      {/* Loading/Error overlay */}
+      {(isGenerating || error) && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 max-w-sm mx-4 text-center">
+            {isGenerating && (
+              <>
+                <div className="w-12 h-12 border-4 border-sage-200 border-t-sage-600 rounded-full animate-spin mx-auto mb-4" />
+                <p className="text-warm-700 font-medium">Generating your PDF report...</p>
+                <p className="text-warm-500 text-sm mt-2">This may take a few moments</p>
+              </>
+            )}
+            {error && (
+              <>
+                <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-red-500 text-2xl">!</span>
+                </div>
+                <p className="text-warm-700 font-medium mb-2">Error generating PDF</p>
+                <p className="text-warm-500 text-sm mb-4">{error}</p>
+                <div className="flex gap-2 justify-center">
+                  <button
+                    onClick={() => { setError(null); generatePDF(); }}
+                    className="px-4 py-2 bg-sage-600 text-white rounded-lg hover:bg-sage-700 transition-colors"
+                  >
+                    Try Again
+                  </button>
+                  <button
+                    onClick={onClose}
+                    className="px-4 py-2 bg-warm-200 text-warm-700 rounded-lg hover:bg-warm-300 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+      {/* Hidden report container - using absolute positioning off-screen instead of display:none */}
+      <div className="fixed" style={{ left: '-9999px', top: 0 }}>
+      <div ref={reportRef} className="bg-white" style={{ width: '210mm' }}>
+        {/* PAGE 1: Title and Overview */}
+        <div
+          data-pdf-page
+          style={{
+            width: '210mm',
+            height: '297mm',
+            padding: '15mm 20mm',
+            boxSizing: 'border-box',
+            backgroundColor: '#ffffff',
+          }}
+        >
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="mb-6 pb-6 border-b-2 border-sage-200">
+              <h1 className="text-4xl font-serif font-bold text-warm-800 mb-3">
+                Big Five Personality Report
+              </h1>
+              {fullName && (
+                <p className="text-2xl font-serif text-warm-700 mb-3">
+                  for {fullName}
+                </p>
+              )}
+              <div className="flex items-center justify-center gap-4 text-warm-600">
+                <span className="text-sm">
+                  Assessment Date: {formattedDate}
+                </span>
+                <span className="text-sage-300">•</span>
+                <span className="text-sm">Time: {formattedTime}</span>
+              </div>
+            </div>
+            <p className="text-warm-500 text-sm leading-relaxed max-w-2xl mx-auto">
+              This comprehensive personality assessment provides insights into
+              your natural tendencies, behavioral patterns, and unique
+              personality profile based on the Big Five personality model.
+            </p>
+          </div>
+
+          {/* Disclaimer */}
+          <div className="bg-sage-50 border-l-4 border-sage-400 rounded-lg p-5 mb-8">
+            <p className="text-sm text-sage-800 leading-relaxed">
+              <strong className="text-sage-900">About This Report:</strong> This
+              assessment is based on the IPIP-NEO-120 personality inventory and
+              is intended for personal growth, self-reflection, and educational
+              purposes only. Results reflect self-reported tendencies at this
+              particular moment and should not be used for clinical diagnosis,
+              professional evaluations, employment decisions, or medical
+              purposes. Personality is dynamic and can shift across time and
+              situations.
+            </p>
+          </div>
+
+          {/* Overview Section */}
+          <div>
+            <div className="flex items-center gap-3 mb-5 pb-3 border-b-2 border-sage-200">
+              <div className="w-1 h-8 bg-sage-400 rounded-full"></div>
+              <h2 className="text-2xl font-serif font-bold text-warm-800">
+                Your Personality Snapshot
               </h2>
             </div>
-            <div className="flex items-center gap-3">
-              <button
-                onClick={generatePDF}
-                disabled={isGenerating}
-                className="btn-zen flex items-center gap-2"
-              >
-                {isGenerating ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Generating...
-                  </>
-                ) : (
-                  <>
-                    <Download className="w-4 h-4" />
-                    Download PDF
-                  </>
-                )}
-              </button>
-              <button
-                onClick={onClose}
-                className="p-2 hover:bg-sage-50 rounded-xl transition-colors text-warm-500 hover:text-warm-700"
-              >
-                <X className="w-5 h-5" />
-              </button>
+            <div className="space-y-3">
+              {interpretationReport.map((report) => (
+                <div
+                  key={report.trait}
+                  className="flex items-center gap-4 p-4 rounded-xl bg-white border border-sage-100"
+                >
+                  <div
+                    className="w-6 h-6 rounded-full flex-shrink-0 shadow-sm"
+                    style={{ backgroundColor: TRAIT_COLORS[report.trait] }}
+                  />
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-semibold text-warm-800">
+                        {TRAIT_LABELS[report.trait]}
+                      </span>
+                      <span className="font-bold text-warm-800 text-lg">
+                        {report.score}%
+                      </span>
+                    </div>
+                    <div className="h-2.5 bg-sage-100 rounded-full overflow-hidden">
+                      <div
+                        className="h-full rounded-full"
+                        style={{
+                          width: `${report.score}%`,
+                          backgroundColor: TRAIT_COLORS[report.trait],
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* PDF Content */}
-          <div className="p-8">
-            <div
-              ref={reportRef}
-              className="bg-white"
-              style={{ width: '210mm', minHeight: '297mm', padding: '20mm' }}
-            >
-              {/* Header */}
-              <div className="text-center mb-12">
-                <div className="mb-8 pb-8 border-b-2 border-sage-200">
-                  <h1 className="text-4xl font-serif font-bold text-warm-800 mb-4">
-                    Big Five Personality Report
-                  </h1>
-                  {fullName && (
-                    <p className="text-2xl font-serif text-warm-700 mb-4">
-                      for {fullName}
-                    </p>
-                  )}
-                  <div className="flex items-center justify-center gap-4 text-warm-600">
-                    <span className="text-sm">
-                      Assessment Date: {formattedDate}
-                    </span>
-                    <span className="text-sage-300">•</span>
-                    <span className="text-sm">Time: {formattedTime}</span>
-                  </div>
-                </div>
-                <p className="text-warm-500 text-sm leading-relaxed max-w-2xl mx-auto">
-                  This comprehensive personality assessment provides insights
-                  into your natural tendencies, behavioral patterns, and unique
-                  personality profile based on the Big Five personality model.
+          {/* Page footer */}
+          <div className="absolute bottom-4 left-0 right-0 text-center">
+            <p className="text-xs text-warm-400">Page 1 of {5 + interpretationReport.length}</p>
+          </div>
+        </div>
+
+        {/* PAGES 2-6: Individual Trait Pages (one per trait) */}
+        {interpretationReport.map((report, index) => (
+          <div
+            key={report.trait}
+            data-pdf-page
+            style={{
+              width: '210mm',
+              height: '297mm',
+              padding: '15mm 20mm',
+              boxSizing: 'border-box',
+              backgroundColor: '#ffffff',
+            }}
+          >
+            {/* Page Header */}
+            <div className="flex items-center gap-3 mb-6 pb-4 border-b-2 border-sage-200">
+              <div
+                className="w-12 h-12 rounded-full flex items-center justify-center shadow-md"
+                style={{ backgroundColor: TRAIT_COLORS[report.trait] }}
+              >
+                <span className="text-white font-bold text-xl">
+                  {TRAIT_LABELS[report.trait].charAt(0)}
+                </span>
+              </div>
+              <div className="flex-1">
+                <h2 className="text-2xl font-serif font-bold text-warm-800">
+                  {TRAIT_LABELS[report.trait]}
+                </h2>
+                <p className="text-warm-500">
+                  Your Score: <span className="font-bold text-warm-700">{report.score}%</span> • {getScoreRangeLabel(report.range)}
                 </p>
               </div>
+            </div>
 
-              {/* Disclaimer */}
-              <div className="bg-gradient-to-r from-sage-50 to-sage-50/50 border-l-4 border-sage-400 rounded-lg p-6 mb-12">
-                <p className="text-sm text-sage-800 leading-relaxed">
-                  <strong className="text-sage-900">About This Report:</strong>{' '}
-                  This assessment is based on the IPIP-NEO-120 personality
-                  inventory and is intended for personal growth,
-                  self-reflection, and educational purposes only. Results
-                  reflect self-reported tendencies at this particular moment and
-                  should not be used for clinical diagnosis, professional
-                  evaluations, employment decisions, or medical purposes.
-                  Personality is dynamic and can shift across time and
-                  situations.
+            {/* Score Bar */}
+            <div className="mb-6 p-4 bg-sage-50 rounded-xl">
+              <div className="flex items-center justify-between text-xs text-warm-500 mb-2">
+                <span>Low</span>
+                <span>Average</span>
+                <span>High</span>
+              </div>
+              <div className="h-4 bg-white rounded-full overflow-hidden border border-sage-200">
+                <div
+                  className="h-full rounded-full transition-all relative"
+                  style={{
+                    width: `${report.score}%`,
+                    backgroundColor: TRAIT_COLORS[report.trait],
+                  }}
+                >
+                  <span className="absolute right-2 top-1/2 -translate-y-1/2 text-white text-xs font-bold">
+                    {report.score}%
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Trait Interpretation */}
+            <div className="mb-6">
+              <h3 className="text-lg font-serif font-bold text-warm-800 mb-3">
+                What This Means
+              </h3>
+              <p className="text-warm-700 leading-relaxed text-sm">
+                {report.traitInterpretation}
+              </p>
+            </div>
+
+            {/* Full Description */}
+            {detailedTraitInterpretations[report.trait] && (
+              <div className="mb-6 p-4 bg-white border-l-4 rounded-lg" style={{ borderColor: TRAIT_COLORS[report.trait] }}>
+                <h3 className="text-lg font-serif font-bold text-warm-800 mb-3">
+                  Understanding {TRAIT_LABELS[report.trait]}
+                </h3>
+                <p className="text-sm text-warm-700 leading-relaxed">
+                  {detailedTraitInterpretations[report.trait].fullDescription}
                 </p>
               </div>
+            )}
 
-              {/* Overview Section */}
-              <div className="mb-12">
-                <div className="flex items-center gap-3 mb-6 pb-4 border-b-2 border-sage-200">
-                  <div className="w-1 h-8 bg-gradient-to-b from-sage-400 to-sage-300 rounded-full"></div>
-                  <h2 className="text-2xl font-serif font-bold text-warm-800">
-                    Your Personality Snapshot
-                  </h2>
-                </div>
-                <div className="space-y-4">
-                  {interpretationReport.map((report) => (
-                    <div
-                      key={report.trait}
-                      className="flex items-center gap-4 p-4 rounded-xl bg-white border border-sage-100 hover:border-sage-200 transition-colors"
-                    >
+            {/* Facets */}
+            <div className="bg-sage-50 rounded-xl p-5">
+              <h3 className="text-lg font-serif font-bold text-warm-800 mb-4 flex items-center gap-2">
+                <span style={{ color: TRAIT_COLORS[report.trait] }}>▸</span>
+                Key Facets
+              </h3>
+              <div className="grid grid-cols-2 gap-3">
+                {report.facets.map((facet) => (
+                  <div
+                    key={facet.facet}
+                    className="p-3 rounded-lg bg-white"
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-semibold text-warm-800">
+                        {facet.facetLabel}
+                      </span>
+                      <span className="text-sm font-bold text-warm-700">
+                        {facet.score}%
+                      </span>
+                    </div>
+                    <div className="w-full h-2 bg-sage-100 rounded-full overflow-hidden">
                       <div
-                        className="w-6 h-6 rounded-full flex-shrink-0 shadow-sm"
-                        style={{ backgroundColor: TRAIT_COLORS[report.trait] }}
+                        className="h-full rounded-full"
+                        style={{
+                          width: `${facet.score}%`,
+                          backgroundColor: TRAIT_COLORS[report.trait],
+                        }}
                       />
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="font-semibold text-warm-800">
-                            {TRAIT_LABELS[report.trait]}
-                          </span>
-                          <span className="font-bold text-warm-800 text-lg">
-                            {report.score}%
-                          </span>
-                        </div>
-                        <div className="h-2.5 bg-sage-100 rounded-full overflow-hidden">
-                          <div
-                            className="h-full rounded-full transition-all"
-                            style={{
-                              width: `${report.score}%`,
-                              backgroundColor: TRAIT_COLORS[report.trait],
-                              boxShadow: `0 0 8px ${TRAIT_COLORS[report.trait]}20`,
-                            }}
-                          />
-                        </div>
-                      </div>
                     </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Page footer */}
+            <div className="absolute bottom-4 left-0 right-0 text-center">
+              <p className="text-xs text-warm-400">Page {index + 2} of {5 + interpretationReport.length}</p>
+            </div>
+          </div>
+        ))}
+
+        {/* PAGE 7: Profile Summary */}
+        <div
+          data-pdf-page
+          style={{
+            width: '210mm',
+            height: '297mm',
+            padding: '15mm 20mm',
+            boxSizing: 'border-box',
+            backgroundColor: '#ffffff',
+          }}
+        >
+          <div className="flex items-center gap-3 mb-6 pb-4 border-b-2 border-sage-200">
+            <div className="w-1 h-8 bg-sage-400 rounded-full"></div>
+            <h2 className="text-2xl font-serif font-bold text-warm-800">
+              Your Personality Profile Summary
+            </h2>
+          </div>
+
+          {/* Personality Pattern */}
+          <div className="bg-sage-50 rounded-xl p-6 mb-6 border border-sage-200">
+            <h3 className="text-xl font-serif font-bold text-warm-800 mb-2">
+              {profileSummary.personalityPattern}
+            </h3>
+            <p className="text-sm text-warm-600 leading-relaxed">
+              Based on your unique combination of traits
+            </p>
+          </div>
+
+          {/* Communication & Stress Grid */}
+          <div className="grid grid-cols-2 gap-4 mb-6">
+            <div
+              className="bg-white border-l-4 rounded-lg p-5"
+              style={{ borderColor: TRAIT_COLORS.openness }}
+            >
+              <h4 className="text-base font-bold text-warm-800 mb-3 flex items-center gap-2">
+                <span style={{ color: TRAIT_COLORS.openness }}>💬</span>
+                Communication Style
+              </h4>
+              <p className="text-sm text-warm-700 leading-relaxed">
+                {profileSummary.communicationStyle}
+              </p>
+            </div>
+            <div
+              className="bg-white border-l-4 rounded-lg p-5"
+              style={{ borderColor: TRAIT_COLORS.neuroticism }}
+            >
+              <h4 className="text-base font-bold text-warm-800 mb-3 flex items-center gap-2">
+                <span style={{ color: TRAIT_COLORS.neuroticism }}>⚡</span>
+                Under Pressure
+              </h4>
+              <p className="text-sm text-warm-700 leading-relaxed">
+                {profileSummary.stressResponse}
+              </p>
+            </div>
+          </div>
+
+          {/* Strengths & Motivations Grid */}
+          <div className="grid grid-cols-2 gap-4 mb-6">
+            <div
+              className="bg-white border-l-4 rounded-lg p-5"
+              style={{ borderColor: TRAIT_COLORS.conscientiousness }}
+            >
+              <h4 className="text-base font-bold text-warm-800 mb-3 flex items-center gap-2">
+                <span style={{ color: TRAIT_COLORS.conscientiousness }}>⭐</span>
+                Key Strengths
+              </h4>
+              <ul className="text-sm text-warm-700 space-y-2">
+                {profileSummary.overallStrengths
+                  .slice(0, 5)
+                  .map((strength, i) => (
+                    <li key={i} className="flex items-start gap-2">
+                      <span className="text-sage-400">•</span>
+                      <span>{strength}</span>
+                    </li>
                   ))}
-                </div>
-              </div>
-
-              {/* Detailed Results */}
-              <div className="mb-12">
-                <div className="flex items-center gap-3 mb-8 pb-4 border-b-2 border-sage-200">
-                  <div className="w-1 h-8 bg-gradient-to-b from-sage-400 to-sage-300 rounded-full"></div>
-                  <h2 className="text-2xl font-serif font-bold text-warm-800">
-                    Detailed Trait Analysis
-                  </h2>
-                </div>
-
-                {interpretationReport.map((report) => (
-                  <div
-                    key={report.trait}
-                    className="mb-10 p-6 rounded-xl border-2 bg-white"
-                    style={{
-                      borderColor: TRAIT_COLORS[report.trait],
-                      pageBreakInside: 'avoid',
-                    }}
-                  >
-                    <div className="flex items-center gap-3 mb-4">
-                      <div
-                        className="w-10 h-10 rounded-full flex items-center justify-center shadow-md"
-                        style={{ backgroundColor: TRAIT_COLORS[report.trait] }}
-                      >
-                        <span className="text-white font-bold text-lg">
-                          {TRAIT_LABELS[report.trait].charAt(0)}
-                        </span>
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="text-xl font-serif font-bold text-warm-800">
-                          {TRAIT_LABELS[report.trait]}
-                        </h3>
-                        <p className="text-sm text-warm-500">
-                          {report.score}% • {getScoreRangeLabel(report.range)}
-                        </p>
-                      </div>
-                    </div>
-
-                    <p className="text-warm-700 mb-4 leading-relaxed text-sm">
-                      {report.traitInterpretation}
-                    </p>
-
-                    {/* Facets */}
-                    <div className="bg-gradient-to-br from-sage-50 to-sage-50/50 rounded-lg p-4 mt-4">
-                      <h4 className="text-sm font-bold text-warm-800 uppercase tracking-wide mb-3 flex items-center gap-2">
-                        <span style={{ color: TRAIT_COLORS[report.trait] }}>
-                          ▸
-                        </span>
-                        Key Aspects
-                      </h4>
-                      <div className="space-y-3">
-                        {report.facets.map((facet) => (
-                          <div
-                            key={facet.facet}
-                            className="flex items-start gap-3 p-3 rounded-lg bg-white/60"
-                          >
-                            <div className="flex-1">
-                              <div className="flex items-center justify-between mb-1">
-                                <span className="text-sm font-semibold text-warm-800">
-                                  {facet.facetLabel}
-                                </span>
-                                <span className="text-sm font-bold text-warm-700">
-                                  {facet.score}%
-                                </span>
-                              </div>
-                              <div className="w-full h-1.5 bg-sage-100 rounded-full overflow-hidden">
-                                <div
-                                  className="h-full rounded-full"
-                                  style={{
-                                    width: `${facet.score}%`,
-                                    backgroundColor: TRAIT_COLORS[report.trait],
-                                    opacity: 0.8,
-                                  }}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
+              </ul>
+            </div>
+            <div
+              className="bg-white border-l-4 rounded-lg p-5"
+              style={{ borderColor: TRAIT_COLORS.extraversion }}
+            >
+              <h4 className="text-base font-bold text-warm-800 mb-3 flex items-center gap-2">
+                <span style={{ color: TRAIT_COLORS.extraversion }}>🎯</span>
+                What Motivates You
+              </h4>
+              <ul className="text-sm text-warm-700 space-y-2">
+                {profileSummary.motivationDrivers.map((driver, i) => (
+                  <li key={i} className="flex items-start gap-2">
+                    <span className="text-sage-400">•</span>
+                    <span>{driver}</span>
+                  </li>
                 ))}
-              </div>
+              </ul>
+            </div>
+          </div>
 
-              {/* Profile Summary Section */}
-              <div className="mb-12" style={{ pageBreakBefore: 'always' }}>
-                <div className="flex items-center gap-3 mb-8 pb-4 border-b-2 border-sage-200">
-                  <div className="w-1 h-8 bg-gradient-to-b from-sage-400 to-sage-300 rounded-full"></div>
-                  <h2 className="text-2xl font-serif font-bold text-warm-800">
-                    Your Personality Profile
-                  </h2>
-                </div>
-
-                <div className="bg-gradient-to-br from-sage-50 to-sage-50/50 rounded-xl p-6 mb-6 border border-sage-200">
-                  <h3 className="text-xl font-serif font-bold text-warm-800 mb-2">
-                    {profileSummary.personalityPattern}
-                  </h3>
-                  <p className="text-sm text-warm-600 leading-relaxed">
-                    Based on your unique combination of traits
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  <div
-                    className="bg-white border-l-4 rounded-lg p-4"
-                    style={{ borderColor: TRAIT_COLORS.openness }}
-                  >
-                    <h4 className="text-sm font-bold text-warm-800 mb-2 flex items-center gap-2">
-                      <span style={{ color: TRAIT_COLORS.openness }}>→</span>
-                      Communication Style
-                    </h4>
-                    <p className="text-xs text-warm-700 leading-relaxed">
-                      {profileSummary.communicationStyle}
-                    </p>
-                  </div>
-                  <div
-                    className="bg-white border-l-4 rounded-lg p-4"
-                    style={{ borderColor: TRAIT_COLORS.neuroticism }}
-                  >
-                    <h4 className="text-sm font-bold text-warm-800 mb-2 flex items-center gap-2">
-                      <span style={{ color: TRAIT_COLORS.neuroticism }}>→</span>
-                      Under Pressure
-                    </h4>
-                    <p className="text-xs text-warm-700 leading-relaxed">
-                      {profileSummary.stressResponse}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div
-                    className="bg-white border-l-4 rounded-lg p-4"
-                    style={{ borderColor: TRAIT_COLORS.conscientiousness }}
-                  >
-                    <h4 className="text-sm font-bold text-warm-800 mb-2 flex items-center gap-2">
-                      <span style={{ color: TRAIT_COLORS.conscientiousness }}>
-                        ▸
-                      </span>
-                      Key Strengths
-                    </h4>
-                    <ul className="text-xs text-warm-700 space-y-1">
-                      {profileSummary.overallStrengths
-                        .slice(0, 4)
-                        .map((strength, i) => (
-                          <li key={i}>• {strength}</li>
-                        ))}
-                    </ul>
-                  </div>
-                  <div
-                    className="bg-white border-l-4 rounded-lg p-4"
-                    style={{ borderColor: TRAIT_COLORS.extraversion }}
-                  >
-                    <h4 className="text-sm font-bold text-warm-800 mb-2 flex items-center gap-2">
-                      <span style={{ color: TRAIT_COLORS.extraversion }}>
-                        ✦
-                      </span>
-                      What Motivates You
-                    </h4>
-                    <ul className="text-xs text-warm-700 space-y-1">
-                      {profileSummary.motivationDrivers.map((driver, i) => (
-                        <li key={i}>• {driver}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-
-              {/* Detailed Insights Section */}
-              <div className="mb-12">
-                <div className="flex items-center gap-3 mb-8 pb-4 border-b-2 border-sage-200">
-                  <div className="w-1 h-8 bg-gradient-to-b from-sage-400 to-sage-300 rounded-full"></div>
-                  <h2 className="text-2xl font-serif font-bold text-warm-800">
-                    Deep Insights & Patterns
-                  </h2>
-                </div>
-
-                {traitInsights.map((insight) => (
-                  <div
-                    key={insight.trait}
-                    className="mb-8 p-6 rounded-xl border-2 bg-white"
-                    style={{
-                      borderColor: TRAIT_COLORS[insight.trait],
-                      pageBreakInside: 'avoid',
-                    }}
-                  >
-                    <div className="flex items-center gap-3 mb-4">
-                      <div
-                        className="w-10 h-10 rounded-full flex items-center justify-center shadow-md"
-                        style={{ backgroundColor: TRAIT_COLORS[insight.trait] }}
-                      >
-                        <span className="text-white font-bold text-lg">
-                          {TRAIT_LABELS[insight.trait].charAt(0)}
-                        </span>
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="text-lg font-serif font-bold text-warm-800">
-                          {TRAIT_LABELS[insight.trait]}
-                        </h3>
-                        <p className="text-xs text-warm-500">
-                          Score: {insight.score}%
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3 mb-4">
-                      {/* Interesting Facts */}
-                      <div className="bg-gradient-to-br from-blue-50 to-blue-50/50 rounded-lg p-3 border border-blue-100">
-                        <h4 className="text-xs font-bold text-blue-900 mb-2 flex items-center gap-1.5">
-                          <span className="text-base">✦</span> Did You Know?
-                        </h4>
-                        <ul className="text-xs text-warm-700 space-y-1.5">
-                          {insight.interestingFacts
-                            .slice(0, 2)
-                            .map((fact, i) => (
-                              <li key={i} className="leading-relaxed">
-                                • {fact}
-                              </li>
-                            ))}
-                        </ul>
-                      </div>
-
-                      {/* Career Environments */}
-                      <div className="bg-gradient-to-br from-green-50 to-green-50/50 rounded-lg p-3 border border-green-100">
-                        <h4 className="text-xs font-bold text-green-900 mb-2 flex items-center gap-1.5">
-                          <span className="text-base">💼</span> Career Fit
-                        </h4>
-                        <ul className="text-xs text-warm-700 space-y-1.5">
-                          {insight.careerEnvironments
-                            .slice(0, 3)
-                            .map((env, i) => (
-                              <li key={i} className="leading-relaxed">
-                                → {env}
-                              </li>
-                            ))}
-                        </ul>
-                      </div>
-
-                      {/* Growth Tips */}
-                      <div className="bg-gradient-to-br from-amber-50 to-amber-50/50 rounded-lg p-3 border border-amber-100">
-                        <h4 className="text-xs font-bold text-amber-900 mb-2 flex items-center gap-1.5">
-                          <span className="text-base">📈</span> Growth Path
-                        </h4>
-                        <ul className="text-xs text-warm-700 space-y-1.5">
-                          {insight.growthTips.slice(0, 2).map((tip, i) => (
-                            <li key={i} className="leading-relaxed">
-                              ✓ {tip}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      {/* Strengths */}
-                      <div className="bg-gradient-to-br from-purple-50 to-purple-50/50 rounded-lg p-3 border border-purple-100">
-                        <h4 className="text-xs font-bold text-purple-900 mb-2 flex items-center gap-1.5">
-                          <span className="text-base">⭐</span> Strengths
-                        </h4>
-                        <ul className="text-xs text-warm-700 space-y-1.5">
-                          {insight.strengths.slice(0, 3).map((strength, i) => (
-                            <li key={i} className="leading-relaxed">
-                              + {strength}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      {/* Relationships */}
-                      <div className="bg-gradient-to-br from-rose-50 to-rose-50/50 rounded-lg p-3 border border-rose-100">
-                        <h4 className="text-xs font-bold text-rose-900 mb-2 flex items-center gap-1.5">
-                          <span className="text-base">💕</span> Relationships
-                        </h4>
-                        <p className="text-xs text-warm-700 leading-relaxed">
-                          {insight.relationshipInsight}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Famous Figures */}
-                    {insight.famousFigures.length > 0 && (
-                      <p className="text-xs text-warm-600 italic mt-3 pt-3 border-t border-sage-100">
-                        <span className="font-semibold">
-                          Individuals with similar traits:
-                        </span>{' '}
-                        {insight.famousFigures.join(', ')}
-                      </p>
-                    )}
-                  </div>
+          {/* Growth Areas */}
+          {profileSummary.areasForGrowth && profileSummary.areasForGrowth.length > 0 && (
+            <div
+              className="bg-white border-l-4 rounded-lg p-5"
+              style={{ borderColor: TRAIT_COLORS.agreeableness }}
+            >
+              <h4 className="text-base font-bold text-warm-800 mb-3 flex items-center gap-2">
+                <span style={{ color: TRAIT_COLORS.agreeableness }}>🌱</span>
+                Areas for Growth
+              </h4>
+              <ul className="text-sm text-warm-700 space-y-2">
+                {profileSummary.areasForGrowth.slice(0, 4).map((area, i) => (
+                  <li key={i} className="flex items-start gap-2">
+                    <span className="text-sage-400">•</span>
+                    <span>{area}</span>
+                  </li>
                 ))}
-              </div>
+              </ul>
+            </div>
+          )}
 
-              {/* Footer */}
-              <div className="mt-12 pt-6 border-t-2 border-sage-200 text-center">
-                <div className="mb-4">
-                  <Leaf className="w-6 h-6 text-sage-400 mx-auto mb-2 opacity-60" />
-                </div>
-                <p className="text-xs text-warm-600 font-medium">
-                  Big Five Personality Assessment Report
-                </p>
-                <p className="text-xs text-warm-500 mt-2">
-                  Based on the IPIP-NEO-120 • International Personality Item
-                  Pool • Public Domain
-                </p>
-                <p className="text-xs text-warm-400 mt-3">
-                  Session ID: {results.sessionId}
-                </p>
-                <p className="text-xs text-sage-400 mt-4">
-                  Generated on {formattedDate} at {formattedTime}
-                </p>
-              </div>
+          {/* Page footer */}
+          <div className="absolute bottom-4 left-0 right-0 text-center">
+            <p className="text-xs text-warm-400">Page {interpretationReport.length + 2} of {5 + interpretationReport.length}</p>
+          </div>
+        </div>
+
+        {/* FINAL PAGE: Closing & Footer */}
+        <div
+          data-pdf-page
+          style={{
+            width: '210mm',
+            height: '297mm',
+            padding: '15mm 20mm',
+            boxSizing: 'border-box',
+            backgroundColor: '#ffffff',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <div className="flex-1">
+            <div className="flex items-center gap-3 mb-6 pb-4 border-b-2 border-sage-200">
+              <div className="w-1 h-8 bg-sage-400 rounded-full"></div>
+              <h2 className="text-2xl font-serif font-bold text-warm-800">
+                Moving Forward
+              </h2>
+            </div>
+
+            <div className="bg-sage-50 rounded-xl p-6 mb-6">
+              <h3 className="text-lg font-serif font-bold text-warm-800 mb-4">
+                Remember
+              </h3>
+              <ul className="space-y-3 text-sm text-warm-700">
+                <li className="flex items-start gap-3">
+                  <span className="text-sage-500">✓</span>
+                  <span>Your personality traits are tendencies, not limitations. They describe how you naturally operate, not what you're capable of.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-sage-500">✓</span>
+                  <span>All trait levels have their strengths. There's no "ideal" personality profile—diversity in personalities is valuable.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-sage-500">✓</span>
+                  <span>Personality can shift over time and across situations. This assessment captures a snapshot of your current tendencies.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-sage-500">✓</span>
+                  <span>Use these insights for self-awareness and growth, not for self-criticism or limiting beliefs about yourself.</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="bg-white border border-sage-200 rounded-xl p-6">
+              <h3 className="text-lg font-serif font-bold text-warm-800 mb-4">
+                About the Big Five Model
+              </h3>
+              <p className="text-sm text-warm-700 leading-relaxed mb-4">
+                The Big Five personality model (also known as the Five-Factor Model or OCEAN) is one of the most 
+                widely researched and validated frameworks in personality psychology. It measures five broad 
+                dimensions of personality that have been consistently found across different cultures and languages.
+              </p>
+              <p className="text-sm text-warm-700 leading-relaxed">
+                This assessment uses the IPIP-NEO-120, a 120-question inventory from the International Personality 
+                Item Pool, which is a public domain collection of personality measures developed for scientific research.
+              </p>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="mt-auto pt-8 border-t-2 border-sage-200 text-center">
+            <p className="text-base text-warm-700 font-serif font-semibold mb-2">
+              Big Five Personality Assessment Report
+            </p>
+            <p className="text-sm text-warm-500 mb-4">
+              Based on the IPIP-NEO-120 • International Personality Item Pool • Public Domain
+            </p>
+            <div className="flex items-center justify-center gap-6 text-xs text-warm-400">
+              <span>Session ID: {results.sessionId.slice(0, 16)}</span>
+              <span>•</span>
+              <span>Generated: {formattedDate} at {formattedTime}</span>
             </div>
           </div>
         </div>
       </div>
     </div>
+    </>
   );
 }

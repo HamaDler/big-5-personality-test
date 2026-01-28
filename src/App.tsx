@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { TestProvider } from './context/TestContext';
 import Layout from './components/Layout';
+import ScrollToTop from './components/ScrollToTop';
 import HomePage from './pages/HomePage';
 import TestPage from './pages/TestPage';
 import ResultsPage from './pages/ResultsPage';
@@ -10,6 +11,7 @@ function App() {
   return (
     <TestProvider>
       <Router>
+        <ScrollToTop />
         <Layout>
           <Routes>
             <Route path="/" element={<HomePage />} />
