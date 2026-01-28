@@ -1,44 +1,73 @@
 # Big Five Personality Test
 
-A scientifically-validated personality assessment application based on the **IPIP-NEO-120** inventory.
+A beautifully designed, scientifically-validated personality assessment application based on the **IPIP-NEO-120** inventory. Features a calming zen-inspired interface with sage green accents and minimal illustrations.
 
 ![Big Five Test](https://img.shields.io/badge/IPIP--NEO--120-Public%20Domain-green)
 ![React](https://img.shields.io/badge/React-18.3-blue)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-06B6D4)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
-## Features
+## ✨ Features
 
-- **Complete IPIP-NEO-120 Implementation**: All 120 public domain items measuring the Big Five traits
+### Assessment
+
+- **Complete IPIP-NEO-120 Implementation**: All 120 public domain items measuring the Big Five personality traits
+- **Multi-Step Questionnaire**: 10-step form (12 questions per step) with progress tracking
 - **Scientifically Accurate Scoring**: Proper handling of reverse-scored items, facet calculations, and trait aggregation
 - **30 Facet Breakdown**: Detailed sub-trait analysis (6 facets per trait)
-- **Responsible Interpretations**: Non-diagnostic, tendency-focused language
-- **PDF Export**: Download professional reports of your results
+
+### Results & Insights
+
+- **Comprehensive Reports**: Detailed trait interpretations with personalized insights
+- **Personality Profile**: Unique personality pattern identification
+- **Interesting Facts**: Research-backed facts about each trait level
+- **Career Environments**: Suitable work environments based on your profile
+- **Growth Tips**: Actionable suggestions for personal development
+- **Relationship Insights**: How your traits influence relationships
+- **Interactive Charts**: Radar and bar chart visualizations
+
+### User Experience
+
+- **Zen-Inspired Design**: Calming sage green theme with warm neutral tones
+- **Minimal SVG Illustrations**: Custom-designed illustrations using the primary color palette
+- **Mobile Responsive**: Fully optimized for all screen sizes
 - **Pause & Resume**: Save your progress and continue later
+- **PDF Export**: Download professional reports of your results
 - **Privacy-First**: All data stored locally in your browser
-- **Mobile-Friendly**: Responsive design for all devices
 - **Accessible**: Follows WCAG guidelines
 
-## The Big Five Traits
+## 🎨 Design System
 
-| Trait                   | Description                                       |
-| ----------------------- | ------------------------------------------------- |
-| **Openness**            | Creativity, curiosity, and preference for novelty |
-| **Conscientiousness**   | Organization, dependability, and self-discipline  |
-| **Extraversion**        | Sociability, assertiveness, and positive emotions |
-| **Agreeableness**       | Cooperation, trust, and empathy                   |
-| **Emotional Stability** | Resilience, calmness, and stress tolerance        |
+The application features a serene, welcoming aesthetic:
 
-## Tech Stack
+- **Primary Color**: Sage green (`#627362`) with a full shade range
+- **Typography**: Inter (sans-serif) for body, Lora (serif) for headings
+- **Muted Trait Colors**: Soft, harmonious colors for each personality trait
+- **Glass Effects**: Subtle backdrop blur and transparency
+- **Smooth Animations**: Gentle fade-in, float, and breathe animations
 
-- **Frontend**: React 18, TypeScript, Tailwind CSS
+## 🧠 The Big Five Traits
+
+| Trait                 | Color       | Description                                       |
+| --------------------- | ----------- | ------------------------------------------------- |
+| **Openness**          | Soft Purple | Creativity, curiosity, and preference for novelty |
+| **Conscientiousness** | Muted Green | Organization, dependability, and self-discipline  |
+| **Extraversion**      | Warm Gold   | Sociability, assertiveness, and positive emotions |
+| **Agreeableness**     | Soft Teal   | Cooperation, trust, and empathy                   |
+| **Neuroticism**       | Dusty Rose  | Emotional sensitivity and stress response         |
+
+## 🛠 Tech Stack
+
+- **Frontend**: React 18, TypeScript
+- **Styling**: Tailwind CSS with custom zen color palette
 - **Routing**: React Router v6
 - **Charts**: Recharts
 - **PDF Generation**: jsPDF + html2canvas
 - **Icons**: Lucide React
 - **Build**: Vite
 
-## Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
 
@@ -68,32 +97,35 @@ npm run build
 npm run preview
 ```
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 src/
-├── components/          # Reusable UI components
-│   ├── Layout.tsx       # Main layout with header/footer
-│   ├── TraitChart.tsx   # Radar and bar charts
-│   ├── FacetBreakdown.tsx # Facet detail views
-│   └── PDFReport.tsx    # PDF generation component
+├── components/              # Reusable UI components
+│   ├── Layout.tsx           # Main layout with header/footer
+│   ├── TraitChart.tsx       # Radar and bar chart visualizations
+│   ├── FacetBreakdown.tsx   # Expandable facet detail views
+│   ├── PDFReport.tsx        # PDF generation component
+│   └── ZenIllustrations.tsx # Custom SVG illustrations
 ├── context/
-│   └── TestContext.tsx  # Global state management
+│   └── TestContext.tsx      # Global state management
 ├── data/
-│   └── questions.ts     # All 120 IPIP-NEO-120 items
+│   └── questions.ts         # All 120 IPIP-NEO-120 items
 ├── lib/
-│   ├── scoring.ts       # Scoring algorithm
-│   ├── interpretations.ts # Trait/facet interpretations
-│   └── storage.ts       # Local storage utilities
+│   ├── scoring.ts           # Scoring algorithm with reverse scoring
+│   ├── interpretations.ts   # Trait/facet interpretations
+│   ├── insights.ts          # Personalized insights generation
+│   └── storage.ts           # Local storage utilities
 ├── pages/
-│   ├── HomePage.tsx     # Landing page
-│   ├── TestPage.tsx     # Questionnaire interface
-│   ├── ResultsPage.tsx  # Results dashboard
-│   └── AboutPage.tsx    # Information & disclaimers
+│   ├── HomePage.tsx         # Landing page with illustrations
+│   ├── TestPage.tsx         # Multi-step questionnaire (10 steps)
+│   ├── ResultsPage.tsx      # Comprehensive results dashboard
+│   └── AboutPage.tsx        # Information & ethical disclaimers
 ├── types/
-│   └── index.ts         # TypeScript type definitions
-├── App.tsx              # Main app with routing
-└── main.tsx             # Entry point
+│   └── index.ts             # TypeScript type definitions
+├── index.css                # Global styles & zen theme utilities
+├── App.tsx                  # Main app with routing
+└── main.tsx                 # Entry point
 ```
 
 ## Scoring Methodology
