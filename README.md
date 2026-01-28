@@ -21,13 +21,13 @@ A scientifically-validated personality assessment application based on the **IPI
 
 ## The Big Five Traits
 
-| Trait | Description |
-|-------|-------------|
-| **Openness** | Creativity, curiosity, and preference for novelty |
-| **Conscientiousness** | Organization, dependability, and self-discipline |
-| **Extraversion** | Sociability, assertiveness, and positive emotions |
-| **Agreeableness** | Cooperation, trust, and empathy |
-| **Emotional Stability** | Resilience, calmness, and stress tolerance |
+| Trait                   | Description                                       |
+| ----------------------- | ------------------------------------------------- |
+| **Openness**            | Creativity, curiosity, and preference for novelty |
+| **Conscientiousness**   | Organization, dependability, and self-discipline  |
+| **Extraversion**        | Sociability, assertiveness, and positive emotions |
+| **Agreeableness**       | Cooperation, trust, and empathy                   |
+| **Emotional Stability** | Resilience, calmness, and stress tolerance        |
 
 ## Tech Stack
 
@@ -42,7 +42,7 @@ A scientifically-validated personality assessment application based on the **IPI
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - npm or yarn
 
 ### Installation
@@ -99,21 +99,25 @@ src/
 ## Scoring Methodology
 
 ### Likert Scale
+
 - 1 = Very Inaccurate
-- 2 = Moderately Inaccurate  
+- 2 = Moderately Inaccurate
 - 3 = Neither Accurate Nor Inaccurate
 - 4 = Moderately Accurate
 - 5 = Very Accurate
 
 ### Reverse Scoring
+
 For reverse-scored items: `adjusted_score = 6 - response`
 
 ### Score Calculation
+
 1. **Facet Score**: Mean of 4 items per facet (raw: 1-5)
 2. **Trait Score**: Mean of 6 facet scores (raw: 1-5)
 3. **Percent Score**: `((raw_score - 1) / 4) * 100`
 
 ### Score Ranges
+
 - **Low**: 0-35%
 - **Moderate**: 36-65%
 - **High**: 66-100%

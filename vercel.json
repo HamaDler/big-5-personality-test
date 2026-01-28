@@ -1,8 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/vercel.json",
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
-  ],
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
   "headers": [
     {
       "source": "/(.*)",

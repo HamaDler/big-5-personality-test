@@ -1,6 +1,6 @@
 /**
  * Local Storage Utilities
- * 
+ *
  * Handles persistence of test sessions and results for:
  * - Pause and resume functionality
  * - Storing completed results
@@ -11,7 +11,7 @@ import { TestSession, TestResults } from '../types';
 const STORAGE_KEYS = {
   CURRENT_SESSION: 'big5_current_session',
   COMPLETED_RESULTS: 'big5_completed_results',
-  SESSION_HISTORY: 'big5_session_history'
+  SESSION_HISTORY: 'big5_session_history',
 } as const;
 
 /**
@@ -54,8 +54,11 @@ export function clearSession(): void {
  */
 export function saveResults(results: TestResults): void {
   try {
-    localStorage.setItem(STORAGE_KEYS.COMPLETED_RESULTS, JSON.stringify(results));
-    
+    localStorage.setItem(
+      STORAGE_KEYS.COMPLETED_RESULTS,
+      JSON.stringify(results),
+    );
+
     // Also add to history
     const history = loadResultsHistory();
     history.push(results);

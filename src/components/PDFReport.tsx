@@ -2,7 +2,10 @@ import { useRef, useState } from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { TestResults, TRAIT_LABELS, BigFiveTrait } from '../types';
-import { InterpretationReport, getScoreRangeLabel } from '../lib/interpretations';
+import {
+  InterpretationReport,
+  getScoreRangeLabel,
+} from '../lib/interpretations';
 import { X, Download, Loader2 } from 'lucide-react';
 
 interface PDFReportProps {
@@ -16,18 +19,25 @@ const TRAIT_COLORS: Record<BigFiveTrait, string> = {
   conscientiousness: '#27AE60',
   extraversion: '#F1C40F',
   agreeableness: '#3498DB',
-  neuroticism: '#E74C3C'
+  neuroticism: '#E74C3C',
 };
 
-export default function PDFReport({ results, interpretationReport, onClose }: PDFReportProps) {
+export default function PDFReport({
+  results,
+  interpretationReport,
+  onClose,
+}: PDFReportProps) {
   const reportRef = useRef<HTMLDivElement>(null);
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const completedDate = new Date(results.completedAt).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
+  const completedDate = new Date(results.completedAt).toLocaleDateString(
+    'en-US',
+    {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    },
+  );
 
   const generatePDF = async () => {
     if (!reportRef.current) return;
@@ -39,14 +49,14 @@ export default function PDFReport({ results, interpretationReport, onClose }: PD
         scale: 2,
         useCORS: true,
         logging: false,
-        backgroundColor: '#ffffff'
+        backgroundColor: '#ffffff',
       });
 
       const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',
-        format: 'a4'
+        format: 'a4',
       });
 
       const pdfWidth = pdf.internal.pageSize.getWidth();
@@ -63,13 +73,27 @@ export default function PDFReport({ results, interpretationReport, onClose }: PD
       let position = 0;
 
       // First page
-      pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
+      pdf.addImage(
+        imgData,
+        'PNG',
+        imgX,
+        imgY,
+        imgWidth * ratio,
+        imgHeight * ratio,
+      );
       heightLeft -= pageHeight;
 
       while (heightLeft > 0) {
         position -= pdfHeight;
         pdf.addPage();
-        pdf.addImage(imgData, 'PNG', imgX, position * ratio, imgWidth * ratio, imgHeight * ratio);
+        pdf.addImage(
+          imgData,
+          'PNG',
+          imgX,
+          position * ratio,
+          imgWidth * ratio,
+          imgHeight * ratio,
+        );
         heightLeft -= pageHeight;
       }
 
@@ -88,7 +112,9 @@ export default function PDFReport({ results, interpretationReport, onClose }: PD
         <div className="bg-white rounded-2xl shadow-xl max-w-4xl w-full">
           {/* Modal Header */}
           <div className="sticky top-0 bg-white border-b border-gray-200 rounded-t-2xl p-4 flex items-center justify-between z-10">
-            <h2 className="text-lg font-semibold text-gray-900">PDF Report Preview</h2>
+            <h2 className="text-lg font-semibold text-gray-900">
+              PDF Report Preview
+            </h2>
             <div className="flex items-center gap-3">
               <button
                 onClick={generatePDF}
@@ -118,7 +144,11 @@ export default function PDFReport({ results, interpretationReport, onClose }: PD
 
           {/* PDF Content */}
           <div className="p-8">
-            <div ref={reportRef} className="bg-white" style={{ width: '210mm', minHeight: '297mm', padding: '20mm' }}>
+            <div
+              ref={reportRef}
+              className="bg-white"
+              style={{ width: '210mm', minHeight: '297mm', padding: '20mm' }}
+            >
               {/* Header */}
               <div className="text-center mb-8">
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">
@@ -132,11 +162,13 @@ export default function PDFReport({ results, interpretationReport, onClose }: PD
               {/* Disclaimer */}
               <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-8">
                 <p className="text-sm text-amber-800">
-                  <strong>Disclaimer:</strong> This report is based on the IPIP-NEO-120 personality inventory 
-                  and is intended for educational and self-reflection purposes only. It is not a clinical 
-                  assessment, diagnosis, or professional psychological evaluation. Results reflect self-reported 
-                  tendencies at a particular moment in time and should not be used for medical, employment, 
-                  or legal decisions.
+                  <strong>Disclaimer:</strong> This report is based on the
+                  IPIP-NEO-120 personality inventory and is intended for
+                  educational and self-reflection purposes only. It is not a
+                  clinical assessment, diagnosis, or professional psychological
+                  evaluation. Results reflect self-reported tendencies at a
+                  particular moment in time and should not be used for medical,
+                  employment, or legal decisions.
                 </p>
               </div>
 
@@ -147,11 +179,8 @@ export default function PDFReport({ results, interpretationReport, onClose }: PD
                 </h2>
                 <div className="space-y-4">
                   {interpretationReport.map((report) => (
-                    <div 
-                      key={report.trait} 
-                      className="flex items-center gap-4"
-                    >
-                      <div 
+                    <div key={report.trait} className="flex items-center gap-4">
+                      <div
                         className="w-4 h-4 rounded-full flex-shrink-0"
                         style={{ backgroundColor: TRAIT_COLORS[report.trait] }}
                       />
@@ -167,9 +196,9 @@ export default function PDFReport({ results, interpretationReport, onClose }: PD
                         <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
                           <div
                             className="h-full rounded-full"
-                            style={{ 
+                            style={{
                               width: `${report.score}%`,
-                              backgroundColor: TRAIT_COLORS[report.trait]
+                              backgroundColor: TRAIT_COLORS[report.trait],
                             }}
                           />
                         </div>
@@ -181,16 +210,16 @@ export default function PDFReport({ results, interpretationReport, onClose }: PD
 
               {/* Detailed Results */}
               {interpretationReport.map((report, index) => (
-                <div 
-                  key={report.trait} 
+                <div
+                  key={report.trait}
                   className="mb-8"
                   style={{ pageBreakInside: 'avoid' }}
                 >
-                  <div 
+                  <div
                     className="flex items-center gap-3 mb-3 pb-2 border-b"
                     style={{ borderColor: TRAIT_COLORS[report.trait] }}
                   >
-                    <div 
+                    <div
                       className="w-8 h-8 rounded-full flex items-center justify-center"
                       style={{ backgroundColor: TRAIT_COLORS[report.trait] }}
                     >
@@ -203,7 +232,8 @@ export default function PDFReport({ results, interpretationReport, onClose }: PD
                         {TRAIT_LABELS[report.trait]}
                       </h3>
                       <p className="text-sm text-gray-500">
-                        Score: {report.score}% ({getScoreRangeLabel(report.range)})
+                        Score: {report.score}% (
+                        {getScoreRangeLabel(report.range)})
                       </p>
                     </div>
                   </div>
@@ -219,16 +249,21 @@ export default function PDFReport({ results, interpretationReport, onClose }: PD
                     </h4>
                     <div className="space-y-2">
                       {report.facets.map((facet) => (
-                        <div key={facet.facet} className="flex items-center justify-between">
-                          <span className="text-sm text-gray-600">{facet.facetLabel}</span>
+                        <div
+                          key={facet.facet}
+                          className="flex items-center justify-between"
+                        >
+                          <span className="text-sm text-gray-600">
+                            {facet.facetLabel}
+                          </span>
                           <div className="flex items-center gap-2">
                             <div className="w-24 h-1.5 bg-gray-200 rounded-full overflow-hidden">
                               <div
                                 className="h-full rounded-full"
-                                style={{ 
+                                style={{
                                   width: `${facet.score}%`,
                                   backgroundColor: TRAIT_COLORS[report.trait],
-                                  opacity: 0.7
+                                  opacity: 0.7,
                                 }}
                               />
                             </div>
@@ -246,7 +281,8 @@ export default function PDFReport({ results, interpretationReport, onClose }: PD
               {/* Footer */}
               <div className="mt-8 pt-4 border-t border-gray-200 text-center">
                 <p className="text-xs text-gray-500">
-                  Based on the IPIP-NEO-120 • International Personality Item Pool • Public Domain
+                  Based on the IPIP-NEO-120 • International Personality Item
+                  Pool • Public Domain
                 </p>
                 <p className="text-xs text-gray-400 mt-1">
                   Session ID: {results.sessionId}

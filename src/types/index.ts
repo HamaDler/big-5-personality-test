@@ -1,6 +1,6 @@
 /**
  * IPIP-NEO-120 Big Five Personality Test Type Definitions
- * 
+ *
  * Based on the International Personality Item Pool representation of the
  * NEO-PI-R™ (Costa & McCrae, 1992). Uses public domain items.
  */
@@ -9,7 +9,7 @@
 // Big Five Traits (OCEAN Model)
 // ============================================================================
 
-export type BigFiveTrait = 
+export type BigFiveTrait =
   | 'openness'
   | 'conscientiousness'
   | 'extraversion'
@@ -21,7 +21,7 @@ export const BIG_FIVE_TRAITS: BigFiveTrait[] = [
   'conscientiousness',
   'extraversion',
   'agreeableness',
-  'neuroticism'
+  'neuroticism',
 ];
 
 export const TRAIT_LABELS: Record<BigFiveTrait, string> = {
@@ -29,7 +29,7 @@ export const TRAIT_LABELS: Record<BigFiveTrait, string> = {
   conscientiousness: 'Conscientiousness',
   extraversion: 'Extraversion',
   agreeableness: 'Agreeableness',
-  neuroticism: 'Emotional Stability' // Framed positively
+  neuroticism: 'Emotional Stability', // Framed positively
 };
 
 export const TRAIT_SHORT_LABELS: Record<BigFiveTrait, string> = {
@@ -37,14 +37,14 @@ export const TRAIT_SHORT_LABELS: Record<BigFiveTrait, string> = {
   conscientiousness: 'Conscientiousness',
   extraversion: 'Extraversion',
   agreeableness: 'Agreeableness',
-  neuroticism: 'Emotional Stability'
+  neuroticism: 'Emotional Stability',
 };
 
 // ============================================================================
 // Facets (6 per trait = 30 total)
 // ============================================================================
 
-export type OpennessFacet = 
+export type OpennessFacet =
   | 'imagination'
   | 'artistic_interests'
   | 'emotionality'
@@ -52,7 +52,7 @@ export type OpennessFacet =
   | 'intellect'
   | 'liberalism';
 
-export type ConscientiousnessFacet = 
+export type ConscientiousnessFacet =
   | 'self_efficacy'
   | 'orderliness'
   | 'dutifulness'
@@ -60,7 +60,7 @@ export type ConscientiousnessFacet =
   | 'self_discipline'
   | 'cautiousness';
 
-export type ExtraversionFacet = 
+export type ExtraversionFacet =
   | 'friendliness'
   | 'gregariousness'
   | 'assertiveness'
@@ -68,7 +68,7 @@ export type ExtraversionFacet =
   | 'excitement_seeking'
   | 'cheerfulness';
 
-export type AgreeablenessFacet = 
+export type AgreeablenessFacet =
   | 'trust'
   | 'morality'
   | 'altruism'
@@ -76,7 +76,7 @@ export type AgreeablenessFacet =
   | 'modesty'
   | 'sympathy';
 
-export type NeuroticismFacet = 
+export type NeuroticismFacet =
   | 'anxiety'
   | 'anger'
   | 'depression'
@@ -84,19 +84,54 @@ export type NeuroticismFacet =
   | 'immoderation'
   | 'vulnerability';
 
-export type Facet = 
-  | OpennessFacet 
-  | ConscientiousnessFacet 
-  | ExtraversionFacet 
-  | AgreeablenessFacet 
+export type Facet =
+  | OpennessFacet
+  | ConscientiousnessFacet
+  | ExtraversionFacet
+  | AgreeablenessFacet
   | NeuroticismFacet;
 
 export const FACETS_BY_TRAIT: Record<BigFiveTrait, Facet[]> = {
-  openness: ['imagination', 'artistic_interests', 'emotionality', 'adventurousness', 'intellect', 'liberalism'],
-  conscientiousness: ['self_efficacy', 'orderliness', 'dutifulness', 'achievement_striving', 'self_discipline', 'cautiousness'],
-  extraversion: ['friendliness', 'gregariousness', 'assertiveness', 'activity_level', 'excitement_seeking', 'cheerfulness'],
-  agreeableness: ['trust', 'morality', 'altruism', 'cooperation', 'modesty', 'sympathy'],
-  neuroticism: ['anxiety', 'anger', 'depression', 'self_consciousness', 'immoderation', 'vulnerability']
+  openness: [
+    'imagination',
+    'artistic_interests',
+    'emotionality',
+    'adventurousness',
+    'intellect',
+    'liberalism',
+  ],
+  conscientiousness: [
+    'self_efficacy',
+    'orderliness',
+    'dutifulness',
+    'achievement_striving',
+    'self_discipline',
+    'cautiousness',
+  ],
+  extraversion: [
+    'friendliness',
+    'gregariousness',
+    'assertiveness',
+    'activity_level',
+    'excitement_seeking',
+    'cheerfulness',
+  ],
+  agreeableness: [
+    'trust',
+    'morality',
+    'altruism',
+    'cooperation',
+    'modesty',
+    'sympathy',
+  ],
+  neuroticism: [
+    'anxiety',
+    'anger',
+    'depression',
+    'self_consciousness',
+    'immoderation',
+    'vulnerability',
+  ],
 };
 
 export const FACET_LABELS: Record<Facet, string> = {
@@ -134,7 +169,7 @@ export const FACET_LABELS: Record<Facet, string> = {
   depression: 'Depression',
   self_consciousness: 'Self-Consciousness',
   immoderation: 'Immoderation',
-  vulnerability: 'Vulnerability'
+  vulnerability: 'Vulnerability',
 };
 
 // ============================================================================
@@ -155,12 +190,16 @@ export interface Question {
 
 export type LikertValue = 1 | 2 | 3 | 4 | 5;
 
-export const LIKERT_SCALE: { value: LikertValue; label: string; shortLabel: string }[] = [
+export const LIKERT_SCALE: {
+  value: LikertValue;
+  label: string;
+  shortLabel: string;
+}[] = [
   { value: 1, label: 'Very Inaccurate', shortLabel: 'Very Inaccurate' },
   { value: 2, label: 'Moderately Inaccurate', shortLabel: 'Inaccurate' },
   { value: 3, label: 'Neither Accurate Nor Inaccurate', shortLabel: 'Neutral' },
   { value: 4, label: 'Moderately Accurate', shortLabel: 'Accurate' },
-  { value: 5, label: 'Very Accurate', shortLabel: 'Very Accurate' }
+  { value: 5, label: 'Very Accurate', shortLabel: 'Very Accurate' },
 ];
 
 // ============================================================================
@@ -183,15 +222,15 @@ export interface TestSession {
 
 export interface FacetScore {
   facet: Facet;
-  rawScore: number;       // Mean of item scores (1-5)
-  percentScore: number;   // Normalized to 0-100
+  rawScore: number; // Mean of item scores (1-5)
+  percentScore: number; // Normalized to 0-100
   itemCount: number;
 }
 
 export interface TraitScore {
   trait: BigFiveTrait;
-  rawScore: number;       // Mean of facet scores (1-5)
-  percentScore: number;   // Normalized to 0-100
+  rawScore: number; // Mean of facet scores (1-5)
+  percentScore: number; // Normalized to 0-100
   facets: FacetScore[];
 }
 

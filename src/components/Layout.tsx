@@ -27,7 +27,9 @@ export default function Layout({ children }: LayoutProps) {
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-openness via-conscientiousness to-agreeableness flex items-center justify-center">
                 <span className="text-white font-bold text-sm">B5</span>
               </div>
-              <span className="font-semibold text-lg hidden sm:block">Big Five Test</span>
+              <span className="font-semibold text-lg hidden sm:block">
+                Big Five Test
+              </span>
             </Link>
 
             {/* Navigation */}
@@ -41,9 +43,10 @@ export default function Layout({ children }: LayoutProps) {
                     className={`
                       flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium
                       transition-colors duration-200
-                      ${isActive 
-                        ? 'bg-gray-100 text-gray-900' 
-                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                      ${
+                        isActive
+                          ? 'bg-gray-100 text-gray-900'
+                          : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                       }
                     `}
                   >
@@ -58,9 +61,7 @@ export default function Layout({ children }: LayoutProps) {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1">
-        {children}
-      </main>
+      <main className="flex-1">{children}</main>
 
       {/* Footer */}
       <footer className="bg-white border-t border-gray-200 py-8 mt-auto">
@@ -70,13 +71,16 @@ export default function Layout({ children }: LayoutProps) {
               Based on the IPIP-NEO-120 • Public Domain
             </p>
             <div className="flex items-center gap-4 text-sm text-gray-500">
-              <Link to="/about" className="hover:text-gray-700 transition-colors">
+              <Link
+                to="/about"
+                className="hover:text-gray-700 transition-colors"
+              >
                 About
               </Link>
               <span>•</span>
-              <a 
-                href="https://ipip.ori.org/" 
-                target="_blank" 
+              <a
+                href="https://ipip.ori.org/"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-gray-700 transition-colors"
               >
@@ -85,8 +89,8 @@ export default function Layout({ children }: LayoutProps) {
             </div>
           </div>
           <p className="text-xs text-gray-400 text-center mt-4">
-            This assessment is for educational and self-reflection purposes only. 
-            It is not a clinical diagnosis tool.
+            This assessment is for educational and self-reflection purposes
+            only. It is not a clinical diagnosis tool.
           </p>
         </div>
       </footer>

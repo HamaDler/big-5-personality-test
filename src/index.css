@@ -3,16 +3,20 @@
 @tailwind utilities;
 
 :root {
-  --color-openness: #9B59B6;
-  --color-conscientiousness: #27AE60;
-  --color-extraversion: #F1C40F;
-  --color-agreeableness: #3498DB;
-  --color-neuroticism: #E74C3C;
+  --color-openness: #9b59b6;
+  --color-conscientiousness: #27ae60;
+  --color-extraversion: #f1c40f;
+  --color-agreeableness: #3498db;
+  --color-neuroticism: #e74c3c;
 }
 
 body {
   @apply bg-gray-50 text-gray-900 antialiased;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family:
+    'Inter',
+    system-ui,
+    -apple-system,
+    sans-serif;
 }
 
 /* Custom scrollbar */
@@ -41,33 +45,75 @@ select:focus-visible {
 }
 
 /* Trait color utilities */
-.bg-trait-openness { background-color: var(--color-openness); }
-.bg-trait-conscientiousness { background-color: var(--color-conscientiousness); }
-.bg-trait-extraversion { background-color: var(--color-extraversion); }
-.bg-trait-agreeableness { background-color: var(--color-agreeableness); }
-.bg-trait-neuroticism { background-color: var(--color-neuroticism); }
+.bg-trait-openness {
+  background-color: var(--color-openness);
+}
+.bg-trait-conscientiousness {
+  background-color: var(--color-conscientiousness);
+}
+.bg-trait-extraversion {
+  background-color: var(--color-extraversion);
+}
+.bg-trait-agreeableness {
+  background-color: var(--color-agreeableness);
+}
+.bg-trait-neuroticism {
+  background-color: var(--color-neuroticism);
+}
 
-.text-trait-openness { color: var(--color-openness); }
-.text-trait-conscientiousness { color: var(--color-conscientiousness); }
-.text-trait-extraversion { color: var(--color-extraversion); }
-.text-trait-agreeableness { color: var(--color-agreeableness); }
-.text-trait-neuroticism { color: var(--color-neuroticism); }
+.text-trait-openness {
+  color: var(--color-openness);
+}
+.text-trait-conscientiousness {
+  color: var(--color-conscientiousness);
+}
+.text-trait-extraversion {
+  color: var(--color-extraversion);
+}
+.text-trait-agreeableness {
+  color: var(--color-agreeableness);
+}
+.text-trait-neuroticism {
+  color: var(--color-neuroticism);
+}
 
-.border-trait-openness { border-color: var(--color-openness); }
-.border-trait-conscientiousness { border-color: var(--color-conscientiousness); }
-.border-trait-extraversion { border-color: var(--color-extraversion); }
-.border-trait-agreeableness { border-color: var(--color-agreeableness); }
-.border-trait-neuroticism { border-color: var(--color-neuroticism); }
+.border-trait-openness {
+  border-color: var(--color-openness);
+}
+.border-trait-conscientiousness {
+  border-color: var(--color-conscientiousness);
+}
+.border-trait-extraversion {
+  border-color: var(--color-extraversion);
+}
+.border-trait-agreeableness {
+  border-color: var(--color-agreeableness);
+}
+.border-trait-neuroticism {
+  border-color: var(--color-neuroticism);
+}
 
 /* Animation utilities */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes slideIn {
-  from { opacity: 0; transform: translateX(-20px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .animate-fadeIn {
@@ -83,11 +129,11 @@ select:focus-visible {
   body {
     @apply bg-white text-black;
   }
-  
+
   .no-print {
     display: none !important;
   }
-  
+
   .page-break {
     page-break-after: always;
   }

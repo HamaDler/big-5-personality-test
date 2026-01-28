@@ -16,14 +16,17 @@ interface FacetBreakdownProps {
   traitColor: string;
 }
 
-export default function FacetBreakdown({ facets, traitColor }: FacetBreakdownProps) {
+export default function FacetBreakdown({
+  facets,
+  traitColor,
+}: FacetBreakdownProps) {
   const [expandedFacet, setExpandedFacet] = useState<Facet | null>(null);
 
   return (
     <div className="space-y-3">
       {facets.map((facet) => {
         const isExpanded = expandedFacet === facet.facet;
-        
+
         return (
           <div
             key={facet.facet}
@@ -35,7 +38,7 @@ export default function FacetBreakdown({ facets, traitColor }: FacetBreakdownPro
             >
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
-                  <ChevronRight 
+                  <ChevronRight
                     className={`w-4 h-4 text-gray-400 transition-transform ${
                       isExpanded ? 'rotate-90' : ''
                     }`}
@@ -53,7 +56,7 @@ export default function FacetBreakdown({ facets, traitColor }: FacetBreakdownPro
                   </span>
                 </div>
               </div>
-              
+
               {/* Score Bar */}
               <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden ml-6">
                 <div

@@ -1,25 +1,37 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTest, loadResults } from '../context/TestContext';
-import { TestResults, BigFiveTrait, TRAIT_LABELS, TRAIT_SHORT_LABELS, FACET_LABELS } from '../types';
-import { generateInterpretationReport, getScoreRange, getScoreRangeLabel } from '../lib/interpretations';
+import {
+  TestResults,
+  BigFiveTrait,
+  TRAIT_LABELS,
+  TRAIT_SHORT_LABELS,
+  FACET_LABELS,
+} from '../types';
+import {
+  generateInterpretationReport,
+  getScoreRange,
+  getScoreRangeLabel,
+} from '../lib/interpretations';
 import TraitChart from '../components/TraitChart';
 import FacetBreakdown from '../components/FacetBreakdown';
 import PDFReport from '../components/PDFReport';
-import { 
-  Download, 
-  RefreshCw, 
-  ChevronDown, 
+import {
+  Download,
+  RefreshCw,
+  ChevronDown,
   ChevronUp,
   Info,
-  AlertTriangle
+  AlertTriangle,
 } from 'lucide-react';
 
 export default function ResultsPage() {
   const navigate = useNavigate();
   const { state, resetTest } = useTest();
   const [results, setResults] = useState<TestResults | null>(null);
-  const [expandedTraits, setExpandedTraits] = useState<Set<BigFiveTrait>>(new Set());
+  const [expandedTraits, setExpandedTraits] = useState<Set<BigFiveTrait>>(
+    new Set(),
+  );
   const [showPDFPreview, setShowPDFPreview] = useState(false);
 
   // Load results from state or storage
@@ -38,9 +50,12 @@ export default function ResultsPage() {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-4">
         <AlertTriangle className="w-12 h-12 text-amber-500 mb-4" />
-        <h2 className="text-xl font-semibold text-gray-900 mb-2">No Results Found</h2>
+        <h2 className="text-xl font-semibold text-gray-900 mb-2">
+          No Results Found
+        </h2>
         <p className="text-gray-600 mb-6 text-center">
-          You haven't completed the assessment yet, or your results have been cleared.
+          You haven't completed the assessment yet, or your results have been
+          cleared.
         </p>
         <button
           onClick={() => navigate('/test')}
@@ -55,7 +70,7 @@ export default function ResultsPage() {
   const interpretationReport = generateInterpretationReport(results.traits);
 
   const toggleTrait = (trait: BigFiveTrait) => {
-    setExpandedTraits(prev => {
+    setExpandedTraits((prev) => {
       const next = new Set(prev);
       if (next.has(trait)) {
         next.delete(trait);
@@ -67,7 +82,7 @@ export default function ResultsPage() {
   };
 
   const expandAll = () => {
-    setExpandedTraits(new Set(results.traits.map(t => t.trait)));
+    setExpandedTraits(new Set(results.traits.map((t) => t.trait)));
   };
 
   const collapseAll = () => {
@@ -80,21 +95,52 @@ export default function ResultsPage() {
   };
 
   const getTraitColorClasses = (trait: BigFiveTrait) => {
-    const colors: Record<BigFiveTrait, { bg: string; text: string; border: string; light: string }> = {
-      openness: { bg: 'bg-openness', text: 'text-openness', border: 'border-openness', light: 'bg-openness-light' },
-      conscientiousness: { bg: 'bg-conscientiousness', text: 'text-conscientiousness', border: 'border-conscientiousness', light: 'bg-conscientiousness-light' },
-      extraversion: { bg: 'bg-extraversion', text: 'text-extraversion', border: 'border-extraversion', light: 'bg-extraversion-light' },
-      agreeableness: { bg: 'bg-agreeableness', text: 'text-agreeableness', border: 'border-agreeableness', light: 'bg-agreeableness-light' },
-      neuroticism: { bg: 'bg-neuroticism', text: 'text-neuroticism', border: 'border-neuroticism', light: 'bg-neuroticism-light' },
+    const colors: Record<
+      BigFiveTrait,
+      { bg: string; text: string; border: string; light: string }
+    > = {
+      openness: {
+        bg: 'bg-openness',
+        text: 'text-openness',
+        border: 'border-openness',
+        light: 'bg-openness-light',
+      },
+      conscientiousness: {
+        bg: 'bg-conscientiousness',
+        text: 'text-conscientiousness',
+        border: 'border-conscientiousness',
+        light: 'bg-conscientiousness-light',
+      },
+      extraversion: {
+        bg: 'bg-extraversion',
+        text: 'text-extraversion',
+        border: 'border-extraversion',
+        light: 'bg-extraversion-light',
+      },
+      agreeableness: {
+        bg: 'bg-agreeableness',
+        text: 'text-agreeableness',
+        border: 'border-agreeableness',
+        light: 'bg-agreeableness-light',
+      },
+      neuroticism: {
+        bg: 'bg-neuroticism',
+        text: 'text-neuroticism',
+        border: 'border-neuroticism',
+        light: 'bg-neuroticism-light',
+      },
     };
     return colors[trait];
   };
 
-  const completedDate = new Date(results.completedAt).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
+  const completedDate = new Date(results.completedAt).toLocaleDateString(
+    'en-US',
+    {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    },
+  );
 
   return (
     <div className="animate-fadeIn pb-16">
@@ -132,9 +178,10 @@ export default function ResultsPage() {
           <div className="flex items-start gap-3">
             <Info className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
             <p className="text-sm text-amber-800">
-              <strong>Remember:</strong> These results reflect tendencies and patterns, not fixed traits. 
-              Personality can be influenced by context and may change over time. 
-              This is not a clinical assessment.
+              <strong>Remember:</strong> These results reflect tendencies and
+              patterns, not fixed traits. Personality can be influenced by
+              context and may change over time. This is not a clinical
+              assessment.
             </p>
           </div>
         </div>
@@ -180,7 +227,7 @@ export default function ResultsPage() {
             {interpretationReport.map((report) => {
               const colors = getTraitColorClasses(report.trait);
               const isExpanded = expandedTraits.has(report.trait);
-              
+
               return (
                 <div
                   key={report.trait}
@@ -193,7 +240,9 @@ export default function ResultsPage() {
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
-                        <div className={`w-12 h-12 rounded-full ${colors.bg} flex items-center justify-center`}>
+                        <div
+                          className={`w-12 h-12 rounded-full ${colors.bg} flex items-center justify-center`}
+                        >
                           <span className="text-white font-bold text-lg">
                             {TRAIT_SHORT_LABELS[report.trait].charAt(0)}
                           </span>
@@ -220,7 +269,7 @@ export default function ResultsPage() {
                         )}
                       </div>
                     </div>
-                    
+
                     {/* Score Bar */}
                     <div className="mt-4">
                       <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -246,7 +295,10 @@ export default function ResultsPage() {
                       <h4 className="text-sm font-semibold text-gray-900 uppercase tracking-wide mb-4">
                         Facets
                       </h4>
-                      <FacetBreakdown facets={report.facets} traitColor={colors.bg} />
+                      <FacetBreakdown
+                        facets={report.facets}
+                        traitColor={colors.bg}
+                      />
                     </div>
                   )}
                 </div>
@@ -264,26 +316,33 @@ export default function ResultsPage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-white rounded-xl p-6">
-              <h3 className="font-semibold text-gray-900 mb-2">Lower Range (0-35%)</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">
+                Lower Range (0-35%)
+              </h3>
               <p className="text-sm text-gray-600">
-                Scores in this range suggest you may express this trait less frequently 
-                or intensely than many others. This is neither good nor bad—it simply 
-                reflects your natural tendencies.
+                Scores in this range suggest you may express this trait less
+                frequently or intensely than many others. This is neither good
+                nor bad—it simply reflects your natural tendencies.
               </p>
             </div>
             <div className="bg-white rounded-xl p-6">
-              <h3 className="font-semibold text-gray-900 mb-2">Moderate Range (36-65%)</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">
+                Moderate Range (36-65%)
+              </h3>
               <p className="text-sm text-gray-600">
-                Scores in this range indicate a balanced expression of this trait. 
-                You likely adapt your behavior based on context and can draw on 
-                different aspects as needed.
+                Scores in this range indicate a balanced expression of this
+                trait. You likely adapt your behavior based on context and can
+                draw on different aspects as needed.
               </p>
             </div>
             <div className="bg-white rounded-xl p-6">
-              <h3 className="font-semibold text-gray-900 mb-2">Higher Range (66-100%)</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">
+                Higher Range (66-100%)
+              </h3>
               <p className="text-sm text-gray-600">
-                Scores in this range suggest you may express this trait more frequently 
-                or intensely than many others. This can be a strength in many contexts.
+                Scores in this range suggest you may express this trait more
+                frequently or intensely than many others. This can be a strength
+                in many contexts.
               </p>
             </div>
           </div>
@@ -292,10 +351,10 @@ export default function ResultsPage() {
 
       {/* PDF Preview Modal */}
       {showPDFPreview && (
-        <PDFReport 
-          results={results} 
+        <PDFReport
+          results={results}
           interpretationReport={interpretationReport}
-          onClose={() => setShowPDFPreview(false)} 
+          onClose={() => setShowPDFPreview(false)}
         />
       )}
     </div>

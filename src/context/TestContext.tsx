@@ -1,6 +1,6 @@
 /**
  * Test Context Provider
- * 
+ *
  * Manages the global state for the personality test, including:
  * - Current session
  * - Question responses
@@ -8,12 +8,29 @@
  * - Navigation state
  */
 
-import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useReducer,
+  useEffect,
+  ReactNode,
+} from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { TestSession, QuestionResponse, TestResults, LikertValue } from '../types';
+import {
+  TestSession,
+  QuestionResponse,
+  TestResults,
+  LikertValue,
+} from '../types';
 import { questions } from '../data/questions';
 import { calculateAllScores, validateResponses } from '../lib/scoring';
-import { saveSession, loadSession, clearSession, saveResults, loadResults } from '../lib/storage';
+import {
+  saveSession,
+  loadSession,
+  clearSession,
+  saveResults,
+  loadResults,
+} from '../lib/storage';
 
 // ============================================================================
 // State Types
@@ -45,7 +62,7 @@ const initialState: TestState = {
   session: null,
   results: null,
   isLoading: false,
-  error: null
+  error: null,
 };
 
 // ============================================================================
@@ -59,13 +76,13 @@ function testReducer(state: TestState, action: TestAction): TestState {
         id: uuidv4(),
         startedAt: Date.now(),
         currentQuestionIndex: 0,
-        responses: []
+        responses: [],
       };
       return {
         ...state,
         session: newSession,
         results: null,
-        error: null
+        error: null,
       };
     }
 
@@ -73,20 +90,20 @@ function testReducer(state: TestState, action: TestAction): TestState {
       return {
         ...state,
         session: action.session,
-        error: null
+        error: null,
       };
 
     case 'ANSWER_QUESTION': {
       if (!state.session) return state;
 
       const existingIndex = state.session.responses.findIndex(
-        r => r.questionId === action.questionId
+        (r) => r.questionId === action.questionId,
       );
 
       const newResponse: QuestionResponse = {
         questionId: action.questionId,
         value: action.value,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       };
 
       const newResponses = [...state.session.responses];
@@ -97,17 +114,18 @@ function testReducer(state: TestState, action: TestAction): TestState {
       }
 
       // Auto-advance to next question if not on last question
-      const nextIndex = state.session.currentQuestionIndex < questions.length - 1
-        ? state.session.currentQuestionIndex + 1
-        : state.session.currentQuestionIndex;
+      const nextIndex =
+        state.session.currentQuestionIndex < questions.length - 1
+          ? state.session.currentQuestionIndex + 1
+          : state.session.currentQuestionIndex;
 
       return {
         ...state,
         session: {
           ...state.session,
           responses: newResponses,
-          currentQuestionIndex: nextIndex
-        }
+          currentQuestionIndex: nextIndex,
+        },
       };
     }
 
@@ -117,42 +135,47 @@ function testReducer(state: TestState, action: TestAction): TestState {
         ...state,
         session: {
           ...state.session,
-          currentQuestionIndex: Math.max(0, Math.min(action.index, questions.length - 1))
-        }
+          currentQuestionIndex: Math.max(
+            0,
+            Math.min(action.index, questions.length - 1),
+          ),
+        },
       };
     }
 
     case 'COMPLETE_TEST':
       return {
         ...state,
-        session: state.session ? {
-          ...state.session,
-          completedAt: Date.now()
-        } : null,
-        results: action.results
+        session: state.session
+          ? {
+              ...state.session,
+              completedAt: Date.now(),
+            }
+          : null,
+        results: action.results,
       };
 
     case 'LOAD_RESULTS':
       return {
         ...state,
-        results: action.results
+        results: action.results,
       };
 
     case 'RESET_TEST':
       return {
-        ...initialState
+        ...initialState,
       };
 
     case 'SET_ERROR':
       return {
         ...state,
-        error: action.error
+        error: action.error,
       };
 
     case 'CLEAR_ERROR':
       return {
         ...state,
-        error: null
+        error: null,
       };
 
     default:
@@ -172,7 +195,7 @@ interface TestContextValue {
   goToQuestion: (index: number) => void;
   submitTest: () => void;
   resetTest: () => void;
-  getCurrentQuestion: () => typeof questions[0] | null;
+  getCurrentQuestion: () => (typeof questions)[0] | null;
   getProgress: () => { answered: number; total: number; percent: number };
   getResponseForQuestion: (questionId: number) => LikertValue | null;
   canSubmit: () => boolean;
@@ -238,7 +261,10 @@ export function TestProvider({ children }: TestProviderProps) {
       return;
     }
 
-    const results = calculateAllScores(state.session.responses, state.session.id);
+    const results = calculateAllScores(
+      state.session.responses,
+      state.session.id,
+    );
     clearSession();
     dispatch({ type: 'COMPLETE_TEST', results });
   };
@@ -261,13 +287,15 @@ export function TestProvider({ children }: TestProviderProps) {
     return {
       answered,
       total: questions.length,
-      percent: Math.round((answered / questions.length) * 100)
+      percent: Math.round((answered / questions.length) * 100),
     };
   };
 
   const getResponseForQuestion = (questionId: number): LikertValue | null => {
     if (!state.session) return null;
-    const response = state.session.responses.find(r => r.questionId === questionId);
+    const response = state.session.responses.find(
+      (r) => r.questionId === questionId,
+    );
     return response ? response.value : null;
   };
 
@@ -299,7 +327,7 @@ export function TestProvider({ children }: TestProviderProps) {
     getResponseForQuestion,
     canSubmit,
     hasExistingSession,
-    hasExistingResults
+    hasExistingResults,
   };
 
   return <TestContext.Provider value={value}>{children}</TestContext.Provider>;

@@ -1,19 +1,20 @@
 import { useNavigate } from 'react-router-dom';
 import { useTest } from '../context/TestContext';
-import { 
-  Play, 
-  RotateCcw, 
-  BarChart3, 
-  CheckCircle, 
+import {
+  Play,
+  RotateCcw,
+  BarChart3,
+  CheckCircle,
   Clock,
   Shield,
   Brain,
-  FileText
+  FileText,
 } from 'lucide-react';
 
 export default function HomePage() {
   const navigate = useNavigate();
-  const { startTest, resumeTest, hasExistingSession, hasExistingResults } = useTest();
+  const { startTest, resumeTest, hasExistingSession, hasExistingResults } =
+    useTest();
 
   const handleStartNew = () => {
     startTest();
@@ -30,18 +31,54 @@ export default function HomePage() {
   };
 
   const traits = [
-    { name: 'Openness', color: 'bg-openness', description: 'Creativity and intellectual curiosity' },
-    { name: 'Conscientiousness', color: 'bg-conscientiousness', description: 'Organization and dependability' },
-    { name: 'Extraversion', color: 'bg-extraversion', description: 'Sociability and positive energy' },
-    { name: 'Agreeableness', color: 'bg-agreeableness', description: 'Cooperation and compassion' },
-    { name: 'Emotional Stability', color: 'bg-neuroticism', description: 'Calmness and resilience' },
+    {
+      name: 'Openness',
+      color: 'bg-openness',
+      description: 'Creativity and intellectual curiosity',
+    },
+    {
+      name: 'Conscientiousness',
+      color: 'bg-conscientiousness',
+      description: 'Organization and dependability',
+    },
+    {
+      name: 'Extraversion',
+      color: 'bg-extraversion',
+      description: 'Sociability and positive energy',
+    },
+    {
+      name: 'Agreeableness',
+      color: 'bg-agreeableness',
+      description: 'Cooperation and compassion',
+    },
+    {
+      name: 'Emotional Stability',
+      color: 'bg-neuroticism',
+      description: 'Calmness and resilience',
+    },
   ];
 
   const features = [
-    { icon: Clock, title: '15-20 minutes', description: '120 carefully designed questions' },
-    { icon: Shield, title: 'Private & Secure', description: 'Your data stays on your device' },
-    { icon: Brain, title: 'Scientifically Based', description: 'Based on the IPIP-NEO-120 inventory' },
-    { icon: FileText, title: 'Detailed Report', description: 'Download your results as PDF' },
+    {
+      icon: Clock,
+      title: '15-20 minutes',
+      description: '120 carefully designed questions',
+    },
+    {
+      icon: Shield,
+      title: 'Private & Secure',
+      description: 'Your data stays on your device',
+    },
+    {
+      icon: Brain,
+      title: 'Scientifically Based',
+      description: 'Based on the IPIP-NEO-120 inventory',
+    },
+    {
+      icon: FileText,
+      title: 'Detailed Report',
+      description: 'Download your results as PDF',
+    },
   ];
 
   return (
@@ -52,12 +89,14 @@ export default function HomePage() {
           <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
             Discover Your
             <span className="bg-gradient-to-r from-openness via-conscientiousness to-agreeableness bg-clip-text text-transparent">
-              {' '}Personality Profile
+              {' '}
+              Personality Profile
             </span>
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Take the scientifically-validated Big Five personality assessment to gain insights
-            into your unique patterns of thinking, feeling, and behaving.
+            Take the scientifically-validated Big Five personality assessment to
+            gain insights into your unique patterns of thinking, feeling, and
+            behaving.
           </p>
 
           {/* Action Buttons */}
@@ -99,12 +138,16 @@ export default function HomePage() {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
             {traits.map((trait) => (
-              <div 
-                key={trait.name} 
+              <div
+                key={trait.name}
                 className="bg-gray-50 rounded-xl p-6 text-center hover:shadow-md transition-shadow"
               >
-                <div className={`w-12 h-12 ${trait.color} rounded-full mx-auto mb-4 opacity-80`} />
-                <h3 className="font-semibold text-gray-900 mb-2">{trait.name}</h3>
+                <div
+                  className={`w-12 h-12 ${trait.color} rounded-full mx-auto mb-4 opacity-80`}
+                />
+                <h3 className="font-semibold text-gray-900 mb-2">
+                  {trait.name}
+                </h3>
                 <p className="text-sm text-gray-600">{trait.description}</p>
               </div>
             ))}
@@ -142,9 +185,12 @@ export default function HomePage() {
               'Your scores across five major personality dimensions',
               'Detailed breakdown of 30 personality facets',
               'Personalized interpretations of your results',
-              'How your tendencies may show up in different situations'
+              'How your tendencies may show up in different situations',
             ].map((item, index) => (
-              <div key={index} className="flex items-center gap-3 bg-gray-50 rounded-lg p-4">
+              <div
+                key={index}
+                className="flex items-center gap-3 bg-gray-50 rounded-lg p-4"
+              >
                 <CheckCircle className="w-5 h-5 text-conscientiousness flex-shrink-0" />
                 <span className="text-gray-700">{item}</span>
               </div>
@@ -157,9 +203,11 @@ export default function HomePage() {
       <section className="py-12 bg-amber-50 border-y border-amber-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-amber-800 text-sm">
-            <strong>Important:</strong> This assessment is for educational and self-reflection purposes only. 
-            It is not a clinical diagnosis tool and should not be used to make medical, psychological, 
-            or professional decisions. Results represent tendencies, not fixed traits.
+            <strong>Important:</strong> This assessment is for educational and
+            self-reflection purposes only. It is not a clinical diagnosis tool
+            and should not be used to make medical, psychological, or
+            professional decisions. Results represent tendencies, not fixed
+            traits.
           </p>
         </div>
       </section>

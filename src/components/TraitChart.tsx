@@ -10,7 +10,7 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  Cell
+  Cell,
 } from 'recharts';
 import { TraitScore, TRAIT_SHORT_LABELS, BigFiveTrait } from '../types';
 
@@ -23,20 +23,20 @@ const TRAIT_COLORS: Record<BigFiveTrait, string> = {
   conscientiousness: '#27AE60',
   extraversion: '#F1C40F',
   agreeableness: '#3498DB',
-  neuroticism: '#E74C3C'
+  neuroticism: '#E74C3C',
 };
 
 export default function TraitChart({ traits }: TraitChartProps) {
-  const radarData = traits.map(t => ({
+  const radarData = traits.map((t) => ({
     trait: TRAIT_SHORT_LABELS[t.trait],
     score: t.percentScore,
-    fullMark: 100
+    fullMark: 100,
   }));
 
-  const barData = traits.map(t => ({
+  const barData = traits.map((t) => ({
     name: TRAIT_SHORT_LABELS[t.trait],
     score: t.percentScore,
-    trait: t.trait
+    trait: t.trait,
   }));
 
   return (
@@ -93,14 +93,14 @@ export default function TraitChart({ traits }: TraitChartProps) {
                 backgroundColor: '#fff',
                 border: '1px solid #e5e7eb',
                 borderRadius: '8px',
-                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
               }}
             />
             <Bar dataKey="score" radius={[0, 4, 4, 0]}>
               {barData.map((entry, index) => (
-                <Cell 
-                  key={`cell-${index}`} 
-                  fill={TRAIT_COLORS[entry.trait as BigFiveTrait]} 
+                <Cell
+                  key={`cell-${index}`}
+                  fill={TRAIT_COLORS[entry.trait as BigFiveTrait]}
                 />
               ))}
             </Bar>
