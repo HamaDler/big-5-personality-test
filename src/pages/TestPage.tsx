@@ -173,17 +173,6 @@ export default function TestPage() {
     }
   };
 
-  const getTraitColor = (trait: BigFiveTrait): string => {
-    const colors: Record<BigFiveTrait, string> = {
-      openness: 'bg-openness',
-      conscientiousness: 'bg-conscientiousness',
-      extraversion: 'bg-extraversion',
-      agreeableness: 'bg-agreeableness',
-      neuroticism: 'bg-neuroticism',
-    };
-    return colors[trait];
-  };
-
   const getTraitLightColor = (trait: BigFiveTrait): string => {
     const colors: Record<BigFiveTrait, string> = {
       openness: 'bg-openness-light',

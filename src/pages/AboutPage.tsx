@@ -2,7 +2,6 @@ import {
   Shield,
   BookOpen,
   Scale,
-  Heart,
   ExternalLink,
   CheckCircle,
   Leaf,

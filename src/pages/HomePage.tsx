@@ -99,7 +99,7 @@ export default function HomePage() {
             <MindIllustration className="w-full h-full animate-float" />
           </div>
           <div className="absolute bottom-0 left-0 w-full">
-            <WavesIllustration className="w-full h-auto opacity-40" />
+            <WavesIllustration className="w-full h-auto opacity-10" />
           </div>
         </div>
 

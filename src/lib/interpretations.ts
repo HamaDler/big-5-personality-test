@@ -18,9 +18,7 @@ import {
   TraitInterpretation,
   FacetInterpretation,
   TraitScore,
-  FacetScore,
   TRAIT_LABELS,
-  TRAIT_SHORT_LABELS,
   FACET_LABELS,
 } from '../types';
 import { getScoreRange } from './scoring';

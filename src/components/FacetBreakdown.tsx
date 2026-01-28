@@ -1,4 +1,4 @@
-import { Facet, ScoreRange, FACET_LABELS } from '../types';
+import { Facet, ScoreRange } from '../types';
 import { getScoreRangeLabel } from '../lib/interpretations';
 import { ChevronRight } from 'lucide-react';
 import { useState } from 'react';
