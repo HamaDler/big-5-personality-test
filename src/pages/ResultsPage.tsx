@@ -6,19 +6,12 @@ import {
   BigFiveTrait,
   TRAIT_LABELS,
   TRAIT_SHORT_LABELS,
-  FACET_LABELS,
 } from '../types';
 import {
   generateInterpretationReport,
-  getScoreRange,
   getScoreRangeLabel,
 } from '../lib/interpretations';
-import {
-  getAllTraitInsights,
-  generateProfileSummary,
-  PersonalizedInsight,
-  ProfileSummary,
-} from '../lib/insights';
+import { getAllTraitInsights, generateProfileSummary } from '../lib/insights';
 import TraitChart from '../components/TraitChart';
 import FacetBreakdown from '../components/FacetBreakdown';
 import PDFReport from '../components/PDFReport';
@@ -28,7 +21,6 @@ import {
   ChevronDown,
   ChevronUp,
   Info,
-  AlertTriangle,
   Lightbulb,
   Briefcase,
   Heart,
@@ -37,6 +29,8 @@ import {
   Users,
   Zap,
   Target,
+  Leaf,
+  Sparkles,
 } from 'lucide-react';
 
 export default function ResultsPage() {
@@ -63,18 +57,17 @@ export default function ResultsPage() {
   if (!results) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-4">
-        <AlertTriangle className="w-12 h-12 text-amber-500 mb-4" />
-        <h2 className="text-xl font-semibold text-gray-900 mb-2">
+        <div className="w-16 h-16 bg-sage-100 rounded-2xl flex items-center justify-center mb-4">
+          <Leaf className="w-8 h-8 text-sage-400" />
+        </div>
+        <h2 className="text-xl font-serif font-semibold text-warm-800 mb-2">
           No Results Found
         </h2>
-        <p className="text-gray-600 mb-6 text-center">
+        <p className="text-warm-500 mb-6 text-center max-w-sm">
           You haven't completed the assessment yet, or your results have been
           cleared.
         </p>
-        <button
-          onClick={() => navigate('/test')}
-          className="px-6 py-3 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition-colors"
-        >
+        <button onClick={() => navigate('/test')} className="btn-zen">
           Take the Assessment
         </button>
       </div>
@@ -173,24 +166,32 @@ export default function ResultsPage() {
   return (
     <div className="animate-fadeIn pb-16">
       {/* Header */}
-      <section className="bg-white border-b border-gray-200 py-8">
+      <section className="bg-white/80 backdrop-blur-md border-b border-sage-100 py-8">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Your Results</h1>
-              <p className="text-gray-500 mt-1">Completed on {completedDate}</p>
+              <div className="flex items-center gap-2 mb-2">
+                <Sparkles className="w-5 h-5 text-sage-500" />
+                <span className="text-sage-600 text-sm font-medium">
+                  Your Journey Results
+                </span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl font-serif font-semibold text-warm-800">
+                Your Personality Profile
+              </h1>
+              <p className="text-warm-500 mt-1">Completed on {completedDate}</p>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 w-full sm:w-auto">
               <button
                 onClick={handleRetake}
-                className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+                className="flex-1 sm:flex-none btn-zen-outline flex items-center justify-center gap-2"
               >
                 <RefreshCw className="w-4 h-4" />
                 Retake
               </button>
               <button
                 onClick={() => setShowPDFPreview(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition-colors"
+                className="flex-1 sm:flex-none btn-zen flex items-center justify-center gap-2"
               >
                 <Download className="w-4 h-4" />
                 Download PDF
@@ -201,50 +202,50 @@ export default function ResultsPage() {
       </section>
 
       {/* Disclaimer Banner */}
-      <section className="bg-amber-50 border-b border-amber-200">
+      <section className="bg-sage-50 border-b border-sage-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-start gap-3">
-            <Info className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-            <p className="text-sm text-amber-800">
-              <strong>Remember:</strong> These results reflect tendencies and
-              patterns, not fixed traits. Personality can be influenced by
-              context and may change over time. This is not a clinical
-              assessment.
+            <Leaf className="w-5 h-5 text-sage-500 flex-shrink-0 mt-0.5" />
+            <p className="text-sm text-sage-700">
+              <strong>A gentle reminder:</strong> These results reflect
+              tendencies and patterns, not fixed traits. Personality can be
+              influenced by context and may change over time. This is not a
+              clinical assessment—it's a tool for self-reflection.
             </p>
           </div>
         </div>
       </section>
 
       {/* Overview Chart */}
-      <section className="py-12 bg-gray-50">
+      <section className="py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6 text-center">
+          <h2 className="text-xl font-serif font-semibold text-warm-800 mb-6 text-center">
             Big Five Overview
           </h2>
-          <div className="bg-white rounded-2xl shadow-sm p-6">
+          <div className="card-zen">
             <TraitChart traits={results.traits} />
           </div>
         </div>
       </section>
 
       {/* Detailed Results */}
-      <section className="py-12 bg-white">
+      <section className="py-12 bg-white/50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-gray-900">
+            <h2 className="text-xl font-serif font-semibold text-warm-800">
               Detailed Breakdown
             </h2>
             <div className="flex items-center gap-2">
               <button
                 onClick={expandAll}
-                className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                className="text-sm text-warm-500 hover:text-sage-600 transition-colors"
               >
                 Expand All
               </button>
-              <span className="text-gray-300">|</span>
+              <span className="text-sage-300">|</span>
               <button
                 onClick={collapseAll}
-                className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                className="text-sm text-warm-500 hover:text-sage-600 transition-colors"
               >
                 Collapse All
               </button>
@@ -259,48 +260,48 @@ export default function ResultsPage() {
               return (
                 <div
                   key={report.trait}
-                  className={`bg-white rounded-xl border-2 ${colors.border} overflow-hidden transition-all`}
+                  className={`bg-white rounded-2xl border-l-4 ${colors.border} overflow-hidden transition-all shadow-soft`}
                 >
                   {/* Trait Header */}
                   <button
                     onClick={() => toggleTrait(report.trait)}
-                    className="w-full p-6 text-left hover:bg-gray-50 transition-colors"
+                    className="w-full p-6 text-left hover:bg-sage-50/50 transition-colors"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
                         <div
-                          className={`w-12 h-12 rounded-full ${colors.bg} flex items-center justify-center`}
+                          className={`w-12 h-12 rounded-xl ${colors.light} flex items-center justify-center`}
                         >
-                          <span className="text-white font-bold text-lg">
+                          <span className={`font-bold text-lg ${colors.text}`}>
                             {TRAIT_SHORT_LABELS[report.trait].charAt(0)}
                           </span>
                         </div>
                         <div>
-                          <h3 className="text-lg font-semibold text-gray-900">
+                          <h3 className="text-lg font-semibold text-warm-800">
                             {TRAIT_LABELS[report.trait]}
                           </h3>
-                          <p className="text-sm text-gray-500">
+                          <p className="text-sm text-warm-500">
                             {getScoreRangeLabel(report.range)}
                           </p>
                         </div>
                       </div>
                       <div className="flex items-center gap-4">
                         <div className="text-right">
-                          <span className="text-2xl font-bold text-gray-900">
+                          <span className="text-2xl font-bold text-warm-800">
                             {report.score}%
                           </span>
                         </div>
                         {isExpanded ? (
-                          <ChevronUp className="w-5 h-5 text-gray-400" />
+                          <ChevronUp className="w-5 h-5 text-warm-400" />
                         ) : (
-                          <ChevronDown className="w-5 h-5 text-gray-400" />
+                          <ChevronDown className="w-5 h-5 text-warm-400" />
                         )}
                       </div>
                     </div>
 
                     {/* Score Bar */}
                     <div className="mt-4">
-                      <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div className="h-2 bg-sage-100 rounded-full overflow-hidden">
                         <div
                           className={`h-full ${colors.bg} transition-all duration-500`}
                           style={{ width: `${report.score}%` }}
@@ -313,14 +314,14 @@ export default function ResultsPage() {
                   {isExpanded && (
                     <div className="px-6 pb-6 animate-fadeIn">
                       {/* Trait Interpretation */}
-                      <div className={`${colors.light} rounded-lg p-4 mb-6`}>
-                        <p className="text-gray-700 leading-relaxed">
+                      <div className={`${colors.light} rounded-xl p-4 mb-6`}>
+                        <p className="text-warm-700 leading-relaxed">
                           {report.traitInterpretation}
                         </p>
                       </div>
 
                       {/* Facet Breakdown */}
-                      <h4 className="text-sm font-semibold text-gray-900 uppercase tracking-wide mb-4">
+                      <h4 className="text-sm font-semibold text-warm-700 uppercase tracking-wide mb-4">
                         Facets
                       </h4>
                       <FacetBreakdown
@@ -337,66 +338,66 @@ export default function ResultsPage() {
       </section>
 
       {/* Profile Summary */}
-      <section className="py-12 bg-gradient-to-br from-indigo-50 to-purple-50">
+      <section className="py-12 bg-sage-50/50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
-              <Zap className="w-5 h-5 text-white" />
+            <div className="w-10 h-10 bg-sage-200 rounded-xl flex items-center justify-center">
+              <Zap className="w-5 h-5 text-sage-700" />
             </div>
-            <h2 className="text-xl font-semibold text-gray-900">
+            <h2 className="text-xl font-serif font-semibold text-warm-800">
               Your Personality Profile
             </h2>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
+          <div className="card-zen mb-6">
             <div className="text-center mb-6">
-              <h3 className="text-2xl font-bold text-indigo-600 mb-2">
+              <h3 className="text-2xl font-serif font-semibold text-sage-700 mb-2">
                 {profileSummary.personalityPattern}
               </h3>
-              <p className="text-gray-600">
+              <p className="text-warm-500">
                 Based on your unique combination of traits
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               {/* Communication Style */}
-              <div className="bg-gray-50 rounded-xl p-4">
+              <div className="bg-sage-50 rounded-xl p-4">
                 <div className="flex items-center gap-2 mb-3">
-                  <Users className="w-5 h-5 text-indigo-600" />
-                  <h4 className="font-semibold text-gray-900">
+                  <Users className="w-5 h-5 text-sage-600" />
+                  <h4 className="font-semibold text-warm-700">
                     Communication Style
                   </h4>
                 </div>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-warm-600">
                   {profileSummary.communicationStyle}
                 </p>
               </div>
 
               {/* Stress Response */}
-              <div className="bg-gray-50 rounded-xl p-4">
+              <div className="bg-sage-50 rounded-xl p-4">
                 <div className="flex items-center gap-2 mb-3">
-                  <Target className="w-5 h-5 text-indigo-600" />
-                  <h4 className="font-semibold text-gray-900">
+                  <Target className="w-5 h-5 text-sage-600" />
+                  <h4 className="font-semibold text-warm-700">
                     Under Pressure
                   </h4>
                 </div>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-warm-600">
                   {profileSummary.stressResponse}
                 </p>
               </div>
 
               {/* Key Strengths */}
-              <div className="bg-gray-50 rounded-xl p-4">
+              <div className="bg-sage-50 rounded-xl p-4">
                 <div className="flex items-center gap-2 mb-3">
-                  <Star className="w-5 h-5 text-green-600" />
-                  <h4 className="font-semibold text-gray-900">Key Strengths</h4>
+                  <Star className="w-5 h-5 text-sage-600" />
+                  <h4 className="font-semibold text-warm-700">Key Strengths</h4>
                 </div>
-                <ul className="text-sm text-gray-600 space-y-1">
+                <ul className="text-sm text-warm-600 space-y-1">
                   {profileSummary.overallStrengths
                     .slice(0, 4)
                     .map((strength, i) => (
                       <li key={i} className="flex items-start gap-2">
-                        <span className="text-green-500 mt-1">•</span>
+                        <span className="text-sage-500 mt-1">•</span>
                         {strength}
                       </li>
                     ))}
@@ -404,17 +405,17 @@ export default function ResultsPage() {
               </div>
 
               {/* Motivation Drivers */}
-              <div className="bg-gray-50 rounded-xl p-4">
+              <div className="bg-sage-50 rounded-xl p-4">
                 <div className="flex items-center gap-2 mb-3">
-                  <TrendingUp className="w-5 h-5 text-amber-600" />
-                  <h4 className="font-semibold text-gray-900">
+                  <TrendingUp className="w-5 h-5 text-sage-600" />
+                  <h4 className="font-semibold text-warm-700">
                     What Motivates You
                   </h4>
                 </div>
-                <ul className="text-sm text-gray-600 space-y-1">
+                <ul className="text-sm text-warm-600 space-y-1">
                   {profileSummary.motivationDrivers.map((driver, i) => (
                     <li key={i} className="flex items-start gap-2">
-                      <span className="text-amber-500 mt-1">•</span>
+                      <span className="text-sage-500 mt-1">•</span>
                       {driver}
                     </li>
                   ))}
@@ -426,14 +427,14 @@ export default function ResultsPage() {
       </section>
 
       {/* Detailed Insights by Trait */}
-      <section className="py-12 bg-white">
+      <section className="py-12 bg-white/50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center">
-              <Lightbulb className="w-5 h-5 text-white" />
+            <div className="w-10 h-10 bg-sage-200 rounded-xl flex items-center justify-center">
+              <Lightbulb className="w-5 h-5 text-sage-700" />
             </div>
-            <h2 className="text-xl font-semibold text-gray-900">
-              Detailed Insights & Interesting Facts
+            <h2 className="text-xl font-serif font-semibold text-warm-800">
+              Insights & Interesting Facts
             </h2>
           </div>
 
@@ -443,21 +444,21 @@ export default function ResultsPage() {
               return (
                 <div
                   key={insight.trait}
-                  className="bg-gray-50 rounded-2xl p-6 border border-gray-200"
+                  className="card-zen border-l-4 border-sage-300"
                 >
                   <div className="flex items-center gap-3 mb-4">
                     <div
-                      className={`w-8 h-8 rounded-full ${colors.bg} flex items-center justify-center`}
+                      className={`w-8 h-8 rounded-xl ${colors.light} flex items-center justify-center`}
                     >
-                      <span className="text-white font-bold text-sm">
+                      <span className={`font-bold text-sm ${colors.text}`}>
                         {TRAIT_LABELS[insight.trait].charAt(0)}
                       </span>
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-900">
+                    <h3 className="text-lg font-semibold text-warm-800">
                       {TRAIT_LABELS[insight.trait]}
                     </h3>
                     <span
-                      className={`px-2 py-1 rounded-full text-xs font-medium ${colors.light} ${colors.text}`}
+                      className={`px-2 py-1 rounded-lg text-xs font-medium ${colors.light} ${colors.text}`}
                     >
                       {insight.score}%
                     </span>
@@ -465,17 +466,17 @@ export default function ResultsPage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Interesting Facts */}
-                    <div className="bg-white rounded-xl p-4">
+                    <div className="bg-sage-50 rounded-xl p-4">
                       <div className="flex items-center gap-2 mb-3">
-                        <Lightbulb className="w-4 h-4 text-amber-500" />
-                        <h4 className="font-medium text-gray-900 text-sm">
+                        <Lightbulb className="w-4 h-4 text-extraversion" />
+                        <h4 className="font-medium text-warm-700 text-sm">
                           Did You Know?
                         </h4>
                       </div>
-                      <ul className="text-sm text-gray-600 space-y-2">
+                      <ul className="text-sm text-warm-600 space-y-2">
                         {insight.interestingFacts.slice(0, 2).map((fact, i) => (
                           <li key={i} className="flex items-start gap-2">
-                            <span className="text-amber-400 mt-1 flex-shrink-0">
+                            <span className="text-extraversion mt-1 flex-shrink-0">
                               ✦
                             </span>
                             <span>{fact}</span>
@@ -485,19 +486,19 @@ export default function ResultsPage() {
                     </div>
 
                     {/* Career Environments */}
-                    <div className="bg-white rounded-xl p-4">
+                    <div className="bg-sage-50 rounded-xl p-4">
                       <div className="flex items-center gap-2 mb-3">
-                        <Briefcase className="w-4 h-4 text-blue-500" />
-                        <h4 className="font-medium text-gray-900 text-sm">
+                        <Briefcase className="w-4 h-4 text-agreeableness" />
+                        <h4 className="font-medium text-warm-700 text-sm">
                           Suitable Environments
                         </h4>
                       </div>
-                      <ul className="text-sm text-gray-600 space-y-1">
+                      <ul className="text-sm text-warm-600 space-y-1">
                         {insight.careerEnvironments
                           .slice(0, 3)
                           .map((env, i) => (
                             <li key={i} className="flex items-start gap-2">
-                              <span className="text-blue-400 mt-1 flex-shrink-0">
+                              <span className="text-agreeableness mt-1 flex-shrink-0">
                                 →
                               </span>
                               <span>{env}</span>
@@ -507,30 +508,30 @@ export default function ResultsPage() {
                     </div>
 
                     {/* Relationship Insights */}
-                    <div className="bg-white rounded-xl p-4">
+                    <div className="bg-sage-50 rounded-xl p-4">
                       <div className="flex items-center gap-2 mb-3">
-                        <Heart className="w-4 h-4 text-rose-500" />
-                        <h4 className="font-medium text-gray-900 text-sm">
+                        <Heart className="w-4 h-4 text-neuroticism" />
+                        <h4 className="font-medium text-warm-700 text-sm">
                           Relationships
                         </h4>
                       </div>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-warm-600">
                         {insight.relationshipInsight}
                       </p>
                     </div>
 
                     {/* Growth Tips */}
-                    <div className="bg-white rounded-xl p-4">
+                    <div className="bg-sage-50 rounded-xl p-4">
                       <div className="flex items-center gap-2 mb-3">
-                        <TrendingUp className="w-4 h-4 text-green-500" />
-                        <h4 className="font-medium text-gray-900 text-sm">
+                        <TrendingUp className="w-4 h-4 text-conscientiousness" />
+                        <h4 className="font-medium text-warm-700 text-sm">
                           Growth Tips
                         </h4>
                       </div>
-                      <ul className="text-sm text-gray-600 space-y-1">
+                      <ul className="text-sm text-warm-600 space-y-1">
                         {insight.growthTips.slice(0, 2).map((tip, i) => (
                           <li key={i} className="flex items-start gap-2">
-                            <span className="text-green-400 mt-1 flex-shrink-0">
+                            <span className="text-conscientiousness mt-1 flex-shrink-0">
                               ✓
                             </span>
                             <span>{tip}</span>
@@ -540,17 +541,17 @@ export default function ResultsPage() {
                     </div>
 
                     {/* Strengths */}
-                    <div className="bg-white rounded-xl p-4">
+                    <div className="bg-sage-50 rounded-xl p-4">
                       <div className="flex items-center gap-2 mb-3">
-                        <Star className="w-4 h-4 text-emerald-500" />
-                        <h4 className="font-medium text-gray-900 text-sm">
+                        <Star className="w-4 h-4 text-sage-600" />
+                        <h4 className="font-medium text-warm-700 text-sm">
                           Your Strengths
                         </h4>
                       </div>
-                      <ul className="text-sm text-gray-600 space-y-1">
+                      <ul className="text-sm text-warm-600 space-y-1">
                         {insight.strengths.slice(0, 3).map((strength, i) => (
                           <li key={i} className="flex items-start gap-2">
-                            <span className="text-emerald-400 mt-1 flex-shrink-0">
+                            <span className="text-sage-500 mt-1 flex-shrink-0">
                               +
                             </span>
                             <span>{strength}</span>
@@ -560,17 +561,17 @@ export default function ResultsPage() {
                     </div>
 
                     {/* Challenges */}
-                    <div className="bg-white rounded-xl p-4">
+                    <div className="bg-sage-50 rounded-xl p-4">
                       <div className="flex items-center gap-2 mb-3">
-                        <Info className="w-4 h-4 text-orange-500" />
-                        <h4 className="font-medium text-gray-900 text-sm">
+                        <Info className="w-4 h-4 text-openness" />
+                        <h4 className="font-medium text-warm-700 text-sm">
                           Watch Out For
                         </h4>
                       </div>
-                      <ul className="text-sm text-gray-600 space-y-1">
+                      <ul className="text-sm text-warm-600 space-y-1">
                         {insight.challenges.slice(0, 2).map((challenge, i) => (
                           <li key={i} className="flex items-start gap-2">
-                            <span className="text-orange-400 mt-1 flex-shrink-0">
+                            <span className="text-openness mt-1 flex-shrink-0">
                               !
                             </span>
                             <span>{challenge}</span>
@@ -582,8 +583,8 @@ export default function ResultsPage() {
 
                   {/* Famous Figures */}
                   {insight.famousFigures.length > 0 && (
-                    <div className="mt-4 pt-4 border-t border-gray-200">
-                      <p className="text-sm text-gray-500">
+                    <div className="mt-4 pt-4 border-t border-sage-100">
+                      <p className="text-sm text-warm-500">
                         <span className="font-medium">
                           Notable figures with similar traits:{' '}
                         </span>
@@ -599,37 +600,37 @@ export default function ResultsPage() {
       </section>
 
       {/* Understanding Your Results */}
-      <section className="py-12 bg-gray-50">
+      <section className="py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">
+          <h2 className="text-xl font-serif font-semibold text-warm-800 mb-6">
             Understanding Your Results
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white rounded-xl p-6">
-              <h3 className="font-semibold text-gray-900 mb-2">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+            <div className="card-zen">
+              <h3 className="font-semibold text-warm-700 mb-2">
                 Lower Range (0-35%)
               </h3>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-warm-500">
                 Scores in this range suggest you may express this trait less
                 frequently or intensely than many others. This is neither good
                 nor bad—it simply reflects your natural tendencies.
               </p>
             </div>
-            <div className="bg-white rounded-xl p-6">
-              <h3 className="font-semibold text-gray-900 mb-2">
+            <div className="card-zen">
+              <h3 className="font-semibold text-warm-700 mb-2">
                 Moderate Range (36-65%)
               </h3>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-warm-500">
                 Scores in this range indicate a balanced expression of this
                 trait. You likely adapt your behavior based on context and can
                 draw on different aspects as needed.
               </p>
             </div>
-            <div className="bg-white rounded-xl p-6">
-              <h3 className="font-semibold text-gray-900 mb-2">
+            <div className="card-zen">
+              <h3 className="font-semibold text-warm-700 mb-2">
                 Higher Range (66-100%)
               </h3>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-warm-500">
                 Scores in this range suggest you may express this trait more
                 frequently or intensely than many others. This can be a strength
                 in many contexts.

@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, FileText, BarChart3, Info } from 'lucide-react';
+import { Home, FileText, BarChart3, Info, Leaf } from 'lucide-react';
 
 interface LayoutProps {
   children: ReactNode;
@@ -11,25 +11,30 @@ export default function Layout({ children }: LayoutProps) {
 
   const navItems = [
     { path: '/', label: 'Home', icon: Home },
-    { path: '/test', label: 'Take Test', icon: FileText },
+    { path: '/test', label: 'Assessment', icon: FileText },
     { path: '/results', label: 'Results', icon: BarChart3 },
     { path: '/about', label: 'About', icon: Info },
   ];
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-zen-gradient-subtle">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+      <header className="bg-white/80 backdrop-blur-md border-b border-sage-100 sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-openness via-conscientiousness to-agreeableness flex items-center justify-center">
-                <span className="text-white font-bold text-sm">B5</span>
+            <Link to="/" className="flex items-center gap-2 group">
+              <div className="w-10 h-10 rounded-xl bg-sage-100 flex items-center justify-center group-hover:bg-sage-200 transition-colors">
+                <Leaf className="w-5 h-5 text-sage-600" />
               </div>
-              <span className="font-semibold text-lg hidden sm:block">
-                Big Five Test
-              </span>
+              <div className="hidden sm:block">
+                <span className="font-serif font-semibold text-lg text-sage-800">
+                  Big Five
+                </span>
+                <span className="text-sage-500 text-sm block -mt-1">
+                  Personality Test
+                </span>
+              </div>
             </Link>
 
             {/* Navigation */}
@@ -41,12 +46,12 @@ export default function Layout({ children }: LayoutProps) {
                     key={path}
                     to={path}
                     className={`
-                      flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium
-                      transition-colors duration-200
+                      flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium
+                      transition-all duration-300
                       ${
                         isActive
-                          ? 'bg-gray-100 text-gray-900'
-                          : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                          ? 'bg-sage-100 text-sage-800'
+                          : 'text-warm-500 hover:text-sage-700 hover:bg-sage-50'
                       }
                     `}
                   >
@@ -64,31 +69,34 @@ export default function Layout({ children }: LayoutProps) {
       <main className="flex-1">{children}</main>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 py-8 mt-auto">
+      <footer className="bg-white/50 border-t border-sage-100 py-8 mt-auto">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-gray-500">
-              Based on the IPIP-NEO-120 • Public Domain
-            </p>
-            <div className="flex items-center gap-4 text-sm text-gray-500">
+            <div className="flex items-center gap-2">
+              <Leaf className="w-4 h-4 text-sage-400" />
+              <p className="text-sm text-warm-500">
+                Based on the IPIP-NEO-120 • Public Domain
+              </p>
+            </div>
+            <div className="flex items-center gap-4 text-sm text-warm-500">
               <Link
                 to="/about"
-                className="hover:text-gray-700 transition-colors"
+                className="hover:text-sage-600 transition-colors"
               >
                 About
               </Link>
-              <span>•</span>
+              <span className="text-sage-300">•</span>
               <a
                 href="https://ipip.ori.org/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-gray-700 transition-colors"
+                className="hover:text-sage-600 transition-colors"
               >
                 IPIP
               </a>
             </div>
           </div>
-          <p className="text-xs text-gray-400 text-center mt-4">
+          <p className="text-xs text-warm-400 text-center mt-4 max-w-xl mx-auto">
             This assessment is for educational and self-reflection purposes
             only. It is not a clinical diagnosis tool.
           </p>

@@ -1,17 +1,26 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --color-openness: #9b59b6;
-  --color-conscientiousness: #27ae60;
-  --color-extraversion: #f1c40f;
-  --color-agreeableness: #3498db;
-  --color-neuroticism: #e74c3c;
+  /* Muted, harmonious trait colors */
+  --color-openness: #9b8ab8;
+  --color-conscientiousness: #7d9f7d;
+  --color-extraversion: #c4a574;
+  --color-agreeableness: #7ba4ad;
+  --color-neuroticism: #b89898;
+
+  /* Sage primary color */
+  --color-sage: #627362;
+  --color-sage-light: #e3e7e3;
+  --color-sage-dark: #404a40;
 }
 
 body {
-  @apply bg-gray-50 text-gray-900 antialiased;
+  @apply bg-warm-50 text-warm-800 antialiased;
   font-family:
     'Inter',
     system-ui,
@@ -19,29 +28,29 @@ body {
     sans-serif;
 }
 
-/* Custom scrollbar */
+/* Serene custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-gray-100 rounded-full;
+  @apply bg-sage-100 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-300 rounded-full;
+  @apply bg-sage-300 rounded-full transition-colors;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-400;
+  @apply bg-sage-400;
 }
 
-/* Focus styles */
+/* Focus styles - sage green */
 button:focus-visible,
 input:focus-visible,
 select:focus-visible {
-  @apply outline-none ring-2 ring-blue-500 ring-offset-2;
+  @apply outline-none ring-2 ring-sage-400 ring-offset-2;
 }
 
 /* Trait color utilities */
@@ -93,11 +102,11 @@ select:focus-visible {
   border-color: var(--color-neuroticism);
 }
 
-/* Animation utilities */
+/* Zen Animation utilities */
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -108,7 +117,7 @@ select:focus-visible {
 @keyframes slideIn {
   from {
     opacity: 0;
-    transform: translateX(-20px);
+    transform: translateX(-16px);
   }
   to {
     opacity: 1;
@@ -116,12 +125,93 @@ select:focus-visible {
   }
 }
 
+@keyframes gentlePulse {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
 .animate-fadeIn {
-  animation: fadeIn 0.3s ease-out forwards;
+  animation: fadeIn 0.4s ease-out forwards;
 }
 
 .animate-slideIn {
-  animation: slideIn 0.3s ease-out forwards;
+  animation: slideIn 0.4s ease-out forwards;
+}
+
+.animate-gentlePulse {
+  animation: gentlePulse 3s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
+
+/* Glass effect for cards */
+.glass {
+  @apply bg-white/70 backdrop-blur-sm;
+}
+
+/* Soft gradient backgrounds */
+.bg-zen-gradient {
+  background: linear-gradient(135deg, #f6f7f6 0%, #e3e7e3 50%, #f5f5f4 100%);
+}
+
+.bg-zen-gradient-subtle {
+  background: linear-gradient(180deg, #fafaf9 0%, #f6f7f6 100%);
+}
+
+/* Smooth transitions */
+.transition-zen {
+  @apply transition-all duration-300 ease-out;
+}
+
+/* Serene button styles */
+.btn-zen {
+  @apply px-6 py-3 bg-sage-600 text-white font-medium rounded-xl 
+         hover:bg-sage-700 active:bg-sage-800
+         transition-all duration-300 ease-out
+         shadow-soft hover:shadow-soft-lg
+         transform hover:-translate-y-0.5;
+}
+
+.btn-zen-outline {
+  @apply px-6 py-3 bg-white border-2 border-sage-300 text-sage-700 font-medium rounded-xl 
+         hover:bg-sage-50 hover:border-sage-400
+         transition-all duration-300 ease-out;
+}
+
+/* Serene card styles */
+.card-zen {
+  @apply bg-white rounded-2xl p-6 shadow-soft 
+         border border-sage-100
+         transition-all duration-300 ease-out
+         hover:shadow-soft-lg;
+}
+
+/* Mobile responsive utilities */
+@layer utilities {
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
 }
 
 /* Print styles for PDF */
@@ -136,5 +226,18 @@ select:focus-visible {
 
   .page-break {
     page-break-after: always;
+  }
+}
+
+/* Mobile-first responsive text */
+@layer base {
+  html {
+    font-size: 16px;
+  }
+
+  @screen sm {
+    html {
+      font-size: 16px;
+    }
   }
 }

@@ -3,21 +3,26 @@ import {
   BookOpen,
   Scale,
   Heart,
-  AlertTriangle,
   ExternalLink,
   CheckCircle,
+  Leaf,
+  Info,
 } from 'lucide-react';
 
 export default function AboutPage() {
   return (
     <div className="animate-fadeIn">
       {/* Header */}
-      <section className="bg-white border-b border-gray-200 py-12">
+      <section className="bg-white/80 backdrop-blur-md border-b border-sage-100 py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-sage-100 rounded-full text-sage-700 text-sm font-medium mb-4">
+            <Info className="w-4 h-4" />
+            <span>Learn more</span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-serif font-semibold text-warm-800 mb-4">
             About This Assessment
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-warm-500 max-w-2xl mx-auto">
             Learn about the science behind the Big Five personality model and
             how to interpret your results responsibly.
           </p>
@@ -25,15 +30,15 @@ export default function AboutPage() {
       </section>
 
       {/* Important Disclaimer */}
-      <section className="py-8 bg-amber-50 border-b border-amber-200">
+      <section className="py-8 bg-sage-50 border-b border-sage-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-start gap-4">
-            <AlertTriangle className="w-6 h-6 text-amber-600 flex-shrink-0 mt-1" />
+            <Leaf className="w-6 h-6 text-sage-600 flex-shrink-0 mt-1" />
             <div>
-              <h2 className="text-lg font-semibold text-amber-900 mb-2">
-                Important Disclaimer
+              <h2 className="text-lg font-serif font-semibold text-sage-800 mb-2">
+                A Thoughtful Reminder
               </h2>
-              <div className="text-amber-800 space-y-2">
+              <div className="text-sage-700 space-y-2">
                 <p>
                   <strong>This assessment is NOT:</strong>
                 </p>
@@ -66,16 +71,16 @@ export default function AboutPage() {
       </section>
 
       {/* The Big Five Model */}
-      <section className="py-12 bg-white">
+      <section className="py-12 bg-white/50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3 mb-6">
-            <BookOpen className="w-6 h-6 text-gray-700" />
-            <h2 className="text-2xl font-bold text-gray-900">
+            <BookOpen className="w-6 h-6 text-sage-600" />
+            <h2 className="text-2xl font-serif font-semibold text-warm-800">
               The Big Five Model
             </h2>
           </div>
 
-          <div className="prose prose-gray max-w-none">
+          <div className="prose prose-warm max-w-none text-warm-600">
             <p>
               The Big Five personality model, also known as the Five-Factor
               Model (FFM) or OCEAN model, is one of the most widely researched
@@ -84,57 +89,65 @@ export default function AboutPage() {
               fundamental dimensions along which human personalities vary.
             </p>
 
-            <h3>The Five Traits</h3>
+            <h3 className="text-warm-800 font-serif">The Five Traits</h3>
 
             <div className="grid gap-4 not-prose my-6">
               {[
                 {
                   trait: 'Openness to Experience',
                   color: 'bg-openness',
+                  lightColor: 'bg-openness-light',
                   description:
                     'Reflects imagination, creativity, intellectual curiosity, and preference for novelty and variety. People high in openness tend to be more adventurous and open to unconventional ideas.',
                 },
                 {
                   trait: 'Conscientiousness',
                   color: 'bg-conscientiousness',
+                  lightColor: 'bg-conscientiousness-light',
                   description:
                     'Reflects organization, dependability, self-discipline, and goal-oriented behavior. People high in conscientiousness tend to be reliable, hardworking, and achievement-oriented.',
                 },
                 {
                   trait: 'Extraversion',
                   color: 'bg-extraversion',
+                  lightColor: 'bg-extraversion-light',
                   description:
                     'Reflects sociability, assertiveness, positive emotions, and energy derived from social interaction. People high in extraversion tend to be outgoing and thrive in social situations.',
                 },
                 {
                   trait: 'Agreeableness',
                   color: 'bg-agreeableness',
+                  lightColor: 'bg-agreeableness-light',
                   description:
                     'Reflects cooperation, trust, empathy, and concern for social harmony. People high in agreeableness tend to be compassionate, trusting, and helpful.',
                 },
                 {
                   trait: 'Emotional Stability',
                   color: 'bg-neuroticism',
+                  lightColor: 'bg-neuroticism-light',
                   description:
                     'Reflects emotional resilience and the ability to remain calm under stress. People high in emotional stability tend to be even-tempered and less reactive to negative events.',
                 },
-              ].map(({ trait, color, description }) => (
+              ].map(({ trait, color, lightColor, description }) => (
                 <div
                   key={trait}
-                  className="flex items-start gap-4 bg-gray-50 rounded-lg p-4"
+                  className={`flex items-start gap-4 ${lightColor} rounded-xl p-4 border-l-4 border-current`}
+                  style={{
+                    borderColor: `var(--color-${trait.toLowerCase().split(' ')[0]})`,
+                  }}
                 >
                   <div
-                    className={`w-4 h-4 ${color} rounded-full flex-shrink-0 mt-1`}
+                    className={`w-3 h-3 ${color} rounded-full flex-shrink-0 mt-1.5`}
                   />
                   <div>
-                    <h4 className="font-semibold text-gray-900">{trait}</h4>
-                    <p className="text-sm text-gray-600 mt-1">{description}</p>
+                    <h4 className="font-semibold text-warm-700">{trait}</h4>
+                    <p className="text-sm text-warm-600 mt-1">{description}</p>
                   </div>
                 </div>
               ))}
             </div>
 
-            <h3>The IPIP-NEO-120</h3>
+            <h3 className="text-warm-800 font-serif">The IPIP-NEO-120</h3>
             <p>
               This assessment uses the IPIP-NEO-120, a 120-item public domain
               measure that provides scores for the Big Five traits and their 30
@@ -153,55 +166,55 @@ export default function AboutPage() {
       </section>
 
       {/* Ethical Considerations */}
-      <section className="py-12 bg-gray-50">
+      <section className="py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3 mb-6">
-            <Shield className="w-6 h-6 text-gray-700" />
-            <h2 className="text-2xl font-bold text-gray-900">
+            <Shield className="w-6 h-6 text-sage-600" />
+            <h2 className="text-2xl font-serif font-semibold text-warm-800">
               Ethical Considerations
             </h2>
           </div>
 
           <div className="grid gap-6 md:grid-cols-2">
-            <div className="bg-white rounded-xl p-6">
-              <h3 className="font-semibold text-gray-900 mb-3">
+            <div className="card-zen">
+              <h3 className="font-semibold text-warm-700 mb-3">
                 Privacy & Data
               </h3>
-              <ul className="space-y-2 text-gray-600">
+              <ul className="space-y-2 text-warm-600">
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-conscientiousness flex-shrink-0 mt-1" />
+                  <CheckCircle className="w-4 h-4 text-sage-500 flex-shrink-0 mt-1" />
                   <span>All data is stored locally on your device</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-conscientiousness flex-shrink-0 mt-1" />
+                  <CheckCircle className="w-4 h-4 text-sage-500 flex-shrink-0 mt-1" />
                   <span>
                     No personal information is collected or transmitted
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-conscientiousness flex-shrink-0 mt-1" />
+                  <CheckCircle className="w-4 h-4 text-sage-500 flex-shrink-0 mt-1" />
                   <span>You can clear your data at any time</span>
                 </li>
               </ul>
             </div>
 
-            <div className="bg-white rounded-xl p-6">
-              <h3 className="font-semibold text-gray-900 mb-3">
+            <div className="card-zen">
+              <h3 className="font-semibold text-warm-700 mb-3">
                 Responsible Use
               </h3>
-              <ul className="space-y-2 text-gray-600">
+              <ul className="space-y-2 text-warm-600">
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-conscientiousness flex-shrink-0 mt-1" />
+                  <CheckCircle className="w-4 h-4 text-sage-500 flex-shrink-0 mt-1" />
                   <span>
                     Results should not be used for hiring or selection
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-conscientiousness flex-shrink-0 mt-1" />
+                  <CheckCircle className="w-4 h-4 text-sage-500 flex-shrink-0 mt-1" />
                   <span>Avoid using results to label or stereotype others</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-conscientiousness flex-shrink-0 mt-1" />
+                  <CheckCircle className="w-4 h-4 text-sage-500 flex-shrink-0 mt-1" />
                   <span>Personality is complex and context-dependent</span>
                 </li>
               </ul>
@@ -211,17 +224,19 @@ export default function AboutPage() {
       </section>
 
       {/* Interpreting Results */}
-      <section className="py-12 bg-white">
+      <section className="py-12 bg-white/50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3 mb-6">
-            <Scale className="w-6 h-6 text-gray-700" />
-            <h2 className="text-2xl font-bold text-gray-900">
+            <Scale className="w-6 h-6 text-sage-600" />
+            <h2 className="text-2xl font-serif font-semibold text-warm-800">
               How to Interpret Your Results
             </h2>
           </div>
 
-          <div className="prose prose-gray max-w-none">
-            <h3>Results Reflect Tendencies, Not Destiny</h3>
+          <div className="prose prose-warm max-w-none text-warm-600">
+            <h3 className="text-warm-800 font-serif">
+              Results Reflect Tendencies, Not Destiny
+            </h3>
             <p>
               Your scores indicate general tendencies in how you typically
               think, feel, and behave. They are not fixed or deterministic.
@@ -229,7 +244,9 @@ export default function AboutPage() {
               motivation, and effort.
             </p>
 
-            <h3>No Score is "Good" or "Bad"</h3>
+            <h3 className="text-warm-800 font-serif">
+              No Score is "Good" or "Bad"
+            </h3>
             <p>
               Each trait represents a spectrum with potential strengths at both
               ends. For example, lower extraversion isn't worse than higher
@@ -237,7 +254,7 @@ export default function AboutPage() {
               the world, each with its own advantages.
             </p>
 
-            <h3>Context Matters</h3>
+            <h3 className="text-warm-800 font-serif">Context Matters</h3>
             <p>
               The same trait can be advantageous in some situations and
               challenging in others. High conscientiousness might excel in
@@ -245,7 +262,9 @@ export default function AboutPage() {
               or spontaneous settings.
             </p>
 
-            <h3>Self-Report Limitations</h3>
+            <h3 className="text-warm-800 font-serif">
+              Self-Report Limitations
+            </h3>
             <p>
               This assessment relies on your honest self-reflection. Results may
               be influenced by:
@@ -260,61 +279,10 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* When to Seek Help */}
-      <section className="py-12 bg-gray-50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3 mb-6">
-            <Heart className="w-6 h-6 text-gray-700" />
-            <h2 className="text-2xl font-bold text-gray-900">
-              When to Seek Professional Help
-            </h2>
-          </div>
-
-          <div className="bg-white rounded-xl p-6">
-            <p className="text-gray-600 mb-4">
-              If you're experiencing persistent distress, difficulty functioning
-              in daily life, or concerns about your mental health, please reach
-              out to a qualified mental health professional. This assessment
-              cannot and should not replace professional evaluation.
-            </p>
-            <p className="text-gray-600 mb-4">
-              Consider seeking help if you experience:
-            </p>
-            <ul className="list-disc list-inside text-gray-600 space-y-1 mb-4">
-              <li>Persistent feelings of sadness, anxiety, or hopelessness</li>
-              <li>Difficulty managing emotions or relationships</li>
-              <li>Thoughts of self-harm or suicide</li>
-              <li>Significant changes in sleep, appetite, or energy</li>
-              <li>
-                Difficulty functioning at work, school, or in relationships
-              </li>
-            </ul>
-            <p className="text-gray-600">
-              <strong>Crisis Resources:</strong>
-            </p>
-            <ul className="list-disc list-inside text-gray-600 space-y-1">
-              <li>National Suicide Prevention Lifeline: 988 (US)</li>
-              <li>Crisis Text Line: Text HOME to 741741</li>
-              <li>
-                International Association for Suicide Prevention:
-                <a
-                  href="https://www.iasp.info/resources/Crisis_Centres/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-agreeableness hover:underline ml-1"
-                >
-                  Find a crisis center
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
       {/* References */}
-      <section className="py-12 bg-white">
+      <section className="py-12 bg-white/50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+          <h2 className="text-2xl font-serif font-semibold text-warm-800 mb-6">
             References & Resources
           </h2>
 
@@ -341,18 +309,18 @@ export default function AboutPage() {
             ].map(({ title, description, url }) => (
               <div
                 key={title}
-                className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg"
+                className="flex items-start gap-4 p-4 bg-sage-50 rounded-xl"
               >
                 <div className="flex-1">
-                  <h3 className="font-medium text-gray-900">{title}</h3>
-                  <p className="text-sm text-gray-600 mt-1">{description}</p>
+                  <h3 className="font-medium text-warm-700">{title}</h3>
+                  <p className="text-sm text-warm-500 mt-1">{description}</p>
                 </div>
                 {url && (
                   <a
                     href={url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-shrink-0 p-2 text-gray-400 hover:text-gray-600 transition-colors"
+                    className="flex-shrink-0 p-2 text-sage-400 hover:text-sage-600 transition-colors"
                   >
                     <ExternalLink className="w-5 h-5" />
                   </a>

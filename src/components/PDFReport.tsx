@@ -7,7 +7,7 @@ import {
   getScoreRangeLabel,
 } from '../lib/interpretations';
 import { PersonalizedInsight, ProfileSummary } from '../lib/insights';
-import { X, Download, Loader2 } from 'lucide-react';
+import { X, Download, Loader2, Leaf } from 'lucide-react';
 
 interface PDFReportProps {
   results: TestResults;
@@ -17,12 +17,13 @@ interface PDFReportProps {
   onClose: () => void;
 }
 
+// Muted zen-inspired trait colors
 const TRAIT_COLORS: Record<BigFiveTrait, string> = {
-  openness: '#9B59B6',
-  conscientiousness: '#27AE60',
-  extraversion: '#F1C40F',
-  agreeableness: '#3498DB',
-  neuroticism: '#E74C3C',
+  openness: '#9b8ab8',
+  conscientiousness: '#7d9f7d',
+  extraversion: '#c4a574',
+  agreeableness: '#7ba4ad',
+  neuroticism: '#b89898',
 };
 
 export default function PDFReport({
@@ -112,19 +113,22 @@ export default function PDFReport({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 overflow-y-auto">
+    <div className="fixed inset-0 bg-warm-900/50 backdrop-blur-sm z-50 overflow-y-auto">
       <div className="min-h-screen py-8 px-4 flex items-start justify-center">
-        <div className="bg-white rounded-2xl shadow-xl max-w-4xl w-full">
+        <div className="bg-white rounded-2xl shadow-soft-xl max-w-4xl w-full">
           {/* Modal Header */}
-          <div className="sticky top-0 bg-white border-b border-gray-200 rounded-t-2xl p-4 flex items-center justify-between z-10">
-            <h2 className="text-lg font-semibold text-gray-900">
-              PDF Report Preview
-            </h2>
+          <div className="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-sage-100 rounded-t-2xl p-4 flex items-center justify-between z-10">
+            <div className="flex items-center gap-2">
+              <Leaf className="w-5 h-5 text-sage-500" />
+              <h2 className="text-lg font-serif font-semibold text-warm-800">
+                PDF Report Preview
+              </h2>
+            </div>
             <div className="flex items-center gap-3">
               <button
                 onClick={generatePDF}
                 disabled={isGenerating}
-                className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn-zen flex items-center gap-2"
               >
                 {isGenerating ? (
                   <>
@@ -140,7 +144,7 @@ export default function PDFReport({
               </button>
               <button
                 onClick={onClose}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 hover:bg-sage-50 rounded-xl transition-colors text-warm-500 hover:text-warm-700"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -156,17 +160,17 @@ export default function PDFReport({
             >
               {/* Header */}
               <div className="text-center mb-8">
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                <h1 className="text-3xl font-serif font-bold text-warm-800 mb-2">
                   Big Five Personality Report
                 </h1>
-                <p className="text-gray-500">
+                <p className="text-warm-500">
                   Assessment completed on {completedDate}
                 </p>
               </div>
 
               {/* Disclaimer */}
-              <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-8">
-                <p className="text-sm text-amber-800">
+              <div className="bg-sage-50 border border-sage-200 rounded-xl p-4 mb-8">
+                <p className="text-sm text-sage-700">
                   <strong>Disclaimer:</strong> This report is based on the
                   IPIP-NEO-120 personality inventory and is intended for
                   educational and self-reflection purposes only. It is not a
@@ -179,7 +183,7 @@ export default function PDFReport({
 
               {/* Overview Section */}
               <div className="mb-8">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+                <h2 className="text-xl font-serif font-semibold text-warm-800 mb-4 pb-2 border-b border-sage-200">
                   Overview
                 </h2>
                 <div className="space-y-4">
@@ -191,14 +195,14 @@ export default function PDFReport({
                       />
                       <div className="flex-1">
                         <div className="flex items-center justify-between mb-1">
-                          <span className="font-medium text-gray-900">
+                          <span className="font-medium text-warm-700">
                             {TRAIT_LABELS[report.trait]}
                           </span>
-                          <span className="font-semibold text-gray-900">
+                          <span className="font-semibold text-warm-700">
                             {report.score}%
                           </span>
                         </div>
-                        <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div className="h-2 bg-sage-100 rounded-full overflow-hidden">
                           <div
                             className="h-full rounded-full"
                             style={{
@@ -233,23 +237,23 @@ export default function PDFReport({
                       </span>
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900">
+                      <h3 className="text-lg font-serif font-semibold text-warm-800">
                         {TRAIT_LABELS[report.trait]}
                       </h3>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-warm-500">
                         Score: {report.score}% (
                         {getScoreRangeLabel(report.range)})
                       </p>
                     </div>
                   </div>
 
-                  <p className="text-gray-700 mb-4 leading-relaxed">
+                  <p className="text-warm-600 mb-4 leading-relaxed">
                     {report.traitInterpretation}
                   </p>
 
                   {/* Facets */}
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">
+                  <div className="bg-sage-50 rounded-xl p-4">
+                    <h4 className="text-sm font-semibold text-warm-700 uppercase tracking-wide mb-3">
                       Facets
                     </h4>
                     <div className="space-y-2">
@@ -258,21 +262,21 @@ export default function PDFReport({
                           key={facet.facet}
                           className="flex items-center justify-between"
                         >
-                          <span className="text-sm text-gray-600">
+                          <span className="text-sm text-warm-600">
                             {facet.facetLabel}
                           </span>
                           <div className="flex items-center gap-2">
-                            <div className="w-24 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                            <div className="w-24 h-1.5 bg-sage-100 rounded-full overflow-hidden">
                               <div
                                 className="h-full rounded-full"
                                 style={{
                                   width: `${facet.score}%`,
                                   backgroundColor: TRAIT_COLORS[report.trait],
-                                  opacity: 0.7,
+                                  opacity: 0.8,
                                 }}
                               />
                             </div>
-                            <span className="text-sm font-medium text-gray-900 w-10 text-right">
+                            <span className="text-sm font-medium text-warm-700 w-10 text-right">
                               {facet.score}%
                             </span>
                           </div>
@@ -285,44 +289,44 @@ export default function PDFReport({
 
               {/* Profile Summary Section */}
               <div className="mb-8" style={{ pageBreakBefore: 'always' }}>
-                <h2 className="text-xl font-semibold text-gray-900 mb-4 pb-2 border-b border-indigo-200">
+                <h2 className="text-xl font-serif font-semibold text-warm-800 mb-4 pb-2 border-b border-sage-200">
                   Your Personality Profile
                 </h2>
 
-                <div className="bg-indigo-50 rounded-lg p-4 mb-4 text-center">
-                  <h3 className="text-lg font-bold text-indigo-600 mb-1">
+                <div className="bg-sage-50 rounded-xl p-4 mb-4 text-center">
+                  <h3 className="text-lg font-bold text-sage-700 mb-1">
                     {profileSummary.personalityPattern}
                   </h3>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-warm-600">
                     Based on your unique combination of traits
                   </p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 mb-4">
-                  <div className="bg-gray-50 rounded-lg p-3">
-                    <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                  <div className="bg-sage-50/70 rounded-xl p-3">
+                    <h4 className="text-sm font-semibold text-warm-700 mb-2">
                       Communication Style
                     </h4>
-                    <p className="text-xs text-gray-600">
+                    <p className="text-xs text-warm-600">
                       {profileSummary.communicationStyle}
                     </p>
                   </div>
-                  <div className="bg-gray-50 rounded-lg p-3">
-                    <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                  <div className="bg-sage-50/70 rounded-xl p-3">
+                    <h4 className="text-sm font-semibold text-warm-700 mb-2">
                       Under Pressure
                     </h4>
-                    <p className="text-xs text-gray-600">
+                    <p className="text-xs text-warm-600">
                       {profileSummary.stressResponse}
                     </p>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-gray-50 rounded-lg p-3">
-                    <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                  <div className="bg-sage-50/70 rounded-xl p-3">
+                    <h4 className="text-sm font-semibold text-warm-700 mb-2">
                       Key Strengths
                     </h4>
-                    <ul className="text-xs text-gray-600 space-y-1">
+                    <ul className="text-xs text-warm-600 space-y-1">
                       {profileSummary.overallStrengths
                         .slice(0, 4)
                         .map((strength, i) => (
@@ -330,11 +334,11 @@ export default function PDFReport({
                         ))}
                     </ul>
                   </div>
-                  <div className="bg-gray-50 rounded-lg p-3">
-                    <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                  <div className="bg-sage-50/70 rounded-xl p-3">
+                    <h4 className="text-sm font-semibold text-warm-700 mb-2">
                       What Motivates You
                     </h4>
-                    <ul className="text-xs text-gray-600 space-y-1">
+                    <ul className="text-xs text-warm-600 space-y-1">
                       {profileSummary.motivationDrivers.map((driver, i) => (
                         <li key={i}>• {driver}</li>
                       ))}
@@ -345,7 +349,7 @@ export default function PDFReport({
 
               {/* Detailed Insights Section */}
               <div className="mb-8">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4 pb-2 border-b border-purple-200">
+                <h2 className="text-xl font-serif font-semibold text-warm-800 mb-4 pb-2 border-b border-sage-200">
                   Detailed Insights & Interesting Facts
                 </h2>
 
@@ -367,21 +371,21 @@ export default function PDFReport({
                           {TRAIT_LABELS[insight.trait].charAt(0)}
                         </span>
                       </div>
-                      <h3 className="text-base font-semibold text-gray-900">
+                      <h3 className="text-base font-serif font-semibold text-warm-800">
                         {TRAIT_LABELS[insight.trait]}
                       </h3>
-                      <span className="text-sm text-gray-500">
+                      <span className="text-sm text-warm-500">
                         ({insight.score}%)
                       </span>
                     </div>
 
                     <div className="grid grid-cols-2 gap-3 mb-3">
                       {/* Interesting Facts */}
-                      <div className="bg-amber-50 rounded-lg p-3">
-                        <h4 className="text-xs font-semibold text-amber-800 mb-2">
+                      <div className="bg-openness-light rounded-xl p-3">
+                        <h4 className="text-xs font-semibold text-openness mb-2">
                           ✦ Did You Know?
                         </h4>
-                        <ul className="text-xs text-gray-700 space-y-1">
+                        <ul className="text-xs text-warm-700 space-y-1">
                           {insight.interestingFacts
                             .slice(0, 2)
                             .map((fact, i) => (
@@ -391,11 +395,11 @@ export default function PDFReport({
                       </div>
 
                       {/* Career Environments */}
-                      <div className="bg-blue-50 rounded-lg p-3">
-                        <h4 className="text-xs font-semibold text-blue-800 mb-2">
+                      <div className="bg-agreeableness-light rounded-xl p-3">
+                        <h4 className="text-xs font-semibold text-agreeableness mb-2">
                           💼 Suitable Environments
                         </h4>
-                        <ul className="text-xs text-gray-700 space-y-1">
+                        <ul className="text-xs text-warm-700 space-y-1">
                           {insight.careerEnvironments
                             .slice(0, 3)
                             .map((env, i) => (
@@ -405,11 +409,11 @@ export default function PDFReport({
                       </div>
 
                       {/* Growth Tips */}
-                      <div className="bg-green-50 rounded-lg p-3">
-                        <h4 className="text-xs font-semibold text-green-800 mb-2">
+                      <div className="bg-conscientiousness-light rounded-xl p-3">
+                        <h4 className="text-xs font-semibold text-conscientiousness mb-2">
                           📈 Growth Tips
                         </h4>
-                        <ul className="text-xs text-gray-700 space-y-1">
+                        <ul className="text-xs text-warm-700 space-y-1">
                           {insight.growthTips.slice(0, 2).map((tip, i) => (
                             <li key={i}>✓ {tip}</li>
                           ))}
@@ -417,11 +421,11 @@ export default function PDFReport({
                       </div>
 
                       {/* Strengths */}
-                      <div className="bg-emerald-50 rounded-lg p-3">
-                        <h4 className="text-xs font-semibold text-emerald-800 mb-2">
+                      <div className="bg-sage-50 rounded-xl p-3">
+                        <h4 className="text-xs font-semibold text-sage-700 mb-2">
                           ⭐ Your Strengths
                         </h4>
-                        <ul className="text-xs text-gray-700 space-y-1">
+                        <ul className="text-xs text-warm-700 space-y-1">
                           {insight.strengths.slice(0, 3).map((strength, i) => (
                             <li key={i}>+ {strength}</li>
                           ))}
@@ -430,18 +434,18 @@ export default function PDFReport({
                     </div>
 
                     {/* Relationship Insight */}
-                    <div className="bg-rose-50 rounded-lg p-3 mb-2">
-                      <h4 className="text-xs font-semibold text-rose-800 mb-1">
+                    <div className="bg-neuroticism-light rounded-xl p-3 mb-2">
+                      <h4 className="text-xs font-semibold text-neuroticism mb-1">
                         💕 Relationships
                       </h4>
-                      <p className="text-xs text-gray-700">
+                      <p className="text-xs text-warm-700">
                         {insight.relationshipInsight}
                       </p>
                     </div>
 
                     {/* Famous Figures */}
                     {insight.famousFigures.length > 0 && (
-                      <p className="text-xs text-gray-500 italic">
+                      <p className="text-xs text-warm-500 italic">
                         Notable figures with similar traits:{' '}
                         {insight.famousFigures.join(', ')}
                       </p>
@@ -451,12 +455,12 @@ export default function PDFReport({
               </div>
 
               {/* Footer */}
-              <div className="mt-8 pt-4 border-t border-gray-200 text-center">
-                <p className="text-xs text-gray-500">
+              <div className="mt-8 pt-4 border-t border-sage-200 text-center">
+                <p className="text-xs text-warm-500">
                   Based on the IPIP-NEO-120 • International Personality Item
                   Pool • Public Domain
                 </p>
-                <p className="text-xs text-gray-400 mt-1">
+                <p className="text-xs text-warm-400 mt-1">
                   Session ID: {results.sessionId}
                 </p>
               </div>

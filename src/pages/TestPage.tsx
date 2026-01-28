@@ -17,6 +17,7 @@ import {
   X,
   Save,
   CheckCircle,
+  Leaf,
 } from 'lucide-react';
 
 const QUESTIONS_PER_STEP = 12;
@@ -183,6 +184,17 @@ export default function TestPage() {
     return colors[trait];
   };
 
+  const getTraitLightColor = (trait: BigFiveTrait): string => {
+    const colors: Record<BigFiveTrait, string> = {
+      openness: 'bg-openness-light',
+      conscientiousness: 'bg-conscientiousness-light',
+      extraversion: 'bg-extraversion-light',
+      agreeableness: 'bg-agreeableness-light',
+      neuroticism: 'bg-neuroticism-light',
+    };
+    return colors[trait];
+  };
+
   const getTraitBorderColor = (trait: BigFiveTrait): string => {
     const colors: Record<BigFiveTrait, string> = {
       openness: 'border-openness',
@@ -215,7 +227,7 @@ export default function TestPage() {
       {/* Save Notification */}
       {saveNotification && (
         <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 animate-fadeIn">
-          <div className="flex items-center gap-2 px-4 py-2 bg-conscientiousness text-white rounded-lg shadow-lg">
+          <div className="flex items-center gap-2 px-4 py-2 bg-sage-600 text-white rounded-xl shadow-soft">
             <CheckCircle className="w-4 h-4" />
             <span className="text-sm font-medium">Progress saved!</span>
           </div>
@@ -223,21 +235,24 @@ export default function TestPage() {
       )}
 
       {/* Progress Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-16 z-40">
+      <div className="bg-white/80 backdrop-blur-md border-b border-sage-100 sticky top-16 z-40">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           {/* Step indicators */}
           <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-medium text-gray-600">
-              Step {currentStep + 1} of {TOTAL_STEPS}
-            </span>
-            <span className="text-sm font-medium text-gray-600">
-              {progress.answered} of {progress.total} questions answered (
+            <div className="flex items-center gap-2">
+              <Leaf className="w-4 h-4 text-sage-500" />
+              <span className="text-sm font-medium text-warm-600">
+                Step {currentStep + 1} of {TOTAL_STEPS}
+              </span>
+            </div>
+            <span className="text-sm font-medium text-warm-500">
+              {progress.answered} of {progress.total} questions (
               {progress.percent}%)
             </span>
           </div>
 
-          {/* Step navigation dots */}
-          <div className="flex items-center justify-center gap-2 mb-4">
+          {/* Step navigation dots - mobile optimized */}
+          <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-4 overflow-x-auto py-3">
             {Array.from({ length: TOTAL_STEPS }, (_, i) => {
               const status = getStepStatus(i);
               return (
@@ -245,22 +260,22 @@ export default function TestPage() {
                   key={i}
                   onClick={() => handleGoToStep(i)}
                   className={`
-                    relative w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium
-                    transition-all duration-200
+                    relative w-7 h-7 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-xs font-medium
+                    transition-all duration-300
                     ${
                       status.isCurrent
-                        ? 'bg-gray-900 text-white ring-2 ring-gray-900 ring-offset-2'
+                        ? 'bg-sage-600 text-white ring-2 ring-sage-300 ring-offset-2'
                         : status.isComplete
-                          ? 'bg-conscientiousness text-white'
+                          ? 'bg-sage-500 text-white'
                           : status.answered > 0
-                            ? 'bg-amber-100 text-amber-700 border-2 border-amber-300'
-                            : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                            ? 'bg-sage-100 text-sage-700 border-2 border-sage-300'
+                            : 'bg-warm-100 text-warm-500 hover:bg-sage-100'
                     }
                   `}
                   title={`Step ${i + 1}: ${status.answered}/${status.total} answered`}
                 >
                   {status.isComplete && !status.isCurrent ? (
-                    <Check className="w-4 h-4" />
+                    <Check className="w-3.5 h-3.5" />
                   ) : (
                     i + 1
                   )}
@@ -270,21 +285,21 @@ export default function TestPage() {
           </div>
 
           {/* Overall progress bar */}
-          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div className="h-2 bg-sage-100 rounded-full overflow-hidden">
             <div
-              className="h-full bg-conscientiousness transition-all duration-300"
+              className="h-full bg-sage-500 transition-all duration-500 ease-out"
               style={{ width: `${progress.percent}%` }}
             />
           </div>
 
           {/* Current step progress */}
-          <div className="flex items-center justify-between mt-2 text-xs text-gray-500">
+          <div className="flex items-center justify-between mt-2 text-xs text-warm-500">
             <span>
               This step: {currentStepAnsweredCount}/{QUESTIONS_PER_STEP}{' '}
               answered
             </span>
             {stepSaved.has(currentStep) && (
-              <span className="flex items-center gap-1 text-conscientiousness">
+              <span className="flex items-center gap-1 text-sage-600">
                 <Check className="w-3 h-3" />
                 Saved
               </span>
@@ -294,9 +309,9 @@ export default function TestPage() {
       </div>
 
       {/* Questions Grid */}
-      <div className="flex-1 py-8 px-4 bg-gray-50">
+      <div className="flex-1 py-6 sm:py-8 px-4">
         <div className="max-w-5xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {currentStepQuestions.map((question, index) => {
               const globalIndex = currentStep * QUESTIONS_PER_STEP + index;
               const currentResponse = getResponseForQuestion(question.id);
@@ -305,19 +320,23 @@ export default function TestPage() {
                 <div
                   key={question.id}
                   className={`
-                    bg-white rounded-xl p-6 shadow-sm border-2 transition-all
-                    ${currentResponse ? `${getTraitBorderColor(question.trait)} border-opacity-50` : 'border-transparent'}
+                    card-zen border-l-4 transition-all duration-300
+                    ${
+                      currentResponse
+                        ? `${getTraitBorderColor(question.trait)} ${getTraitLightColor(question.trait)} bg-opacity-30`
+                        : 'border-sage-200'
+                    }
                   `}
                 >
                   {/* Question header */}
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-medium text-gray-400">
+                    <span className="text-xs font-medium text-warm-400">
                       Q{globalIndex + 1}
                     </span>
                     <span
                       className={`
-                        inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium text-white
-                        ${getTraitColor(question.trait)}
+                        inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium
+                        ${getTraitLightColor(question.trait)} text-warm-700
                       `}
                     >
                       {TRAIT_SHORT_LABELS[question.trait]}
@@ -325,12 +344,12 @@ export default function TestPage() {
                   </div>
 
                   {/* Question text */}
-                  <p className="text-gray-900 font-medium mb-4 min-h-[3rem]">
+                  <p className="text-warm-700 font-medium mb-4 min-h-[3rem] leading-relaxed">
                     "{question.text}"
                   </p>
 
-                  {/* Likert scale options */}
-                  <div className="flex items-center justify-between gap-1">
+                  {/* Likert scale options - mobile optimized */}
+                  <div className="flex items-center justify-between gap-1 sm:gap-2">
                     {LIKERT_SCALE.map(({ value, shortLabel }) => {
                       const isSelected = currentResponse === value;
                       return (
@@ -338,11 +357,12 @@ export default function TestPage() {
                           key={value}
                           onClick={() => handleAnswer(question.id, value)}
                           className={`
-                            flex-1 py-2 px-1 rounded-lg text-xs font-medium transition-all
+                            flex-1 py-2.5 sm:py-2 px-1 rounded-xl text-xs sm:text-sm font-medium 
+                            transition-all duration-300
                             ${
                               isSelected
-                                ? 'bg-gray-900 text-white'
-                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                ? 'bg-sage-600 text-white shadow-soft'
+                                : 'bg-sage-50 text-warm-600 hover:bg-sage-100'
                             }
                           `}
                           title={shortLabel}
@@ -354,9 +374,9 @@ export default function TestPage() {
                   </div>
 
                   {/* Scale labels */}
-                  <div className="flex justify-between mt-1 text-[10px] text-gray-400">
-                    <span>Very Inaccurate</span>
-                    <span>Very Accurate</span>
+                  <div className="flex justify-between mt-2 text-[10px] sm:text-xs text-warm-400">
+                    <span>Inaccurate</span>
+                    <span>Accurate</span>
                   </div>
                 </div>
               );
@@ -364,29 +384,30 @@ export default function TestPage() {
           </div>
 
           {/* Navigation */}
-          <div className="flex items-center justify-between mt-8 bg-white rounded-xl p-4 shadow-sm">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 bg-white rounded-2xl p-4 shadow-soft border border-sage-100">
             <button
               onClick={handlePreviousStep}
               disabled={isFirstStep}
               className={`
-                flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors
+                w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all duration-300
                 ${
                   isFirstStep
-                    ? 'text-gray-300 cursor-not-allowed'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                    ? 'text-warm-300 cursor-not-allowed'
+                    : 'text-warm-600 hover:text-sage-700 hover:bg-sage-50'
                 }
               `}
             >
               <ChevronLeft className="w-5 h-5" />
-              Previous Step
+              <span className="hidden sm:inline">Previous</span>
+              <span className="sm:hidden">Back</span>
             </button>
 
             <button
               onClick={handleSaveStep}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+              className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl font-medium text-warm-500 hover:text-sage-700 hover:bg-sage-50 transition-all duration-300"
             >
-              <Save className="w-5 h-5" />
-              Save Progress
+              <Save className="w-4 h-4" />
+              Save
             </button>
 
             {isLastStep ? (
@@ -394,30 +415,31 @@ export default function TestPage() {
                 onClick={handleSubmit}
                 disabled={!isCurrentStepComplete && !canSubmit()}
                 className={`
-                  flex items-center gap-2 px-6 py-2 rounded-lg font-medium transition-colors
+                  w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl font-medium transition-all duration-300
                   ${
                     canSubmit()
-                      ? 'bg-conscientiousness text-white hover:bg-opacity-90'
-                      : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                      ? 'bg-sage-600 text-white hover:bg-sage-700 shadow-soft'
+                      : 'bg-warm-100 text-warm-500 hover:bg-warm-200'
                   }
                 `}
               >
-                Submit Test
+                Complete Assessment
                 <Check className="w-5 h-5" />
               </button>
             ) : (
               <button
                 onClick={handleNextStep}
                 className={`
-                  flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors
+                  w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all duration-300
                   ${
                     isCurrentStepComplete
-                      ? 'bg-gray-900 text-white hover:bg-gray-800'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                      ? 'bg-sage-600 text-white hover:bg-sage-700 shadow-soft'
+                      : 'text-warm-600 hover:text-sage-700 hover:bg-sage-50'
                   }
                 `}
               >
-                Next Step
+                <span className="hidden sm:inline">Next Step</span>
+                <span className="sm:hidden">Next</span>
                 <ChevronRight className="w-5 h-5" />
               </button>
             )}
@@ -427,7 +449,7 @@ export default function TestPage() {
           <div className="text-center mt-6">
             <button
               onClick={() => setShowExitConfirm(true)}
-              className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
+              className="text-sm text-warm-500 hover:text-sage-600 transition-colors"
             >
               Save & Exit
             </button>
@@ -437,16 +459,18 @@ export default function TestPage() {
 
       {/* Submit Confirmation Modal */}
       {showConfirmSubmit && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl p-6 max-w-md w-full animate-fadeIn">
-            <div className="flex items-center gap-3 text-amber-600 mb-4">
+        <div className="fixed inset-0 bg-warm-900/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-6 max-w-md w-full animate-fadeIn shadow-soft-lg">
+            <div className="flex items-center gap-3 text-extraversion mb-4">
               <AlertCircle className="w-6 h-6" />
-              <h3 className="text-lg font-semibold">Incomplete Assessment</h3>
+              <h3 className="text-lg font-serif font-semibold text-warm-800">
+                Almost There
+              </h3>
             </div>
-            <p className="text-gray-600 mb-4">
+            <p className="text-warm-600 mb-4">
               You have {unansweredQuestions.length} unanswered question
-              {unansweredQuestions.length !== 1 ? 's' : ''}. Please answer all
-              questions before submitting.
+              {unansweredQuestions.length !== 1 ? 's' : ''}. Please complete all
+              questions before finishing.
             </p>
             <div className="max-h-32 overflow-y-auto mb-4">
               <div className="flex flex-wrap gap-2">
@@ -460,7 +484,7 @@ export default function TestPage() {
                           handleGoToStep(step);
                           setShowConfirmSubmit(false);
                         }}
-                        className="px-3 py-1 bg-amber-100 text-amber-700 rounded text-sm hover:bg-amber-200 transition-colors"
+                        className="px-3 py-1.5 bg-sage-100 text-sage-700 rounded-lg text-sm hover:bg-sage-200 transition-colors"
                       >
                         Step {step + 1} ({status.answered}/{status.total})
                       </button>
@@ -472,7 +496,7 @@ export default function TestPage() {
             </div>
             <button
               onClick={() => setShowConfirmSubmit(false)}
-              className="w-full py-2 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition-colors"
+              className="w-full py-2.5 bg-sage-600 text-white rounded-xl font-medium hover:bg-sage-700 transition-colors"
             >
               Continue Assessment
             </button>
@@ -482,32 +506,33 @@ export default function TestPage() {
 
       {/* Exit Confirmation Modal */}
       {showExitConfirm && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl p-6 max-w-md w-full animate-fadeIn">
+        <div className="fixed inset-0 bg-warm-900/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-6 max-w-md w-full animate-fadeIn shadow-soft-lg">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">Save Progress?</h3>
+              <h3 className="text-lg font-serif font-semibold text-warm-800">
+                Save Progress?
+              </h3>
               <button
                 onClick={() => setShowExitConfirm(false)}
-                className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-1.5 hover:bg-sage-100 rounded-xl transition-colors"
               >
-                <X className="w-5 h-5" />
+                <X className="w-5 h-5 text-warm-500" />
               </button>
             </div>
-            <p className="text-gray-600 mb-6">
+            <p className="text-warm-600 mb-6">
               Your progress ({progress.answered} of {progress.total} questions)
-              has been saved. You can continue from where you left off at any
-              time.
+              has been saved. You can continue your journey anytime.
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setShowExitConfirm(false)}
-                className="flex-1 py-2 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-colors"
+                className="flex-1 py-2.5 bg-sage-50 text-sage-700 rounded-xl font-medium hover:bg-sage-100 transition-colors"
               >
                 Continue
               </button>
               <button
                 onClick={() => navigate('/')}
-                className="flex-1 py-2 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition-colors"
+                className="flex-1 py-2.5 bg-sage-600 text-white rounded-xl font-medium hover:bg-sage-700 transition-colors"
               >
                 Exit
               </button>
