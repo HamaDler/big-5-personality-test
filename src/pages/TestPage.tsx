@@ -2,13 +2,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTest } from '../context/TestContext';
 import { questions } from '../data/questions';
-import {
-  LIKERT_SCALE,
-  LikertValue,
-  TRAIT_SHORT_LABELS,
-  BigFiveTrait,
-  Question,
-} from '../types';
+import { LIKERT_SCALE, LikertValue, BigFiveTrait, Question } from '../types';
 import {
   ChevronLeft,
   ChevronRight,
