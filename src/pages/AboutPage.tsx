@@ -233,7 +233,7 @@ export default function AboutPage() {
           </div>
 
           <div className="prose prose-warm max-w-none text-warm-600">
-            <h3 className="text-warm-800 font-serif">
+            <h3 className="text-warm-800 font-serif mt-2 text-lg font-medium">
               Results Reflect Tendencies, Not Destiny
             </h3>
             <p>
@@ -243,7 +243,7 @@ export default function AboutPage() {
               motivation, and effort.
             </p>
 
-            <h3 className="text-warm-800 font-serif">
+            <h3 className="text-warm-800 font-serif mt-2 text-lg font-medium">
               No Score is "Good" or "Bad"
             </h3>
             <p>
@@ -253,7 +253,9 @@ export default function AboutPage() {
               the world, each with its own advantages.
             </p>
 
-            <h3 className="text-warm-800 font-serif">Context Matters</h3>
+            <h3 className="text-warm-800 font-serif mt-2 text-lg font-medium">
+              Context Matters
+            </h3>
             <p>
               The same trait can be advantageous in some situations and
               challenging in others. High conscientiousness might excel in
@@ -261,7 +263,7 @@ export default function AboutPage() {
               or spontaneous settings.
             </p>
 
-            <h3 className="text-warm-800 font-serif">
+            <h3 className="text-warm-800 font-serif mt-2 text-lg font-medium">
               Self-Report Limitations
             </h3>
             <p>
