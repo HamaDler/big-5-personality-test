@@ -324,18 +324,19 @@ export default function TestPage() {
                     <span className="text-xs font-medium text-warm-400">
                       Q{globalIndex + 1}
                     </span>
-                    <span
+                    {/*  Hiding the traits can make the results page feel more rewarding, while keeping the questions part mysterious */}
+                    {/* <span
                       className={`
                         inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium
                         ${getTraitLightColor(question.trait)} text-warm-700
                       `}
                     >
                       {TRAIT_SHORT_LABELS[question.trait]}
-                    </span>
+                    </span> */}
                   </div>
 
                   {/* Question text */}
-                  <p className="text-warm-700 font-medium mb-4 min-h-[3rem] leading-relaxed">
+                  <p className="text-warm-700 font-medium mb-4 min-h-[3rem] leading-relaxed text-lg">
                     "{question.text}"
                   </p>
 
@@ -395,7 +396,7 @@ export default function TestPage() {
 
             <button
               onClick={handleSaveStep}
-              className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl font-medium text-warm-500 hover:text-sage-700 hover:bg-sage-50 transition-all duration-300"
+              className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl font-medium text-warm-500 bg-warm-100 hover:text-sage-700 hover:bg-sage-50 transition-all duration-300"
             >
               <Save className="w-4 h-4" />
               Save
