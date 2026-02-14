@@ -173,7 +173,6 @@ export default function ResultsPage() {
           </div>
         </div>
       </section>
-
       {/* Disclaimer Banner */}
       <section className="bg-sage-50 border-b border-sage-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -188,7 +187,6 @@ export default function ResultsPage() {
           </div>
         </div>
       </section>
-
       {/* Overview Chart */}
       <section className="py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -285,7 +283,6 @@ export default function ResultsPage() {
           </div>
         </section>
       )}
-
       {/* Detailed Results */}
       <section className="py-12 bg-white/50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -394,7 +391,6 @@ export default function ResultsPage() {
           </div>
         </div>
       </section>
-
       {/* Comprehensive Trait Descriptions */}
       <section className="py-12 bg-gradient-to-b from-white to-sage-50/30">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -417,7 +413,6 @@ export default function ResultsPage() {
         </div>
       </section>
       <hr />
-
       {/* Action Buttons */}
       <section className="py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -439,7 +434,6 @@ export default function ResultsPage() {
           </div>
         </div>
       </section>
-
       {/* PDF Preview Modal */}
       {showNameModal && (
         <div className="fixed inset-0 bg-warm-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -490,7 +484,6 @@ export default function ResultsPage() {
           </div>
         </div>
       )}
-
       {showPDFPreview && (
         <PDFReport
           results={results}

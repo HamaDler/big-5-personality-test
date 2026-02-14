@@ -2,10 +2,7 @@ import { useRef, useEffect, useState } from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { TestResults, TRAIT_LABELS, BigFiveTrait } from '../types';
-import {
-  InterpretationReport,
-  getScoreRangeLabel,
-} from '../lib/interpretations';
+import { InterpretationReport } from '../lib/interpretations';
 
 interface PDFReportProps {
   results: TestResults;
