@@ -5,6 +5,7 @@ import ScrollToTop from './components/ScrollToTop';
 import HomePage from './pages/HomePage';
 import TestPage from './pages/TestPage';
 import ResultsPage from './pages/ResultsPage';
+import InsightsPage from './pages/InsightsPage';
 import AboutPage from './pages/AboutPage';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/test" element={<TestPage />} />
             <Route path="/results" element={<ResultsPage />} />
+            <Route path="/insights" element={<InsightsPage />} />
             <Route path="/about" element={<AboutPage />} />
           </Routes>
         </Layout>
