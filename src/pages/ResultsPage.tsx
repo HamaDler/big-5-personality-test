@@ -170,22 +170,6 @@ export default function ResultsPage() {
               </h1>
               <p className="text-warm-500 mt-1">Completed on {completedDate}</p>
             </div>
-            <div className="flex items-center gap-3 w-full sm:w-auto">
-              <button
-                onClick={handleRetake}
-                className="flex-1 sm:flex-none btn-zen-outline flex items-center justify-center gap-2"
-              >
-                <RefreshCw className="w-4 h-4" />
-                Retake
-              </button>
-              <button
-                onClick={() => setShowNameModal(true)}
-                className="flex-1 sm:flex-none btn-zen flex items-center justify-center gap-2"
-              >
-                <Download className="w-4 h-4" />
-                Download Summary
-              </button>
-            </div>
           </div>
         </div>
       </section>
@@ -416,7 +400,7 @@ export default function ResultsPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-2xl font-serif font-semibold text-warm-800 mb-3">
-              Want to Learn More?
+              Want to Learn What Your Traits Mean?
             </h2>
             <p className="text-warm-600 max-w-3xl mx-auto mb-6">
               Explore deep dive interpretations and detailed insights about each
@@ -428,6 +412,29 @@ export default function ResultsPage() {
             >
               <Sparkles className="w-4 h-4" />
               Explore Traits & Insights
+            </button>
+          </div>
+        </div>
+      </section>
+      <hr />
+
+      {/* Action Buttons */}
+      <section className="py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <button
+              onClick={handleRetake}
+              className="w-full sm:w-auto btn-zen-outline flex items-center justify-center gap-2 !px-4 !py-2 text-sm"
+            >
+              <RefreshCw className="w-4 h-4" />
+              Retake Assessment
+            </button>
+            <button
+              onClick={() => setShowNameModal(true)}
+              className="w-full sm:w-auto btn-zen-outline flex items-center justify-center gap-2 !px-4 !py-2 text-sm"
+            >
+              <Download className="w-4 h-4" />
+              Download Summary
             </button>
           </div>
         </div>
