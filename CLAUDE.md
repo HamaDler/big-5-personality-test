@@ -166,7 +166,7 @@ The `dist/` folder produced by `npm run build` is a fully static site.
 Docker quick start:
 ```bash
 docker build -t big-5-personality-test .
-docker run -p 80:3000 big-5-personality-test
+docker run -p 3000:80 big-5-personality-test
 ```
 
 ## Gotchas and Constraints
