@@ -135,9 +135,9 @@ Additional animations (`fadeIn`, `slideIn`, `gentlePulse`) are defined as raw CS
 
 ### Typography
 
-Google Fonts loaded in `index.html`:
-- **Inter** — all body and UI text (`font-sans`)
-- **Lora** — headings and editorial copy (`font-serif`)
+Google Fonts configuration:
+- **Inter** — all body and UI text (`font-sans`), loaded in `index.html`
+- **Lora** — headings and editorial copy (`font-serif`), loaded via `@import` in `src/index.css`
 
 ## Key Files Quick Reference
 
