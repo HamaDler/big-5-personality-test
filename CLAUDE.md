@@ -58,7 +58,7 @@ src/
 - Computed `TestResults` (trait scores + facet scores)
 - Loading state and navigation helpers
 
-The reducer handles four actions: `START_TEST`, `ANSWER_QUESTION`, `COMPLETE_TEST`, `RESET_TEST`. State is written to `localStorage` on every dispatch so sessions survive page refreshes.
+From a user perspective, the primary actions handled by the reducer are: `START_TEST`, `ANSWER_QUESTION`, `COMPLETE_TEST`, and `RESET_TEST`. The reducer also supports additional internal actions (e.g. `RESUME_TEST`, `GO_TO_QUESTION`, `LOAD_RESULTS`, `SET_ERROR`, `CLEAR_ERROR`) for navigation, persistence, and error handling. State is written to `localStorage` on every dispatch so sessions survive page refreshes.
 
 ### Scoring Pipeline
 
