@@ -173,7 +173,7 @@ docker run -p 3000:80 big-5-personality-test
 
 - **No tests** — there is no `npm test` script. Validate logic changes manually and with `npm run lint`.
 - **`neuroticism` key vs. display label** — the internal trait key is always `'neuroticism'`; it is only relabelled to `'Emotional Stability'` at the display layer via `TRAIT_LABELS`.
-- **Reverse scoring** — 62 of the 120 items are reverse-scored (`reverseScored: true`). Scoring changes must preserve this transformation.
+- **Reverse scoring** — 58 of the 120 items are reverse-scored (`reverseScored: true`). Scoring changes must preserve this transformation.
 - **localStorage schema** — changing the structure of stored sessions/results can silently break resume functionality for existing users. Add a migration step or version key if the schema changes.
 - **PDF export** — `PDFReport.tsx` uses `html2canvas` to rasterise DOM nodes, which is sensitive to font loading timing and Tailwind purge. Test PDF output after any styling changes to results-related components.
 - **Path alias** — `@/` is configured in both `vite.config.ts` and `tsconfig.json`. Keep both in sync if new aliases are added.
