@@ -159,7 +159,7 @@ The `dist/` folder produced by `npm run build` is a fully static site.
 
 | Platform | Config file | Notes |
 |----------|-------------|-------|
-| Vercel | `vercel.json` | SPA rewrites + security headers (CSP, X-Frame-Options) |
+| Vercel | `vercel.json` | SPA rewrites + security headers (X-Content-Type-Options, X-Frame-Options, X-XSS-Protection, Referrer-Policy) |
 | Netlify | `public/_redirects`, `public/_headers` | SPA fallback routing |
 | Docker | `Dockerfile` + `nginx.conf` | Multi-stage build; Node 18-alpine → Nginx alpine; gzip + long-term caching |
 
