@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import { TestProvider } from './context/TestContext';
 import Layout from './components/Layout';
 import ScrollToTop from './components/ScrollToTop';
@@ -22,6 +23,7 @@ function App() {
             <Route path="/about" element={<AboutPage />} />
           </Routes>
         </Layout>
+        <Analytics />
       </Router>
     </TestProvider>
   );
